@@ -1,0 +1,41 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-moira
+version			20071203
+distname		moira-${version}
+categories		net
+maintainers		mit.edu:broder
+description		Hesiod is the Project Athena service name resolution protocol
+platforms		darwin
+master_sites	http://web.mit.edu/macathena/dist/
+patchfiles		patch-build-destdir \
+				patch-configure.in \
+				patch-config.sub \
+				patch-config.guess
+checksums		md5 53349ba789e5e65575f1d42454531d33 \
+				sha1 118463de08239b4b2f9675c8a3ea3e3738f06e92 \
+				rmd160 4dce4c44ff69d343490e000163d053ef498f6e66
+
+use_autoconf	yes
+
+configure.args	--with-krb5 \
+				--with-com_err \
+				--with-hesiod \
+
+configure.env-append	TERM=vt100
+
+post-destroot	{
+	file rename ${destroot}${prefix}/bin/chfn \
+		${destroot}${prefix}/bin/chfn.moira
+	file rename ${destroot}${prefix}/bin/chsh \
+		${destroot}${prefix}/bin/chsh.moira
+	file rename ${destroot}${prefix}/share/man/man1/chfn.1 \
+		${destroot}${prefix}/share/man/man1/chfn.moira.1
+	file rename ${destroot}${prefix}/share/man/man1/chsh.1 \
+		${destroot}${prefix}/share/man/man1/chsh.moira.1
+}
+
+depends_lib		port:libhesiod
+
+destroot.violate_mtree yes

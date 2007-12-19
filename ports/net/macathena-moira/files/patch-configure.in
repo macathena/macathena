@@ -1,0 +1,104 @@
+--- configure.in.orig	2006-05-12 16:26:10.000000000 -0400
++++ configure.in	2007-12-18 15:53:40.000000000 -0500
+@@ -1,6 +1,6 @@
+ AC_INIT(patchlevel.h)
+ 
+-dnl On Athena at least, many of the packages (krb, zephyr, hesiod, etc)
++dnl On Athena at least, many of the packages (krb, hesiod, etc)
+ dnl will all be in /usr/athena... this hack lets us not end up with 10
+ dnl copies of -I/usr/athena/include -L/usr/athena/lib in our command lines
+ AC_DEFUN(MR_EXTEND, [
+@@ -115,17 +115,16 @@
+     [  --with-krb4=PREFIX      Specify location of krb4],
+     [krb4="$withval"], [krb4=no])
+ AC_MSG_RESULT($krb4)
+-if test $krb4 = "no"; then
+-    AC_MSG_ERROR(Kerberos is required for Moira)
+-fi
+-if test "$krb4" != yes; then
+-    MR_INCLUDE($krb4/include)
+-    if test -d "$krb4/include/kerberosIV"; then
+-	MR_INCLUDE($krb4/include/kerberosIV)
++if test "$krb4" != no; then
++    if test "$krb4" != yes; then
++        MR_INCLUDE($krb4/include)
++        if test -d "$krb4/include/kerberosIV"; then
++        MR_INCLUDE($krb4/include/kerberosIV)
++        fi
++        MR_LIBS($krb4/lib)
++    elif test -d /usr/include/kerberosIV; then
++        MR_INCLUDE(/usr/include/kerberosIV)
+     fi
+-    MR_LIBS($krb4/lib)
+-elif test -d /usr/include/kerberosIV; then
+-    MR_INCLUDE(/usr/include/kerberosIV)
+ fi
+ AC_CHECK_LIB(k5crypto, main, crypto="k5crypto",
+              [AC_CHECK_LIB(crypto, main, crypto="crypto")])
+@@ -143,20 +142,26 @@
+     [krb5="$withval"], [krb5=no])
+ AC_MSG_RESULT($krb5)
+ if test "$krb5" != no; then
+-    REG_SVR_DEFS=-DKRB5
+     if test "$krb5" != yes; then
+-	REG_SVR_INCLUDES=-I$krb5/include
+-	REG_SVR_LIBS=-L$krb5/lib
++        REG_SVR_DEFS=-DKRB5
++        if test "$krb5" != yes; then
++        REG_SVR_INCLUDES=-I$krb5/include
++        REG_SVR_LIBS=-L$krb5/lib
++        fi
++        REG_SVR_LIBS="$REG_SVR_LIBS -lkadm5clnt -lgssapi_krb5 -lgssrpc -lkrb4 -ldes425 -lkrb5 -l${crypto} -lresolv"
++    else
++        REG_SVR_DEFS=-DKRB4
++        REG_SVR_LIBS=-lkadm
+     fi
+-    REG_SVR_LIBS="$REG_SVR_LIBS -lkadm5clnt -lgssapi_krb5 -lgssrpc -lkrb4 -ldes425 -lkrb5 -l${crypto} -lresolv"
+-else
+-    REG_SVR_DEFS=-DKRB4
+-    REG_SVR_LIBS=-lkadm
+ fi
+ AC_SUBST(REG_SVR_DEFS)
+ AC_SUBST(REG_SVR_INCLUDES)
+ AC_SUBST(REG_SVR_LIBS)
+ 
++if test $krb5 = "no" -a $krb4 = "no"; then
++    AC_MSG_ERROR(Kerberos is required for Moira)
++fi
++
+ # Hesiod support
+ AC_MSG_CHECKING(for Hesiod)
+ AC_ARG_WITH(hesiod,
+@@ -176,23 +181,6 @@
+     MR_DEFINE(HAVE_HESIOD)
+ fi
+ 
+-# Zephyr support
+-AC_MSG_CHECKING(for Zephyr)
+-AC_ARG_WITH(zephyr,
+-    [  --with-zephyr=PREFIX    Specify location of Zephyr],
+-    [zephyr="$withval"], [zephyr=no])
+-AC_MSG_RESULT($zephyr)
+-if test "$zephyr" != no; then
+-    if test "$zephyr" != yes; then
+-	MR_INCLUDE($zephyr/include)
+-	MR_LIBS($zephyr/lib)
+-    fi
+-    AC_CHECK_LIB(zephyr, ZInitialize, :,
+-		 [AC_MSG_ERROR(Zephyr library not found)],
+-		 $LIBPATH $KRB4_LIBS -lcom_err)
+-    MR_DEFINE(HAVE_ZEPHYR)
+-fi
+-
+ # RSAREF support (default: build util/rsaref if present)
+ AC_MSG_CHECKING(for RSAREF)
+ AC_ARG_WITH(rsaref,
+@@ -449,7 +437,7 @@
+ MR_INCLUDE('$(BUILDTOP)/db')
+ MR_INCLUDE('$(srcdir)')
+ LDFLAGS="$LDFLAGS -L\$(BUILDTOP)/lib $LIBPATH"
+-KLIBS="-lzephyr $KRB4_LIBS -lcom_err -lhesiod $LIBS"
++KLIBS="$KRB4_LIBS -lcom_err -lhesiod $LIBS"
+ LIBS="-lmoira $KLIBS"
+ AC_SUBST(KLIBS)
+ 

@@ -1,0 +1,18 @@
+# $Id$
+PortSystem		1.0
+
+name			hesiod
+version			3.1.0
+distname		hesinfo-${version}
+categories		net
+maintainers		mit.edu:broder
+description		Hesiod is the Project Athena service name resolution protocol
+platforms		darwin
+master_sites	ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/
+checksums		md5 376b3af2bb3f59a972c218312527eadf \
+				sha1 30a92f80f0e8754a5dfc377c71b50f517b168d3a \
+				rmd160 b7ac55b67992748cbc7b9cd64b0c6b4b4e4cb6bf
+
+depends_lib		port:libhesiod
+
+destroot.violate_mtree yes
