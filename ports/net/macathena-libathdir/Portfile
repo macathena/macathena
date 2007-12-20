@@ -1,0 +1,17 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-libathdir
+version			20050915
+distname		libathdir-${version}
+categories		net
+maintainers		mit.edu:broder
+platforms		darwin
+master_sites	http://web.mit.edu/macathena/dist/
+checksums		md5 dfaafb68b41899c06341774824e25914 \
+				sha1 18f188120f59a13171d3fa87ec6fe862d0ff8665 \
+				rmd160 2248c02486df693b0a367b43d0230b3da8c0c8ce
+
+use_autoconf	yes
+
+destroot.violate_mtree yes

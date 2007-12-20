@@ -1,0 +1,17 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-athdir
+version			19991101
+distname		athdir-${version}
+categories		net
+maintainers		mit.edu:broder
+platforms		darwin
+master_sites	http://web.mit.edu/macathena/dist/
+checksums		md5 173b586526e287f44b575e28e6cbaea5 \
+				sha1 91772fd92f4856fb24760ddad66f2ccaa63def7f \
+				rmd160 53f04eed4d93e8d43c55ea63df63001e35d80a12
+
+use_autoconf	yes
+
+destroot.violate_mtree yes
