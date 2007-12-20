@@ -9,7 +9,8 @@ maintainers		mit.edu:broder
 description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
 master_sites	ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/
-patchfiles		patch-hesiod.c \
+patchfiles		patch-Makefile.in \
+				patch-hesiod.c \
 				patch-config.sub \
 				patch-config.guess
 checksums		md5 89c785d350e75d6628754659ee4583e8 \
