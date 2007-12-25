@@ -1,0 +1,27 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-machtype
+version			20030812
+distname		machtype-${version}
+categories		net
+maintainers		mit.edu:broder
+description		Hesiod is the Project Athena service name resolution protocol
+platforms		darwin
+master_sites	http://web.mit.edu/macathena/dist/
+patchfiles		patch-configure.in \
+				patch-machtype_linux.sh \
+				patch-config.sub \
+				patch-config.guess
+checksums		md5 0f338ab18e7a6f92e6ed615c13ec6de0 \
+				sha1 f43c9316759eb68231f3a4c0fa5c1417b1e937b8 \
+				ripemd160 ea206b52fabe8fafb212eb92f620be032cd51b8b
+
+use_autoconf	yes
+
+configure.env-append	ATHENA_MAJOR_VERSION=9 \
+						ATHENA_MINOR_VERSION=4
+
+destroot.violate_mtree yes
+
+configure.env-append	[exec ${filespath}/getSysnameList.py]

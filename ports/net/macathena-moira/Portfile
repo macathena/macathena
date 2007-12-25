@@ -36,6 +36,7 @@ post-destroot	{
 		${destroot}${prefix}/share/man/man1/chsh.moira.1
 }
 
-depends_lib		port:libhesiod
+depends_lib		port:libhesiod \
+				port:ncurses
 
 destroot.violate_mtree yes
