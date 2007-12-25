@@ -39,4 +39,4 @@ post-destroot	{
 depends_lib		port:libhesiod \
 				port:ncurses
 
-destroot.violate_mtree yes
+destroot.violate_mtree	yes

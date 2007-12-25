@@ -14,4 +14,4 @@ checksums		md5 dfaafb68b41899c06341774824e25914 \
 
 use_autoconf	yes
 
-destroot.violate_mtree yes
+destroot.violate_mtree	yes

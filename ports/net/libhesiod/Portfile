@@ -19,4 +19,4 @@ checksums		md5 89c785d350e75d6628754659ee4583e8 \
 
 configure.args	LIBS=-lresolv
 
-destroot.violate_mtree yes
+destroot.violate_mtree	yes

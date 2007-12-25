@@ -22,6 +22,8 @@ use_autoconf	yes
 configure.env-append	ATHENA_MAJOR_VERSION=9 \
 						ATHENA_MINOR_VERSION=4
 
-destroot.violate_mtree yes
+depends_lib		port:macathena-base
+
+destroot.violate_mtree	yes
 
 configure.env-append	[exec ${filespath}/getSysnameList.py]

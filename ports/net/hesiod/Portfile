@@ -15,4 +15,4 @@ checksums		md5 376b3af2bb3f59a972c218312527eadf \
 
 depends_lib		port:libhesiod
 
-destroot.violate_mtree yes
+destroot.violate_mtree	yes
