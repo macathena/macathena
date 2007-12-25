@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+
+from commands import getoutput
+import os
+import sys
+import getopt
+
+usage = """Usage: machtype [-cdrvACELMNPS]
+"""
+
+try:
+	optlist, args = getopt.getopt(sys.argv[1:], 'cdkmrvACELMNPS')
+except getopt.GetoptError:
+	sys.stderr.write(usage)
+	sys.exit(1)
+
+optdict = dict(optlist)
+
+verbose = False
+printed = False
+
+darwin_version = int(getoutput('uname -r').split('.')[0]) * 10
+
+if optdict.has_key('-v'):
+	#  -v     : more verbose -- about memory mainly
+	verbose = True
+
+#  -A     : print Athena Release
+if optdict.has_key('-A'):
+	if verbose:
+		print 'Machtype version: ',
+	print '9.4'
+	printed = True
+
+#  -P     : print out Athena System packs (from /srvd/.rvdinfo)
+if optdict.has_key('-P'):
+	sys.stderr.write('MacAthena does not use system packs.\n')
+	printed = True
+
+#  -L     : version of athena from /etc/athena/version
+if optdict.has_key('-L'):
+	version = file('/etc/athena/version').readlines()[-1].strip()
+	if verbose:
+		print version
+	else:
+		print version.split(' ')[4]
+	printed = True
+
+#  -N     : print out the name of the base OS
+if optdict.has_key('-N'):
+	if verbose:
+		print getoutput('uname -sr')
+	else:
+		print getoutput('uname -s')
+	printed = True
+
+#  -E     : print out the version of the Base OS
+if optdict.has_key('-E'):
+	print getoutput('uname -r')
+	printed = True
+
+#  -S     : Print out the Athena System name
+#if optdict.has_key('-S'):
+
+#  -C     : print out compatible Athena System names
+#if optdict.has_key('-C'):
+
+#  -c     : Processor type
+if optdict.has_key('-c'):
+	if verbose:
+		print '%s on %s' % (getoutput('uname -sr'), getoutput('uname -m'))
+	else:
+		print getoutput('uname -m')
+	printed = True
+
+#  -d     : display type 
+if optdict.has_key('-d'):
+	print getoutput('system_profiler SPDisplaysDataType').split('\n')[2].strip(" :")
+	printed = True
+
+#  -r     : disk drive type
+#if optdict.has_key('-r'):
+
+#  -M     : physical memory
+#if optdict.has_key('-M'):
+
+if not printed:
+	print "darwin"

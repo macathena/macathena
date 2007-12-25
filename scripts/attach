@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import getopt
+import hesiod
+
+usage = """Usage: attach [options] filesystem ... [options] filesystem ...
+       attach -l filesystem
+       attach -H host
+       attach
+"""
+
+if len(sys.argv) > 1 and sys.argv[1] == '-Padd':
+	os.execv('/usr/local/bin/attach-add.py', sys.argv[2:])
+
+try:
+	optlist, args = getopt.getopt(sys.argv[1:], 'vqplvngazhrwm:Mxet:o:NSOLH', ['verbose', 'quiet', 'printpath', 'lookup', 'map', 'nomap', 'remap', 'noremap', 'zephyr', 'nozephyr', 'readonly', 'write', 'mountpoint=', 'master', 'noexplicit', 'explicit', 'type', 'mountoptions', 'nosetuid', 'nosuid', 'setuid', 'suid', 'override', 'lock', 'host=']);
+except getopt.GetoptError:
+	sys.stderr.write(usage)
+	sys.exit(1)
+
+print_usage = False
+noise_level = 'verbose'
+for o, a in optlist:
+	if o == '-l' or o == '--lookup':
+		noise_level = 'lookup'
+	if o == '-v' or o == '--verbose':
+		noise_level = 'verbose'
+	if o == '-q' or o == '--quiet':
+		noise_level = 'quiet'
+	if o == '-p' or o == '--printpath':
+		noise_level = 'path'
+	if o == '-m' or o == '--mountpoint':
+		if a[0:5] == '/mit/':
+			sys.stderr.write('Sorry. The MacAthena attach program does not support alternate mount points within /mit\n')
+			sys.exit(1)
+		elif len(args) != 1:
+			print_usage = True
+		else:
+			filsys = hesiod.FilsysLookup(args[0])
+			if filsys:
+				os.symlink(filsys.getFilsys()[0]['location'], a)
+				sys.exit(0)
+			else:
+				sys.stderr.write('%s: Locker unknown' % args[0])
+				sys.exit(2)
+	if o == '-H' or o == '--host':
+		sys.stderr.write('Sorry. The MacAthena attach program does not keep an attachtab\n')
+		sys.exit(1)
+
+exit_code = 0
+
+for arg in args:
+	try:
+		os.stat('/mit/%s' % arg)
+		os.system('/usr/bin/aklog /mit/%s' % arg)
+	except OSError:
+		sys.stderr.write('%s: Locker unknown\n' % arg)
+		exit_code = 2
+	if noise_level == 'verbose':
+		filsys = hesiod.FilsysLookup(args[0])
+		print 'attach: %s attached to /mit/%s for filesystem %s' % (filsys.getFilsys()[0]['location'], arg, arg)
+	elif noise_level == 'path':
+		print '/mit/%s' % arg
+	elif noise_level == 'lookup':
+		print '%s resolves to:' % arg
+		os.system('hesinfo %s filsys' % arg)
+
+sys.exit(exit_code)
