@@ -19,4 +19,7 @@ destroot		{
 	file mkdir ${destroot}/etc/athena
 	file copy ${filespath}/reactivate ${destroot}/etc/athena
 	file copy ${filespath}/version ${destroot}/etc/athena
+	
+	ln -s /usr /usr/athena
+	ln -s /bin /bin/athena
 }
