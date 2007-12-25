@@ -35,7 +35,8 @@ def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', 
 
 modules = {'moira': ['moira', '/afs/athena.mit.edu/astaff/project/moiradev/repository', False],
 	'libathdir': ['athena/lib/athdir'],
-	'athdir': ['athena/bin/athdir']}
+	'athdir': ['athena/bin/athdir'],
+	'machtype': ['athena/bin/machtype']}
 
 if __name__ == '__main__':
 	import sys
