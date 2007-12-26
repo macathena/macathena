@@ -8,7 +8,7 @@ categories		net
 maintainers		mit.edu:sipb-macathena
 description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
-master_sites	http://web.mit.edu/macathena/dist/
+master_sites	http://macathena.mit.edu/dist/
 patchfiles		patch-build-destdir \
 				patch-configure.in \
 				patch-config.sub \

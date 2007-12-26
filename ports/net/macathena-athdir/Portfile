@@ -7,7 +7,7 @@ distname		athdir-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
-master_sites	http://web.mit.edu/macathena/dist/
+master_sites	http://macathena.mit.edu/dist/
 checksums		md5 173b586526e287f44b575e28e6cbaea5 \
 				sha1 91772fd92f4856fb24760ddad66f2ccaa63def7f \
 				rmd160 53f04eed4d93e8d43c55ea63df63001e35d80a12
