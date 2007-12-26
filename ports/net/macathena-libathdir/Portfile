@@ -5,7 +5,7 @@ name			macathena-libathdir
 version			20050915
 distname		libathdir-${version}
 categories		net
-maintainers		mit.edu:broder
+maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://web.mit.edu/macathena/dist/
 checksums		md5 dfaafb68b41899c06341774824e25914 \

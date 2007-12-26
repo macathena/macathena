@@ -5,7 +5,7 @@ name			libhesiod
 version			3.1.0
 distname		hesiod-${version}
 categories		net
-maintainers		mit.edu:broder
+maintainers		mit.edu:sipb-macathena
 description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
 master_sites	ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/

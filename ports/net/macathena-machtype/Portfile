@@ -5,7 +5,7 @@ name			macathena-machtype
 version			20030812
 distname		machtype-${version}
 categories		net
-maintainers		mit.edu:broder
+maintainers		mit.edu:sipb-macathena
 description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
 master_sites	http://web.mit.edu/macathena/dist/

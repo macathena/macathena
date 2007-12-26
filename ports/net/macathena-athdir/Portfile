@@ -5,7 +5,7 @@ name			macathena-athdir
 version			19991101
 distname		athdir-${version}
 categories		net
-maintainers		mit.edu:broder
+maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://web.mit.edu/macathena/dist/
 checksums		md5 173b586526e287f44b575e28e6cbaea5 \
