@@ -15,5 +15,3 @@ checksums		md5 173b586526e287f44b575e28e6cbaea5 \
 use_autoconf	yes
 
 depends_lib		port:macathena-libathdir
-
-destroot.violate_mtree	yes

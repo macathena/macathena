@@ -13,5 +13,3 @@ checksums		md5 dfaafb68b41899c06341774824e25914 \
 				rmd160 2248c02486df693b0a367b43d0230b3da8c0c8ce
 
 use_autoconf	yes
-
-destroot.violate_mtree	yes
