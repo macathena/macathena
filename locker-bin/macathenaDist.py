@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', getAutoconf='packs/build/autoconf'):
+def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', getAutoconf='packs/build/autoconf', date='tomorrow'):
 	import os
 	import time
 	import tarfile
@@ -10,7 +10,7 @@ def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', 
 	os.chdir('/mit/macathena/build')
 	
 	os.environ['CVSROOT'] = cvsroot
-	os.system('cvs -R export -r HEAD %s >/dev/null 2>/dev/null' % cvsModule)
+	os.system('cvs -R export -D %s %s >/dev/null 2>/dev/null' % (date, cvsModule))
 	
 	if getAutoconf:
 		os.system('cvs -R export -r HEAD -d %s %s >/dev/null 2>/dev/null' % (cvsModule, getAutoconf))
