@@ -21,5 +21,4 @@ destroot		{
 
 depends_run		port:macathena-moira \
 				port:macathena-machtype \
-				port:macathena-athdir \
-				port:hesiod
+				port:macathena-athrun
