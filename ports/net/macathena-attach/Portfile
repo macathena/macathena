@@ -23,6 +23,6 @@ build			{}
 destroot		{
 	file copy ${filespath}/attach ${destroot}${prefix}/bin/attach
 	
-	file mkdir ${destroot}/bin/athena
+	file mkdir ${destroot}/bin
 	ln -s ${prefix}/bin/attach ${destroot}/bin
 }

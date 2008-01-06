@@ -1,0 +1,17 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-athrun
+version			20060725
+distname		athrun-${version}
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+master_sites	http://macathena.mit.edu/dist/
+checksums		md5 6cbdf13b113cbc5c758f979b695ae91c \
+				sha1 95fcde5c0d44cc1a8f7862c574f841ad84686be1 \
+				rmd160 1a4e381f185062b860e46bb5db50eaaa08dd26af
+
+use_autoconf	yes
+
+depends_lib		port:macathena-attachandrun
