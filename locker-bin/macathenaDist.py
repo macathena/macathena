@@ -38,7 +38,8 @@ modules = {'moira': ['moira', '/afs/athena.mit.edu/astaff/project/moiradev/repos
 	'athdir': ['athena/bin/athdir'],
 	'machtype': ['athena/bin/machtype'],
 	'attachandrun': ['athena/bin/attachandrun'],
-	'athrun': ['athena/bin/athrun']}
+	'athrun': ['athena/bin/athrun'],
+	'athinfo': ['athena/bin/athinfo']}
 
 if __name__ == '__main__':
 	import sys
