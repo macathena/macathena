@@ -1,0 +1,17 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-athinfo
+version			20071107
+distname		athinfo-${version}
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+master_sites	http://macathena.mit.edu/dist/
+checksums		md5 365d7e363a498ebe001a55b83827015e \
+				sha1 a9de2ced2a3880797a3e9eba53f19c309461abc5 \
+				rmd160 adf0c6a690c023eb6c827c5d3e25b72fc8a58517
+
+use_autoconf	yes
+
+depends_lib		port:macathena-base
