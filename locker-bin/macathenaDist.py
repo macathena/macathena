@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', getAutoconf='packs/build/autoconf', date='tomorrow'):
+def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs/dev.mit.edu/source/repository', date='tomorrow'):
 	import os
 	import time
 	import tarfile
@@ -12,8 +12,9 @@ def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', 
 	os.environ['CVSROOT'] = cvsroot
 	os.system('cvs -R export -D %s %s >/dev/null 2>/dev/null' % (date, cvsModule))
 	
-	if getAutoconf:
-		os.system('cvs -R export -r HEAD -d %s %s >/dev/null 2>/dev/null' % (cvsModule, getAutoconf))
+	if extras:
+		for extra in extras:
+			os.system('cvs -R export -D %s -d %s %s >/dev/null 2>/dev/null' % (date, cvsModule, extra))
 	
 	stamp = 0
 	for root, dirs, files in os.walk(cvsModule):
@@ -33,16 +34,18 @@ def packageCvs(module, cvsModule, cvsroot='/afs/dev.mit.edu/source/repository', 
 	
 	print 'Created /mit/macathena/dist/%s.tar.gz' % tarball
 
-modules = {'moira': ['moira', '/afs/athena.mit.edu/astaff/project/moiradev/repository', False],
+modules = {'moira': ['moira', False, '/afs/athena.mit.edu/astaff/project/moiradev/repository'],
 	'libathdir': ['athena/lib/athdir'],
 	'athdir': ['athena/bin/athdir'],
 	'machtype': ['athena/bin/machtype'],
 	'attachandrun': ['athena/bin/attachandrun'],
 	'athrun': ['athena/bin/athrun'],
 	'athinfo': ['athena/bin/athinfo'],
-	'getcluster': ['athena/bin/getcluster'],
+	'getcluster': ['athena/bin/getcluster', ['packs/build/autoconf', 'packs/build/aclocal.m4']],
 	'libxj': ['athena/lib/Xj'],
-	'xcluster': ['athena/bin/xcluster']}
+	'libss': ['athena/lib/ss'],
+	'xcluster': ['athena/bin/xcluster'],
+	'discuss': ['athena/bin/discuss']}
 
 if __name__ == '__main__':
 	import sys
