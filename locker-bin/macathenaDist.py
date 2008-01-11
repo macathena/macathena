@@ -1,11 +1,23 @@
 #!/usr/bin/env python
 
+import tarfile
+import os
+import time
+import shutil
+
+class MyTarFile(tarfile.TarFile):
+	def gettarinfo(self, name=None, arcname=None, fileobj=None):
+		info = tarfile.TarFile.gettarinfo(self, name, arcname, fileobj)
+		info.uid = info.gid = 0
+		info.uname = "root"
+		info.gname = "wheel"
+		
+		if info.isdir():
+			info.mtime = 0
+		
+		return info
+
 def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs/dev.mit.edu/source/repository', date='tomorrow'):
-	import os
-	import time
-	import tarfile
-	import shutil
-	
 	os.system('attach macathena >/dev/null 2>/dev/null')
 	os.chdir('/mit/macathena/build')
 	
@@ -25,7 +37,7 @@ def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs
 	tarball = '%s-%s' % (module, tarball_time)
 	os.rename(cvsModule, tarball)
 	
-	tar = tarfile.open('%s.tar.gz' % tarball, 'w:gz')
+	tar = MyTarFile.open('%s.tar.gz' % tarball, 'w:gz')
 	tar.add(tarball)
 	tar.close()
 	
@@ -43,14 +55,19 @@ modules = {'moira': ['moira', False, '/afs/athena.mit.edu/astaff/project/moirade
 	'athinfo': ['athena/bin/athinfo'],
 	'getcluster': ['athena/bin/getcluster', ['packs/build/autoconf', 'packs/build/aclocal.m4']],
 	'libxj': ['athena/lib/Xj'],
-	'libss': ['athena/lib/ss'],
-	'xcluster': ['athena/bin/xcluster'],
+	'libss': ['athena/lib/ss', ['packs/build/autoconf', 'packs/build/aclocal.m4', 'packs/build/libtool']],
+	'xcluster': ['athena/bin/xcluster', ['packs/build/autoconf', 'packs/build/aclocal.m4']],
 	'discuss': ['athena/bin/discuss']}
 
 if __name__ == '__main__':
 	import sys
 	
-	for arg in sys.argv[1:]:
+	if sys.argv[1] == "all":
+		build = modules.keys()
+	else:
+		build = sys.argv[1:]
+	
+	for arg in build:
 		if modules.has_key(arg):
 			apply(packageCvs, [arg] + modules[arg])
 		else:
