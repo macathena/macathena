@@ -13,9 +13,9 @@ patchfiles		patch-configure.in \
 				patch-machtype_linux.sh \
 				patch-config.sub \
 				patch-config.guess
-checksums		md5 0f338ab18e7a6f92e6ed615c13ec6de0 \
-				sha1 f43c9316759eb68231f3a4c0fa5c1417b1e937b8 \
-				ripemd160 ea206b52fabe8fafb212eb92f620be032cd51b8b
+checksums		md5 377829b5da0c05cf334d2fa2e9124c4f \
+				sha1 ea18209e214b35238ed31955c6ceb1fbabcfdcb2 \
+				rmd160 021db450b6af4aaa3e46eab678c01e5bcc9cfa4b
 
 use_autoconf	yes
 

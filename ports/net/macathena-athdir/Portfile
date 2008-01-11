@@ -8,9 +8,9 @@ categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
-checksums		md5 09f4d08660522e368657062aefaf9410 \
-				sha1 d684347a32a98a77f1f0c2e465824e6a4ec0fcb9 \
-				rmd160 1f314e9e398debf5a459b5b967593681210e3754
+checksums		md5 5007c383a3b12fdf9df9e2e0c967666a \
+				sha1 19588c1c1e660e4d357fdb96f78015faa859567d \
+				rmd160 d7dc9f85444e2375fe6d0105517ea4a9b5a54a50
 
 use_autoconf	yes
 

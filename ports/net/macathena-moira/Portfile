@@ -15,7 +15,7 @@ patchfiles		patch-build-destdir \
 				patch-config.guess
 checksums		md5 eeb0b651e1689b56a2df030bdc61881c \
 				sha1 945e277c3c974c1933f8efda80f95bc2f9537aef \
-				ripemd160 48f6b2b8696f8f73d335fa918c8d40f167413416
+				rmd160 48f6b2b8696f8f73d335fa918c8d40f167413416
 
 use_autoconf	yes
 

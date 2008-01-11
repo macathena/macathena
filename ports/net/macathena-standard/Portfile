@@ -12,10 +12,10 @@ platforms		darwin
 
 distfiles		
 
-fetch			{ }
-checksum		{ }
-configure		{ }
-build			{ }
+fetch			{}
+checksum		{}
+configure		{}
+build			{}
 destroot		{
 	file mkdir ${destroot}${prefix}/share/doc/macathena-standard/
 	file copy ${filespath}/README.macathena \
