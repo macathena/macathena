@@ -3,9 +3,9 @@ PortSystem		1.0
 
 name			macathena-standard
 version			0.1
-# Increment the epoch every time macathena-standard gets changed until we hit a
-# real release
-epoch			2
+# Increment the revision every time macathena-standard gets changed until we hit
+# a real release
+revision		1
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
