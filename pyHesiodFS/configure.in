@@ -1,0 +1,5 @@
+AC_INIT()
+
+AC_PROG_CC
+
+AC_OUTPUT(edu.mit.sipb.mit-automounter.plist)
