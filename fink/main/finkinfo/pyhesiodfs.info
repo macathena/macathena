@@ -1,5 +1,5 @@
 Package: pyhesiodfs
-Version: 1.0.39
+Version: 1.0.41
 Revision: 1
 Source: http://macathena.mit.edu/dist/%n-%v.tar.gz
 SourceDirectory: pyHesiodFS
@@ -7,7 +7,7 @@ Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: GPL
 Description: Automatically mounts AFS lockers in /mit
-Source-MD5: ad4e56cf68bbf595eb5b6424b269bb68
+Source-MD5: 4cc84e24f830c810e400846d2b4a4b64
 Depends: fuse-py25, pydns-py25
 CompileScript: <<
 	autoconf
