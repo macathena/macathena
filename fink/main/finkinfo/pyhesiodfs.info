@@ -1,6 +1,6 @@
 Package: pyhesiodfs
 Version: 1.0.41
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/%n-%v.tar.gz
 SourceDirectory: pyHesiodFS
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -15,6 +15,7 @@ CompileScript: <<
 	python2.5 setup.py build
 <<
 InstallScript: <<
+	mkdir %d/mit
 	python2.5 setup.py install --root=%d
 <<
 PostInstScript: <<

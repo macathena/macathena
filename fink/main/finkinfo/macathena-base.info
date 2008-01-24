@@ -1,0 +1,18 @@
+Package: macathena-base
+Version: 0.1
+Revision: 1
+Source: none
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+Description: Creates the /usr/athena and /bin/athena symlinks, and contains /etc/athena/version and a dummy /etc/athena/reactivate
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %d/etc/athena
+	mkdir -p %d/usr
+	mkdir -p %d/bin
+	printf "MacAthena Workstation (darwin) Version 1.0 Sun Dec 23 23:07:38 EDT 2007" >%d/etc/athena/version
+	printf "#\!/bin/sh\n\necho \"/etc/athena/reactivate is not supported on MacAthena.\" >&2\n" >%d/etc/athena/reactivate
+	ln -s /usr %d/usr/athena
+	ln -s /bin %d/bin/athena
+<<
