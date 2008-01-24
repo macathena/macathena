@@ -22,7 +22,11 @@ if not hasattr(fuse, '__version__'):
 fuse.fuse_python_api = (0, 2)
 
 hello_path = '/README.txt'
-hello_str = 'This is the pyhesiodfs FUSE autmounter. To access a Hesiod filsys, just access %s/name.\n'
+hello_str = """This is the pyhesiodfs FUSE autmounter. To access a Hesiod filsys, just access
+%(mountpoint)s/name.
+
+If you're using the Finder, try pressing Cmd+Shift+G and then entering
+%(mountpoint)s/name"""
 
 class MyStat(fuse.Stat):
     def __init__(self):
@@ -45,7 +49,7 @@ class PyHesiodFS(Fuse):
         self.fuse_args.add("noappledouble", True)
         self.fuse_args.add("noapplexattr", True)
         self.fuse_args.add("fsname", "pyHesiodFS")
-        self.fuse_args.add("volname", "pyHesiodFS automounter")
+        self.fuse_args.add("volname", "MIT")
         self.mounts = {}
     
     def getattr(self, path):
@@ -119,8 +123,9 @@ class PyHesiodFS(Fuse):
         return buf
 
 def main():
+    global hello_str
     usage="""
-Userspace hello example
+pyHesiodFS
 
 """ + Fuse.fusage
     server = PyHesiodFS(version="%prog " + fuse.__version__,
@@ -128,6 +133,7 @@ Userspace hello example
                      dash_s_do='setsingle')
 
     server.parse(errex=1)
+    hello_str = hello_str % {'mountpoint': server.parse(errex=1).mountpoint}
     server.main()
 
 if __name__ == '__main__':
