@@ -1,0 +1,11 @@
+Package: macathena-hesiod
+Version: 3.1.0
+Revision: 1
+Source: ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/hesinfo-%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Hesiod, a service name resolution protocol
+Source-MD5: 376b3af2bb3f59a972c218312527eadf
+
+Depends: macathena-libhesiod

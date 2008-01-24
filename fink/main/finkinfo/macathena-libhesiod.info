@@ -1,0 +1,16 @@
+Package: macathena-libhesiod
+Version: 3.1.0
+Revision: 1
+Source: ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/hesiod-%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Hesiod, a service name resolution protocol
+Source-MD5: 89c785d350e75d6628754659ee4583e8
+
+BuildDepends: fink (>= 0.24.12)
+UpdateConfigGuess: true
+PatchFile: %n.patch
+PatchFile-MD5: 30652536d14b645113e3126e380dbbf3
+PatchScript: patch -p0 < %{PatchFile}
+ConfigureParams: LIBS=-lresolv

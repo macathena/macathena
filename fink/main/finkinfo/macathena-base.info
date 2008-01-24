@@ -1,10 +1,16 @@
 Package: macathena-base
 Version: 0.1
-Revision: 1
+Revision: 2
 Source: none
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
-Description: Creates the /usr/athena and /bin/athena symlinks, and contains /etc/athena/version and a dummy /etc/athena/reactivate
+License: Public Domain
+Description: Creates files expected by MacAthena
+DescDetail: <<
+	Creates the /usr/athena and /bin/athena symlinks, and contains
+	/etc/athena/version and a dummy /etc/athena/reactivate
+<<
+
 CompileScript: <<
 <<
 InstallScript: <<

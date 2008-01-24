@@ -8,6 +8,7 @@ HomePage: http://macathena.mit.edu/
 License: GPL
 Description: Automatically mounts AFS lockers in /mit
 Source-MD5: 4cc84e24f830c810e400846d2b4a4b64
+
 Depends: fuse-py25, pydns-py25
 CompileScript: <<
 	autoconf
