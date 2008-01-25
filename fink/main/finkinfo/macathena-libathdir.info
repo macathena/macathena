@@ -11,6 +11,7 @@ DescDetail: <<
 <<
 Source-MD5: f032b6df8041182e4b673579542237f6
 
+BuildDepends: automake-1.9
 UpdateConfigGuess: true
 CompileScript: <<
 	cp %p/share/automake-1.9/install-sh %b/

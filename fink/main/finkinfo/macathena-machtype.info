@@ -8,7 +8,7 @@ License: BSD
 Description: Print Athena machine type to standard output
 Source-MD5: d1d9a6c6a0f379216e23b588bd99ef0d
 
-BuildDepends: fink (>= 0.24.12), macathena-base
+BuildDepends: fink (>= 0.24.12), macathena-base, automake-1.9
 UpdateConfigGuess: true
 PatchFile: %n.patch
 PatchFile-MD5: b3640db9d86c7e3800da8ae75c3bca3d

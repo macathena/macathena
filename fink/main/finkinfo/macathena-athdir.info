@@ -11,7 +11,7 @@ DescDetail: <<
 <<
 Source-MD5: 4d7fbfe6aba366c75c0e082e586abaa1
 
-BuildDepends: macathena-libathdir
+BuildDepends: macathena-libathdir, automake-1.9
 UpdateConfigGuess: true
 CompileScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
