@@ -15,8 +15,8 @@ PatchFile: %n.patch
 PatchFile-MD5: b3640db9d86c7e3800da8ae75c3bca3d
 PatchScript: patch -p0 < %{PatchFile}
 CompileScript: <<
-	cp %p/share/automake1.9/install-sh %b/
-	cp %p/share/automake1.9/mkinstalldirs %b/
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	env `python2.5 %b/getSysnameList.py` ATHENA_MAJOR_VERSION=9 ATHENA_MINOR_VERSION=4 ./configure %c
 	make

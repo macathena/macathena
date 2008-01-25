@@ -18,8 +18,8 @@ Source-MD5: 2e4951883d4892df0c393db54fddbff3
 BuildDepends: automake1.9
 UpdateConfigGuess: true
 CompileScript: <<
-	cp %p/share/automake1.9/install-sh %b/
-	cp %p/share/automake1.9/mkinstalldirs %b/
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	./configure %c
 	make
