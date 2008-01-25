@@ -1,0 +1,94 @@
+--- machtype_linux.sh.orig	2007-12-24 21:51:18.000000000 -0600
++++ machtype_linux.sh	2007-12-25 00:20:57.000000000 -0600
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # $Id: machtype_linux.sh,v 1.9 2003-08-12 21:47:50 jweiss Exp $
+ 
+ # We need to support the following options:
+@@ -86,7 +86,7 @@
+ fi
+ 
+ if [ $syspacks ]; then
+-	echo "Linux does not use system packs." >&2
++	echo "MacAthena does not use system packs." >&2
+ 	printed=1
+ fi
+ 
+@@ -133,32 +133,31 @@
+ fi
+ 
+ if [ $display ] ; then
+-        /sbin/lspci | awk -F: '/VGA/ {print $3}' | sed -n -e 's/^ //' -e p
++	system_profiler SPDisplaysDataType | awk 'NR==3 { print }' | sed "s/^ *\(.*\):$/\1/"
+ 	printed=1
+ fi
+ 
+ if [ $rdsk ]; then
+-	awk '/^SCSI device/ { print; }
+-	     /^hd[a-z]:/ { print; }
+-	     /^Floppy/ { for (i=3; i <= NF; i += 3) print $i ": " $(i+2); }' \
+-	     /var/log/dmesg
++	disks=`ls /dev/disk* | grep 'disk[0-9]*$'`
++	for disk in $disks
++	do
++		printf "%s: %s GB\n" "$(basename $disk)" "$(diskutil info "$disk" | awk '$1=="Total" { print  $3 }')"
++	done
+ 	printed=1
+ fi
+ 
+ if [ $memory ] ; then
++	physmem=$(($(sysctl -n hw.physmem)/1024))
++	usermem=$(($(sysctl -n hw.usermem)/1024))
+ 	if [ $verbose ]; then
+-		awk 'BEGIN { FS="[^0-9]+" }
+-		     /^Memory:/ { printf "user=%d, phys=%d (%d M)\n",
+-				         $2*1.024, $3*1.024, $3/1000; }' \
+-		    /var/log/dmesg
++		printf "user=%d, phys=%d (%d M)\n" $usermem $physmem $((physmem/1024))
+ 	else
+-		awk 'BEGIN { FS="[^0-9]+" }
+-		     /^Memory:/ { printf "%d\n", $3*1.024; }' /var/log/dmesg
++		echo $physmem
+ 	fi
+ 	printed=1
+ fi
+ 
+ if [ $printed -eq '0' ] ; then
+-	echo linux
++	echo darwin
+ fi
+ exit 0
+--- configure.in.orig	2007-12-25 00:06:52.000000000 -0600
++++ configure.in	2007-12-25 00:07:19.000000000 -0600
+@@ -17,7 +17,7 @@
+ irix*)
+ 	OS=irix
+ 	;;
+-linux*)
++linux* | darwin*)
+ 	OS=linux
+ 	;;
+ netbsd*)
+--- getSysnameList.py.orig	2008-01-24 23:17:35.000000000 -0500
++++ getSysnameList.py	2007-12-25 01:58:14.000000000 -0500
+@@ -0,0 +1,19 @@
++#!/usr/bin/env python
++
++from commands import getoutput
++
++arch = getoutput('arch')
++darwin_ver = int(getoutput('uname -r').split('.')[0]) * 10
++
++ver_list = range(darwin_ver, 40, -10)
++x86_list = ["x86_darwin_%d" % ver for ver in ver_list]
++ppc_list = ["ppc_darwin_%d" % ver for ver in ver_list]
++
++if arch == 'i386':
++	versions = [item for items in zip(x86_list, ppc_list) for item in items]
++else:
++	versions = ppc_list
++
++versions += ['share', 'common', 'any']
++
++print 'ATHENA_SYS=%s ATHENA_SYS_COMPAT="%s"' % (versions[0], ':'.join(versions[1:]))

@@ -1,0 +1,25 @@
+Package: macathena-athinfo
+Version: 22699
+Revision: 1
+Source: http://macathena.mit.edu/dist/athinfo-%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Retrieve information about a workstation
+DescDetail: <<
+	An Athena utility to retrieve information about a workstation. The athinfo
+	tool queries a remote workstation using the athinfo daemon for information
+	about the workstation, such as its hardware type and configuration, its
+	current software installation state, the number of users logged on, and
+	various other informational state queries.
+<<
+Source-MD5: 2e4951883d4892df0c393db54fddbff3
+
+UpdateConfigGuess: true
+CompileScript: <<
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
+	autoconf
+	./configure %c
+	make
+<<
