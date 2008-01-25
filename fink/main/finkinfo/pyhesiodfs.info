@@ -1,5 +1,5 @@
 Package: pyhesiodfs
-Version: svn53
+Version: 53
 Revision: 2
 Source: http://macathena.mit.edu/dist/%n-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
