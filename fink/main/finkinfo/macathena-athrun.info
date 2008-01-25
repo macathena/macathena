@@ -1,0 +1,30 @@
+Package: macathena-athrun
+Version: 22699
+Revision: 1
+Source: http://macathena.mit.edu/dist/athrun-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Utility to run a program from a locker
+DescDetail: <<
+	An Athena utility for scripts to run a program from a locker.
+	The athrun utility allows a script to robustly run a program from 
+	a specified locker.
+<<
+Source-MD5: a84f99aaac798be9c701923279d8886e
+
+Depends: macathena-attachandrun
+BuildDepends: automake1.9
+UpdateConfigGuess: true
+CompileScript: <<
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
+	autoconf
+	./configure %c
+	make
+<<
+InstallScript: <<
+	make install prefix=%i
+	mkdir -p %d/bin
+	ln -s %p/bin/athrun %d/bin/athrun
+<<

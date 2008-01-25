@@ -14,4 +14,6 @@ CompileScript: <<
 <<
 InstallScript: <<
 	python2.5 setup.py install --root=%d
+	mkdir -p %d/bin
+	ln -s %p/bin/attach %d/bin/attach
 <<

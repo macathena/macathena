@@ -1,7 +1,7 @@
 Package: macathena-athinfo
 Version: 22699
 Revision: 1
-Source: http://macathena.mit.edu/dist/athinfo-%v.tar.gz
+Source: http://macathena.mit.edu/dist/athinfo-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
