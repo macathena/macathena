@@ -113,7 +113,8 @@ svnModules = {'libathdir': ['trunk/athena/lib/athdir'],
 # Our packages:
 	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
 	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
-	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn']
+	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn'],
+	'update': ['trunk/source/update', False, 'https://macathena.mit.edu/svn']
 }
 
 if __name__ == '__main__':
