@@ -13,7 +13,8 @@ DescDetail: <<
 <<
 Source-MD5: c4ee8b7555546e9b2b70eb31e3307a7e
 
-BuildDepends: fink (>= 0.24.12), macathena-hesiod, libncurses5
+Depends: macathena-hesiod, libncurses5
+BuildDepends: fink (>= 0.24.12)
 UpdateConfigGuess: true
 PatchFile: %n.patch
 PatchFile-MD5: b351913b158ec878a18051c34b677c3f

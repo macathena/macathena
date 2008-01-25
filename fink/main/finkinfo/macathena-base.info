@@ -11,7 +11,7 @@ DescDetail: <<
 	/etc/athena/version and a dummy /etc/athena/reactivate
 <<
 
-Depends: automake-1.9
+BuildDepends: automake1.9
 CompileScript: <<
 <<
 InstallScript: <<
