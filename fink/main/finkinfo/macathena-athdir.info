@@ -1,0 +1,22 @@
+Package: macathena-athdir
+Version: 22699
+Revision: 1
+Source: http://macathena.mit.edu/dist/athdir-%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Find machine-specific directory locations
+DescDetail: <<
+	A library to implement machine-specific directory location on Athena.
+<<
+Source-MD5: 4d7fbfe6aba366c75c0e082e586abaa1
+
+BuildDepends: macathena-libathdir
+UpdateConfigGuess: true
+CompileScript: <<
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
+	autoconf
+	./configure %c
+	make
+<<

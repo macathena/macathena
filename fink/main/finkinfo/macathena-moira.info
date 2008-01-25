@@ -1,5 +1,5 @@
 Package: macathena-moira
-Version: 20071203
+Version: 20080116
 Revision: 1
 Source: http://macathena.mit.edu/dist/moira-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -11,7 +11,7 @@ DescDetail: <<
 	central repository for information about users, groups hosts, print 
 	queues, and several other aspects of the Athena environment.
 <<
-Source-MD5: eeb0b651e1689b56a2df030bdc61881c
+Source-MD5: c4ee8b7555546e9b2b70eb31e3307a7e
 
 BuildDepends: fink (>= 0.24.12), macathena-hesiod, libncurses5
 UpdateConfigGuess: true
