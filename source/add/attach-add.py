@@ -48,7 +48,7 @@ for arg in args:
 	else:
 		locker = '/mit/%s' % arg
 		
-		bin_pipe = os.popen('/usr/local/bin/athdir %s bin' % locker)
+		bin_pipe = os.popen('@FINKPREFIX@/bin/athdir %s bin' % locker)
 		new_bin = bin_pipe.read().strip()
 		if bin_pipe.close() != None:
 			if not os.access(locker, os.F_OK):
@@ -59,7 +59,7 @@ for arg in args:
 		if front: path.insert(0, new_bin)
 		elif not remove_locker: path.append(new_bin)
 		
-		man_pipe = os.popen('/usr/local/bin/athdir %s man' % locker)
+		man_pipe = os.popen('@FINKPREFIX@/bin/athdir %s man' % locker)
 		new_man = man_pipe.read().strip()
 		if man_pipe.close() == None:
 			if new_man in manpath:
@@ -67,7 +67,7 @@ for arg in args:
 			if front: manpath.insert(0, new_man)
 			elif not remove_locker: manpath.append(new_man)
 		
-		info_pipe = os.popen('/usr/local/bin/athdir %s info' % locker)
+		info_pipe = os.popen('@FINKPREFIX@/bin/athdir %s info' % locker)
 		new_info = info_pipe.read().strip()
 		if info_pipe.close() == None:
 			if new_info in infopath:
