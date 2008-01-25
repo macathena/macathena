@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import gzip
 import tarfile
 import os
 from os.path import basename
@@ -7,6 +8,22 @@ import time
 import shutil
 
 mtime = 0
+
+def _write_gzip_header(self):
+	self.fileobj.write('\037\213')             # magic header
+	self.fileobj.write('\010')                 # compression method
+	fname = self.filename[:-3]
+	flags = 0
+	if fname:
+		flags = gzip.FNAME
+	self.fileobj.write(chr(flags))
+	gzip.write32u(self.fileobj, long(mtime))
+	self.fileobj.write('\002')
+	self.fileobj.write('\377')
+	if fname:
+		self.fileobj.write(fname + '\000')
+
+gzip.GzipFile._write_gzip_header = _write_gzip_header
 
 class MyTarFile(tarfile.TarFile):
 	def gettarinfo(self, name=None, arcname=None, fileobj=None):
@@ -20,17 +37,18 @@ class MyTarFile(tarfile.TarFile):
 		
 		return info
 
-def packageSvn(module, svnModule, extras=[], svnroot='/afs/dev.mit.edu/source/svn-repos', revision='HEAD'):
+def packageSvn(module, svnModule, extras=[], svnroot='file:///afs/dev.mit.edu/source/svn-repos', revision='HEAD'):
 	os.system('attach macathena >/dev/null 2>/dev/null')
 	os.chdir('/mit/macathena/build')
 	
-	os.system('svn export -r %s file://%s/%s %s >/dev/null 2>&1' % (revision, svnroot, svnModule, module))
+	os.system('svn export -r %s %s/%s %s >/dev/null 2>&1' % (revision, svnroot, svnModule, module))
 	
-	for extra in extras:
-		os.system('svn export -r %s file://%s/%s >/dev/null 2>&1' % (revision, svnroot, extra))
-		os.system('mv %s %s' % (basename(extra), module))
+	if extras:
+		for extra in extras:
+			os.system('svn export -r %s %s/%s >/dev/null 2>&1' % (revision, svnroot, extra))
+			os.system('mv %s %s' % (basename(extra), module))
 	
-	version_info = os.popen('svn info -r %s file://%s/%s' % (revision, svnroot, svnModule)).readlines()
+	version_info = os.popen('svn info -r %s %s/%s' % (revision, svnroot, svnModule)).readlines()
 	for line in version_info:
 		if line.startswith('Last Changed Date: '):
 			time_string = line.strip().split(': ')[1][0:19]
@@ -39,7 +57,7 @@ def packageSvn(module, svnModule, extras=[], svnroot='/afs/dev.mit.edu/source/sv
 	
 	mtime = int(time.strftime("%s", time.strptime(time_string, "%Y-%m-%d %H:%M:%S")))
 	
-	tarball = "%s-%s" % (module, revision)
+	tarball = "%s-svn%s" % (module, revision)
 	os.rename(module, tarball)
 	
 	tar = MyTarFile.open('%s.tar.gz' % tarball, 'w:gz')
@@ -91,7 +109,12 @@ svnModules = {'libathdir': ['trunk/athena/lib/athdir'],
 	'getcluster': ['trunk/athena/bin/getcluster', ['attic/packs/build/aclocal.m4']],
 	'libxj': ['trunk/athena/lib/Xj'],
 	'xcluster': ['trunk/athena/bin/xcluster', ['attic/packs/build/aclocal.m4']],
-	'discuss': ['trunk/athena/bin/discuss']}
+	'discuss': ['trunk/athena/bin/discuss'],
+# Our packages:
+	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
+	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
+	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn']
+}
 
 if __name__ == '__main__':
 	import sys
