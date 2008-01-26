@@ -11,6 +11,7 @@ Source-MD5: 261c7839b934644c821c1af425f5dddc
 Depends: macathena-athdir, python25, pyhesiodfs
 PatchScript: sed -i ".bak" -e 's|@FINKPREFIX@|%p|g' setup.py macathena-add.sh macathena-add.csh attach-add.py
 CompileScript: <<
+	mkdir -p %d/lib/python2.5/site-packages
 	python2.5 setup.py build
 <<
 InstallScript: <<
