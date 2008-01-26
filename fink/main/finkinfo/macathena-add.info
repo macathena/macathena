@@ -1,6 +1,6 @@
 Package: macathena-add
 Version: 56
-Revision: 2
+Revision: 3
 Source: http://macathena.mit.edu/dist/add-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -11,9 +11,9 @@ Source-MD5: 261c7839b934644c821c1af425f5dddc
 Depends: macathena-athdir, python25, pyhesiodfs
 PatchScript: sed -i ".bak" -e 's|@FINKPREFIX@|%p|g' setup.py macathena-add.sh macathena-add.csh attach-add.py
 CompileScript: <<
-	mkdir -p %i/lib/python2.5/site-packages
 	python2.5 setup.py build
 <<
 InstallScript: <<
+	mkdir -p %i/lib/python2.5/site-packages
 	python2.5 setup.py install --root=%d
 <<
