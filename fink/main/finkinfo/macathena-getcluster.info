@@ -1,0 +1,30 @@
+Package: macathena-getcluster
+Version: 22699
+Revision: 1
+Source: http://macathena.mit.edu/dist/getcluster-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Retrieve Hesiod info for Athena workstations
+DescDetail: <<
+	Retrieve service cluster info from Hesiod for Athena workstations
+	The getcluster program is used on all Athena workstations to find the 
+	service cluster information for the workstation and writes a list of 
+	environment variable assignments which can be used to initialize a 
+	shell accordingly.
+<<
+Source-MD5: f14fed0f86802db22e5a7c6f905cddf6
+
+Depends: macathena-libhesiod
+BuildDepends: automake1.9
+UpdateConfigGuess: true
+CompileScript: <<
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
+	autoconf
+	./configure %c
+	make
+<<
+InstallScript: <<
+	make install prefix=%i
+<<
