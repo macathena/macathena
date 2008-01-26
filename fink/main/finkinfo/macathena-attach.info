@@ -13,8 +13,8 @@ CompileScript: <<
 	python2.5 setup.py build
 <<
 InstallScript: <<
+	mkdir -p %i/lib/python2.5/site-packages
 	python2.5 setup.py install --root=%d
 	mkdir -p %d/bin
-	mkdir -p %i/lib/python2.5/site-packages
 	ln -s %p/bin/attach %d/bin/attach
 <<
