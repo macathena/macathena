@@ -1,6 +1,6 @@
 Package: macathena-attach
 Version: 57
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/attach-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -15,5 +15,6 @@ CompileScript: <<
 InstallScript: <<
 	python2.5 setup.py install --root=%d
 	mkdir -p %d/bin
+	mkdir -p %i/lib/python2.5/site-packages
 	ln -s %p/bin/attach %d/bin/attach
 <<
