@@ -16,6 +16,8 @@ CompileScript: <<
 <<
 InstallScript: <<
 	mkdir %d/mit
+	mkdir -p %d/bin
+	mkdir -p %i/lib/python2.5/site-packages
 	python2.5 setup.py install --root=%d
 <<
 PostInstScript: <<
