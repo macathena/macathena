@@ -13,7 +13,7 @@ DescDetail: <<
 	current software installation state, the number of users logged on, and
 	various other informational state queries.
 <<
-Source-MD5: 833350a33ebd33d3f7711bfd66c74dba
+Source-MD5: 12043897f54c0c7a955b0600175ac6bb
 
 BuildDepends: automake1.9
 UpdateConfigGuess: true

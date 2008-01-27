@@ -6,7 +6,7 @@ Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: GPL
 Description: Automatically mounts AFS lockers in /mit
-Source-MD5: 39291db76287e0bf207994b77b447e4d
+Source-MD5: c578c79ead4e2d1c7867edd66f6194d4
 
 Depends: fuse-py25, pydns-py25
 CompileScript: <<

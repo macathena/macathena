@@ -9,7 +9,7 @@ Description: Find machine-specific directory locations
 DescDetail: <<
 	A library to implement machine-specific directory location on Athena.
 <<
-Source-MD5: ce8cb34a29bf229dcae778434708c121
+Source-MD5: 88bbdd4a68d673a7bc8529b4ba9b04c2
 
 Depends: macathena-libathdir
 BuildDepends: automake1.9

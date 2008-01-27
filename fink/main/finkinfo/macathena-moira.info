@@ -11,7 +11,7 @@ DescDetail: <<
 	central repository for information about users, groups hosts, print 
 	queues, and several other aspects of the Athena environment.
 <<
-Source-MD5: 8addd25977c784024a7fe109b5f3e8dd
+Source-MD5: d52148488b606024bfffdc1775bca707
 
 Depends: macathena-hesiod, libncurses5
 BuildDepends: fink (>= 0.24.12)

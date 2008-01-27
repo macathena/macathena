@@ -6,7 +6,7 @@ Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Widget library used by many Athena programs.
-Source-MD5: a23f2c49c3e585c66f9f7d7310fe4a75
+Source-MD5: 2a65781fb7171c82b78f7ca4aa213604
 
 BuildDepends: automake1.9
 UpdateConfigGuess: true

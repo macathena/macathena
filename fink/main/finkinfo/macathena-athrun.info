@@ -11,7 +11,7 @@ DescDetail: <<
 	The athrun utility allows a script to robustly run a program from 
 	a specified locker.
 <<
-Source-MD5: a84f99aaac798be9c701923279d8886e
+Source-MD5: a7426af81c089db2b63a6336482a713c
 
 Depends: macathena-attachandrun
 BuildDepends: automake1.9

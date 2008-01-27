@@ -11,7 +11,7 @@ DescDetail: <<
 	The attachandrun utility allows a script to robustly run a program from 
 	a specified locker.
 <<
-Source-MD5: 2bd1fbabe34ea11a3c1d7565c374641d
+Source-MD5: 9312e52dbd055c62861d9c5d0a076d9e
 
 Depends: macathena-attach
 BuildDepends: automake1.9

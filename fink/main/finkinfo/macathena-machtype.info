@@ -6,7 +6,7 @@ Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Print Athena machine type to standard output
-Source-MD5: 09eb882bfc0ff86ce38132814a7a588e
+Source-MD5: f03f88e7ae085b16979d4ecd5a5f75d9
 
 Depends: macathena-base
 BuildDepends: fink (>= 0.24.12), automake1.9

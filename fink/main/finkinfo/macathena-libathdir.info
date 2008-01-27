@@ -9,7 +9,7 @@ Description: Find machine-specific directory locations
 DescDetail: <<
 	A library to implement machine-specific directory location on Athena.
 <<
-Source-MD5: 5c77cdb11016656c22eed4c35d66c3a6
+Source-MD5: 270130665f1075650735187a459c11d3
 
 BuildDepends: automake1.9
 UpdateConfigGuess: true
