@@ -7,16 +7,16 @@ HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Mimic the functionality of Athena's attach
 Source-MD5: 96b0fd698e653c9f2a169a6c1845e18b
+DocFiles: copyright
 
 Depends: macathena-add, python25, pyhesiodfs
 CompileScript: <<
 	python2.5 setup.py build
 <<
 InstallScript: <<
-	mkdir -p %i/lib/python2.5/site-packages %d/bin %i/share/doc/%n/
+	mkdir -p %i/lib/python2.5/site-packages %d/bin
 	
 	python2.5 setup.py install --root=%d
 	
 	ln -s %p/bin/attach %d/bin/attach
-	cp %b/copyright %i/share/doc/%n/
 <<

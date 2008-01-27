@@ -11,6 +11,7 @@ DescDetail: <<
 	/etc/athena/version and a dummy /etc/athena/reactivate
 <<
 Source-MD5: f2c007d98c970e84af9cd0c9c5a88df6
+DocFiles: copyright
 
 BuildDepends: automake1.9
 CompileScript: <<
@@ -19,10 +20,9 @@ InstallScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	
-	%b/mkinstalldirs %d/etc/athena %d/usr %d/bin %i/share/macathena-base/ %i/share/doc/macathena-base/
+	%b/mkinstalldirs %d/etc/athena %d/usr %d/bin %i/share/%n/
 	%b/install-sh %b/version %b/reactivate %d/etc/athena/
-	%b/install-sh -m 644 %b/athena-copyright %i/share/macathena-base/
-	%b/install-sh -m 644 %b/copyright %i/share/doc/macathena-base/
+	%b/install-sh -m 644 %b/athena-copyright %i/share/%n/
 	
 	ln -s /usr %d/usr/athena
 	ln -s /bin %d/bin/athena

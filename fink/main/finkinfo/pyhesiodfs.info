@@ -7,6 +7,7 @@ HomePage: http://macathena.mit.edu/
 License: GPL
 Description: Automatically mounts AFS lockers in /mit
 Source-MD5: 2d321c4c4fadb67025aff9eb57e02d5f
+DocFiles: COPYING copyright
 
 Depends: fuse-py25, pydns-py25
 BuildDepends: automake1.9
@@ -20,8 +21,6 @@ InstallScript: <<
 	
 	%b/mkinstalldirs %d/mit %d/bin %i/lib/python2.5/site-packages %i
 	python2.5 setup.py install --root=%d
-	
-	%b/install-sh -m 644 COPYING copyright %i/share/doc/pyhesiodfs/
 <<
 PostInstScript: <<
 	launchctl load /Library/LaunchDaemons/edu.mit.sipb.mit-automounter.plist
