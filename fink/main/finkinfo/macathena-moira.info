@@ -1,6 +1,6 @@
 Package: macathena-moira
 Version: 20080116
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/moira-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -31,4 +31,7 @@ InstallScript: <<
 	mv %i/bin/chsh %i/bin/chsh.moira
 	mv %i/share/man/man1/chfn.1 %i/share/man/man1/chfn.moira.1
 	mv %i/share/man/man1/chsh.1 %i/share/man/man1/chsh.moira.1
+	
+	%b/mkinstalldirs %i/share/doc/%n
+	cat %b/include/mit-copyright.h | python -c "import sys; print ''.join(sys.stdin.readlines()[2:-2])" >%i/share/doc/%n/copyright
 <<

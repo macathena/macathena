@@ -1,20 +1,22 @@
 Package: macathena-attach
-Version: 57
+Version: 78
 Revision: 2
 Source: http://macathena.mit.edu/dist/attach-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Mimic the functionality of Athena's attach
-Source-MD5: 551ce7b88a7fbb90ccfa9cdb394c5e95
+Source-MD5: 96b0fd698e653c9f2a169a6c1845e18b
 
 Depends: macathena-add, python25, pyhesiodfs
 CompileScript: <<
 	python2.5 setup.py build
 <<
 InstallScript: <<
-	mkdir -p %i/lib/python2.5/site-packages
+	mkdir -p %i/lib/python2.5/site-packages %d/bin %i/share/doc/%n/
+	
 	python2.5 setup.py install --root=%d
-	mkdir -p %d/bin
+	
 	ln -s %p/bin/attach %d/bin/attach
+	cp %b/copyright %i/share/doc/%n/
 <<

@@ -1,17 +1,19 @@
 Package: macathena-update
-Version: 63
+Version: 78
 Revision: 1
 Source: http://macathena.mit.edu/dist/update-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
-License: BSD
+License: Public Domain
 Description: Update MacAthena packages
-Source-MD5: 69cbfebb95889f68669b2c8db2bf2916
+Source-MD5: 908e375ad7c401d1fb1beed9bfa05987
 
 PatchScript: sed -i ".bak" -e 's|@FINKPREFIX@|%p|g' macathena-update
 CompileScript: <<
 <<
 InstallScript: <<
 	mkdir -p %i/bin/
-	cp macathena-update %i/bin/
+	mkdir -p %i/share/doc/%n/
+	cp %b/macathena-update %i/bin/
+	cp %b/copyright %i/share/doc/%n/
 <<

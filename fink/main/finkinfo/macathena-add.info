@@ -1,12 +1,12 @@
 Package: macathena-add
-Version: 72
+Version: 78
 Revision: 1
 Source: http://macathena.mit.edu/dist/add-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Add a locker to the path
-Source-MD5: cb829cf009c4558fbfa8f4141f7939de
+Source-MD5: 60be60923f19ce270f83682243a1c5bf
 
 Depends: macathena-athdir, python25, pyhesiodfs
 PatchScript: sed -i ".bak" -e 's|@FINKPREFIX@|%p|g' setup.py macathena-add.sh macathena-add.csh attach-add.py
@@ -14,6 +14,7 @@ CompileScript: <<
 	python2.5 setup.py build
 <<
 InstallScript: <<
-	mkdir -p %i/lib/python2.5/site-packages
+	mkdir -p %i/lib/python2.5/site-packages %i/share/doc/%n/
 	python2.5 setup.py install --root=%d
+	cp %b/copyright %i/share/doc/%n/
 <<

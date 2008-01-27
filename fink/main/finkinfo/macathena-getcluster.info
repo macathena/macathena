@@ -1,6 +1,6 @@
 Package: macathena-getcluster
 Version: 22699
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/getcluster-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -16,7 +16,7 @@ DescDetail: <<
 Source-MD5: 662aa267d3c555019007dac9b243a9b7
 
 Depends: macathena-libhesiod
-BuildDepends: automake1.9
+BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
@@ -27,4 +27,7 @@ CompileScript: <<
 <<
 InstallScript: <<
 	make install prefix=%i
+	
+	%b/mkinstalldirs %i/share/doc/%n/
+	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

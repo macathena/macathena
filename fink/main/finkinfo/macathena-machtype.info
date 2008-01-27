@@ -1,6 +1,6 @@
 Package: macathena-machtype
 Version: 22699
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/machtype-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -9,7 +9,7 @@ Description: Print Athena machine type to standard output
 Source-MD5: f03f88e7ae085b16979d4ecd5a5f75d9
 
 Depends: macathena-base
-BuildDepends: fink (>= 0.24.12), automake1.9
+BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 PatchFile: %n.patch
 PatchFile-MD5: b3640db9d86c7e3800da8ae75c3bca3d
@@ -20,4 +20,10 @@ CompileScript: <<
 	autoconf
 	env `python2.5 %b/getSysnameList.py` ATHENA_MAJOR_VERSION=9 ATHENA_MINOR_VERSION=4 ./configure %c
 	make
+<<
+InstallScript: <<
+	make install prefix=%i
+	
+	%b/mkinstalldirs %i/share/doc/%n/
+	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

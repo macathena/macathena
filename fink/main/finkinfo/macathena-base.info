@@ -1,7 +1,7 @@
 Package: macathena-base
-Version: 0.1
-Revision: 2
-Source: none
+Version: 76
+Revision: 1
+Source: http://macathena.mit.edu/dist/base-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
@@ -10,16 +10,20 @@ DescDetail: <<
 	Creates the /usr/athena and /bin/athena symlinks, and contains
 	/etc/athena/version and a dummy /etc/athena/reactivate
 <<
+Source-MD5: f2c007d98c970e84af9cd0c9c5a88df6
 
 BuildDepends: automake1.9
 CompileScript: <<
 <<
 InstallScript: <<
-	mkdir -p %d/etc/athena
-	mkdir -p %d/usr
-	mkdir -p %d/bin
-	printf "MacAthena Workstation (darwin) Version 1.0 Sun Dec 23 23:07:38 EDT 2007" >%d/etc/athena/version
-	printf "#\!/bin/sh\n\necho \"/etc/athena/reactivate is not supported on MacAthena.\" >&2\n" >%d/etc/athena/reactivate
+	cp %p/share/automake-1.9/install-sh %b/
+	cp %p/share/automake-1.9/mkinstalldirs %b/
+	
+	%b/mkinstalldirs %d/etc/athena %d/usr %d/bin %i/share/macathena-base/ %i/share/doc/macathena-base/
+	%b/install-sh %b/version %b/reactivate %d/etc/athena/
+	%b/install-sh -m 644 %b/athena-copyright %i/share/macathena-base/
+	%b/install-sh -m 644 %b/copyright %i/share/doc/macathena-base/
+	
 	ln -s /usr %d/usr/athena
 	ln -s /bin %d/bin/athena
 <<

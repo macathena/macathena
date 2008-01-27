@@ -1,6 +1,6 @@
 Package: macathena-libathdir
 Version: 22699
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/libathdir-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -11,7 +11,7 @@ DescDetail: <<
 <<
 Source-MD5: 270130665f1075650735187a459c11d3
 
-BuildDepends: automake1.9
+BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
@@ -19,4 +19,10 @@ CompileScript: <<
 	autoconf
 	./configure %c
 	make
+<<
+InstallScript: <<
+	make install prefix=%i
+	
+	%b/mkinstalldirs %i/share/doc/%n/
+	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

@@ -1,6 +1,6 @@
 Package: macathena-libxj
 Version: 22699
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/libxj-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -8,7 +8,7 @@ License: BSD
 Description: Widget library used by many Athena programs.
 Source-MD5: 2a65781fb7171c82b78f7ca4aa213604
 
-BuildDepends: automake1.9
+BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
@@ -19,4 +19,7 @@ CompileScript: <<
 <<
 InstallScript: <<
 	make install prefix=%i
+	
+	%b/mkinstalldirs %i/share/doc/%n/
+	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<
