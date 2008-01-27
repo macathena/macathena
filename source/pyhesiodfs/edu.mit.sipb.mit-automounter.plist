@@ -8,13 +8,13 @@
 	<false/>
 	<key>ProgramArguments</key>
 	<array>
-		<string>@prefix@/bin/pyHesiodFS.py</string>
+		<string>/usr/local/bin/pyHesiodFS.py</string>
 		<string>-f</string>
 		<string>/mit</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StandardErrorPath</key>
-	<string>@prefix@/var/log/mit-automounter.log</string>
+	<string>/usr/local/var/log/mit-automounter.log</string>
 </dict>
 </plist>
