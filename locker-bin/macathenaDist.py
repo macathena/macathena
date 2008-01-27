@@ -32,12 +32,13 @@ class MyTarFile(tarfile.TarFile):
 		info.uname = "root"
 		info.gname = "wheel"
 		
-		if info.isdir():
-			info.mtime = mtime
+		info.mtime = mtime
 		
 		return info
 
 def packageSvn(module, svnModule, extras=[], svnroot='file:///afs/dev.mit.edu/source/svn-repos', revision='HEAD'):
+	global mtime
+	
 	os.system('attach macathena >/dev/null 2>/dev/null')
 	os.chdir('/mit/macathena/build')
 	
@@ -70,6 +71,8 @@ def packageSvn(module, svnModule, extras=[], svnroot='file:///afs/dev.mit.edu/so
 	print 'Created /mit/macathena/dist/%s.tar.gz' % tarball
 
 def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs/dev.mit.edu/source/repository', date='tomorrow'):
+	global mtime
+	
 	os.system('attach macathena >/dev/null 2>/dev/null')
 	os.chdir('/mit/macathena/build')
 	
@@ -85,6 +88,7 @@ def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs
 		if len(files) > 0:
 			stamp = max(stamp, max(os.stat('%s/%s' % (root, file))[8] for file in files))
 	
+	mtime = int(time.strftime('%s', time.localtime(stamp)))
 	tarball_time = time.strftime('%Y%m%d', time.localtime(stamp))
 	tarball = '%s-%s' % (module, tarball_time)
 	os.rename(cvsModule, tarball)
@@ -100,16 +104,16 @@ def packageCvs(module, cvsModule, extras=['packs/build/autoconf'], cvsroot='/afs
 
 cvsModules = {'moira': ['moira', False, '/afs/athena.mit.edu/astaff/project/moiradev/repository']}
 
-svnModules = {'libathdir': ['trunk/athena/lib/athdir'],
-	'athdir': ['trunk/athena/bin/athdir'],
-	'machtype': ['trunk/athena/bin/machtype'],
+svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 	'attachandrun': ['trunk/athena/bin/attachandrun'],
 	'athrun': ['trunk/athena/bin/athrun'],
 	'athinfo': ['trunk/athena/bin/athinfo'],
+	'discuss': ['trunk/athena/bin/discuss', ['attic/packs/build/aclocal.m4']],
 	'getcluster': ['trunk/athena/bin/getcluster', ['attic/packs/build/aclocal.m4']],
+	'libathdir': ['trunk/athena/lib/athdir'],
 	'libxj': ['trunk/athena/lib/Xj'],
+	'machtype': ['trunk/athena/bin/machtype'],
 	'xcluster': ['trunk/athena/bin/xcluster', ['attic/packs/build/aclocal.m4']],
-	'discuss': ['trunk/athena/bin/discuss'],
 # Our packages:
 	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
 	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
@@ -127,8 +131,10 @@ if __name__ == '__main__':
 	
 	for arg in build:
 		if svnModules.has_key(arg):
+			print "Building %s" % arg
 			apply(packageSvn, [arg] + svnModules[arg])
 		elif cvsModules.has_key(arg):
+			print "Building %s" % arg
 			apply(packageCvs, [arg] + cvsModules[arg])
 		else:
 			print "Sorry - I don't know about the module %s" % arg
