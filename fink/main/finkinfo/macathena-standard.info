@@ -7,4 +7,4 @@ HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: Metapackage providing MacAthena standard environment
 
-Depends: pyhesiodfs, macathena-athinfo, macathena-athrun, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-lilbgms, macathena-libxj, macathena-moira, macathena-machtype, macathena-update
+Depends: pyhesiodfs, macathena-athinfo, macathena-athrun, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-lilbgms, macathena-libxj, macathena-moira, macathena-machtype, macathena-ssl-certificates, macathena-update
