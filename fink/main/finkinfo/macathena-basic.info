@@ -1,0 +1,10 @@
+Package: macathena-basic
+Version: 0.1
+Revision: 1
+Type: bundle
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Metapackage providing basic MacAthena software
+
+Depends: pyhesiodfs, macathena-athrun, macathena-moira, macathena-ssl-certificates, macathena-update

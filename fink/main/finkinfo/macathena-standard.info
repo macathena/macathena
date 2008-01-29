@@ -1,10 +1,10 @@
 Package: macathena-standard
 Version: 0.1
-Revision: 2
+Revision: 4
 Type: bundle
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: Metapackage providing MacAthena standard environment
 
-Depends: pyhesiodfs, macathena-athinfo, macathena-athrun, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-lilbgms, macathena-libxj, macathena-moira, macathena-machtype, macathena-ssl-certificates, macathena-update
+Depends: macathena-basic, macathena-athinfo, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-libgms, macathena-libxj, macathena-machtype, macathena-update
