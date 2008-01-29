@@ -10,20 +10,17 @@ DescDetail: <<
 	A library to implement machine-specific directory location on Athena.
 <<
 Source-MD5: 88bbdd4a68d673a7bc8529b4ba9b04c2
+DocFiles: athena-copyright
 
 Depends: macathena-libathdir
 BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
+	cp %p/share/macathena-base/athena-copyright %b/
+	
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	./configure %c
 	make
-<<
-InstallScript: <<
-	make install prefix=%i
-	
-	%b/mkinstalldirs %i/share/doc/%n/
-	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

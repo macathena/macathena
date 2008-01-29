@@ -7,6 +7,7 @@ HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Print Athena machine type to standard output
 Source-MD5: f03f88e7ae085b16979d4ecd5a5f75d9
+DocFiles: athena-copyright
 
 Depends: macathena-base
 BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1)
@@ -15,15 +16,11 @@ PatchFile: %n.patch
 PatchFile-MD5: b3640db9d86c7e3800da8ae75c3bca3d
 PatchScript: patch -p0 < %{PatchFile}
 CompileScript: <<
+	cp %p/share/macathena-base/athena-copyright %b/
+	
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	env `python2.5 %b/getSysnameList.py` ATHENA_MAJOR_VERSION=9 ATHENA_MINOR_VERSION=4 ./configure %c
 	make
-<<
-InstallScript: <<
-	make install prefix=%i
-	
-	%b/mkinstalldirs %i/share/doc/%n/
-	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

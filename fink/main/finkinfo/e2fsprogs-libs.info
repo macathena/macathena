@@ -1,6 +1,6 @@
 Package: e2fsprogs-libs
 Version: 1.40.4
-Revision: 1
+Revision: 2
 Source: mirror:sourceforge:e2fsprogs/%n-%v.tar.gz
 Maintainer: Evan Broder <broder@mit.edu>
 HomePage: http://e2fsprogs.sourceforge.net/
@@ -10,6 +10,9 @@ Source-MD5: fff603ce42c0e51d5b2500c36138d874
 DocFiles: COPYING
 
 Depends: libss (= %v-%r), libcomerr (= %v-%r), libblkid (= %v-%r), libuuid (= %v-%r)
+
+PatchFile: %n.patch
+PatchFile-MD5: 7f934a671ac597defa64fc5866be68cb
 
 SplitOff: <<
 	Package: libss

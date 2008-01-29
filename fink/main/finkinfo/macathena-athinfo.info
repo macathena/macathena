@@ -14,19 +14,16 @@ DescDetail: <<
 	various other informational state queries.
 <<
 Source-MD5: 12043897f54c0c7a955b0600175ac6bb
+DocFiles: athena-copyright
 
 BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
+	cp %p/share/macathena-base/athena-copyright %b/
+	
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	./configure %c
 	make
-<<
-InstallScript: <<
-	make install prefix=%i
-	
-	%b/mkinstalldirs %i/share/doc/%n/
-	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

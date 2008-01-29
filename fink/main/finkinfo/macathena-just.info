@@ -7,19 +7,16 @@ HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Simple text formatting utilities on Athena
 Source-MD5: 1a6e81a33ba97f1109ccdb7299c1a695
+DocFiles: athena-copyright
 
 BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
+	cp %p/share/macathena-base/athena-copyright %b/
+	
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
 	./configure %c
 	make
-<<
-InstallScript: <<
-	make install prefix=%i
-	
-	%b/mkinstalldirs %i/share/doc/%n/
-	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

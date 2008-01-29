@@ -12,11 +12,14 @@ DescDetail: <<
 	a specified locker.
 <<
 Source-MD5: 9312e52dbd055c62861d9c5d0a076d9e
+DocFiles: athena-copyright
 
 Depends: macathena-attach
 BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 CompileScript: <<
+	cp %p/share/macathena-base/athena-copyright %b/
+	
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	autoconf
@@ -27,7 +30,4 @@ InstallScript: <<
 	make install prefix=%i
 	mkdir -p %d/bin
 	ln -s %p/bin/attachandrun %d/bin/attachandrun
-	
-	%b/mkinstalldirs %i/share/doc/%n/
-	cp /sw/share/macathena-base/athena-copyright %i/share/doc/%n/copyright
 <<

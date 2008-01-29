@@ -1,0 +1,343 @@
+diff -ur discuss-svn22699/server/rpproc.c discuss-svn22699-orig/server/rpproc.c 
+--- discuss-svn22699-orig/server/rpproc.c	2008-01-28 23:27:37.000000000 -0500
++++ discuss-svn22699/server/rpproc.c	2008-01-28 23:27:56.000000000 -0500
+@@ -116,7 +116,7 @@
+     USPCardinal bt;
+ #endif	  
+ 
+-    init_rpc_err_tbl();
++    initialize_rpc_error_table();
+ 
+ #ifdef INETD
+     d = open ("/dev/null", 2);
+@@ -485,7 +485,7 @@
+     int i;
+ {
+     if (USP_put_long_integer(us, i) != SUCCESS) {
+-	rpc_err = errno + rpc_err_base;
++	rpc_err = errno + ERROR_TABLE_BASE_rpc;
+     }
+ }
+ 
+@@ -500,7 +500,7 @@
+     if (str == NULL)
+       str = "";
+     if (USP_put_string(us, str) != SUCCESS) {
+-	rpc_err = rpc_err_base + errno;
++	rpc_err = ERROR_TABLE_BASE_rpc + errno;
+ 	return;
+     }
+ }
+@@ -514,7 +514,7 @@
+     bool b;
+ {
+     if (USP_put_boolean(us, (USPBoolean)b) != SUCCESS) {
+-	rpc_err = rpc_err_base + errno;
++	rpc_err = ERROR_TABLE_BASE_rpc + errno;
+ 	return;
+     }
+ }
+@@ -527,7 +527,7 @@
+ sendreply()
+ {
+     if (USP_end_block(us) != SUCCESS) {
+-	rpc_err = rpc_err_base + errno;
++	rpc_err = ERROR_TABLE_BASE_rpc + errno;
+ 	return;
+     }
+     return;
+@@ -542,7 +542,7 @@
+ {
+     USP_begin_block(us,UNKNOWN_CALL);
+     if (USP_end_block(us) != SUCCESS) {
+-	rpc_err = rpc_err_base + errno;
++	rpc_err = ERROR_TABLE_BASE_rpc + errno;
+ 	return;
+     }
+     return;
+diff -ur discuss-svn22699-orig/server/Makefile.in discuss-svn22699/client/Makefile.in
+--- discuss-svn22699-orig/server/Makefile.in    2007-01-30 23:54:16.0000
+00000 -0500
++++ discuss-svn22699/server/Makefile.in 2007-01-30 23:54:30.000000000 -0
+500
+@@ -41,7 +41,7 @@
+ install:
+ 	${top_srcdir}/mkinstalldirs ${DESTDIR}${sbindir}
+ 	${INSTALL_PROGRAM} discussd ${DESTDIR}${sbindir}
+-	${INSTALL} -o discuss -m 4755 disserve ${DESTDIR}${sbindir}
++	${INSTALL} disserve ${DESTDIR}${sbindir}
+ 
+ discussd: $(DISCUSSD_OBJS)
+ 	${CC} ${LDFLAGS} -o $@ $(DISCUSSD_OBJS) ${LIBS}
+diff -ur discuss-svn22699-orig/client/discuss.c discuss-svn22699/client/discuss.c
+--- discuss-svn22699-orig/client/discuss.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/client/discuss.c	2008-01-28 22:51:10.000000000 -0500
+@@ -154,8 +154,8 @@
+ 		ss_perror(sci_idx, code, INFO_DIR);
+ 	}
+ 
+-	init_disc_err_tbl();
+-	init_dsc_err_tbl();
++	initialize_disc_error_table();
++	initialize_dsc_error_table();
+ 
+ 	temp_file = malloc(64);
+ 	pgm = malloc(64);
+diff -ur discuss-svn22699-orig/client/trn_expr.y discuss-svn22699/client/trn_expr.y
+--- discuss-svn22699-orig/client/trn_expr.y	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/client/trn_expr.y	2008-01-28 22:10:42.000000000 -0500
+@@ -69,7 +69,7 @@
+  *
+  */
+ 
+-static yyerror(msg)
++yyerror(msg)
+ 	char *msg;
+ {
+ #ifdef	lint
+@@ -97,7 +97,7 @@
+ 	return(1);
+ }
+ 
+-static yylex()
++yylex()
+ {
+ 	if (!*cp) return -1;
+ 	if(isdigit(*cp)) {
+diff -ur discuss-svn22699-orig/edsc/edsc.c discuss-svn22699/edsc/edsc.c
+--- discuss-svn22699-orig/edsc/edsc.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/edsc/edsc.c	2008-01-28 22:53:24.000000000 -0500
+@@ -122,7 +122,7 @@
+      char *cp,*op,delim,*args;
+      struct rlimit limit;
+ 
+-     init_dsc_err_tbl();
++     initialize_dsc_error_table();
+ 
+      temp_file = malloc(64);
+      pgm = malloc(64);
+diff -ur discuss-svn22699-orig/include/config.h.sed discuss-svn22699/include/config.h.sed
+--- discuss-svn22699-orig/include/config.h.sed	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/include/config.h.sed	2008-01-28 22:58:28.000000000 -0500
+@@ -53,7 +53,7 @@
+ 
+ /* Server to exec (assumed to be in SERVERDIR) */
+ #ifndef SERVER
+-#define SERVER "/usr/athena/etc/disserve"
++#define SERVER "SERVERDIR/disserve"
+ #endif
+ #ifndef SERVER_LOCAL
+ /* this one is path-searched if it doesn't begin with slash... */
+@@ -65,7 +65,7 @@
+ 
+ /* Info directory */
+ #ifndef INFO_DIR
+-#define INFO_DIR "/usr/athena/share/discuss/info"
++#define INFO_DIR "INFODIR"
+ #endif
+ 
+ /* Name server / Kerberos realm */
+@@ -80,7 +80,7 @@
+ 
+ /* Place where dsmail can find dspipe */
+ #ifndef DSPIPE
+-#define DSPIPE "/usr/athena/bin/dspipe"
++#define DSPIPE "BINDIR/dspipe"
+ #endif
+ 
+ /* dsc_setup command */
+diff -ur discuss-svn22699-orig/libds/auth_krb.c discuss-svn22699/libds/auth_krb.c
+--- discuss-svn22699-orig/libds/auth_krb.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/libds/auth_krb.c	2008-01-28 22:51:35.000000000 -0500
+@@ -74,7 +74,7 @@
+ 	 exit(1);
+      }
+ 
+-     init_krb_err_tbl();
++     initialize_krb_error_table();
+ 
+      realmp = strchr (service_id, '@');
+      if (realmp == NULL || realmp - service_id >= sizeof (serv)) {
+@@ -131,7 +131,7 @@
+ 
+      static KTEXT_ST ticket;
+ 
+-     init_krb_err_tbl();
++     initialize_krb_error_table();
+ 
+      realmp = strchr (service_id, '@');
+      if (realmp == NULL || realmp - service_id >= sizeof (serv)) {
+@@ -159,7 +159,7 @@
+      } else {
+ 	 *authl = 0;
+ 	 *authp = NULL;
+-	 *result = rem + krb_err_base;
++	 *result = rem + ERROR_TABLE_BASE_krb;
+      }
+ }
+ 
+diff -ur discuss-svn22699-orig/libds/rpcall.c discuss-svn22699/libds/rpcall.c
+--- discuss-svn22699-orig/libds/rpcall.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/libds/rpcall.c	2008-01-28 22:52:31.000000000 -0500
+@@ -146,10 +146,10 @@
+ 
+ /*
+  *
+- * sendfile(tf)  -- Send a file in an RPC call.
++ * rpc_sendfile(tf)  -- Send a file in an RPC call.
+  *
+  */
+-void sendfile(tf)
++void rpc_sendfile(tf)
+     tfile tf;
+ {
+     int tfs;
+@@ -181,8 +181,8 @@
+  */
+ void init_rpc ()
+ {
+-    init_rpc_err_tbl();
+-    init_usp_err_tbl();
++    initialize_rpc_error_table();
++    initialize_usp_error_table();
+ }
+ 
+ /*
+diff -ur discuss-svn22699-orig/libds/stubs.c discuss-svn22699/libds/stubs.c
+--- discuss-svn22699-orig/libds/stubs.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/libds/stubs.c	2008-01-28 21:24:02.000000000 -0500
+@@ -51,7 +51,7 @@
+      startsend(ADD_TRN);
+      if (rpc_err) { *result = rpc_err; return; }
+      sendstr(mtg_name);
+-     sendfile(source_file);
++     rpc_sendfile(source_file);
+      sendstr(subject);
+      sendint(reply_trn);
+      sendit(discuss);
+@@ -85,7 +85,7 @@
+      startsend(ADD_TRN2);
+      if (rpc_err) { *result = rpc_err; return; }
+      sendstr(mtg_name);
+-     sendfile(source_file);
++     rpc_sendfile(source_file);
+      sendstr(subject);
+      sendstr(signature);
+      sendint(reply_trn);
+@@ -342,7 +342,7 @@
+      if (rpc_err) { *result = rpc_err; return; }
+      sendstr(mtg_name);
+      sendint(trn);
+-     sendfile(dest_file);
++     rpc_sendfile(dest_file);
+      sendit(discuss);
+      if (rpc_err) { *result = rpc_err; return; }
+      recvdata(dest_file);
+diff -ur discuss-svn22699-orig/mclient/crmtgs.c discuss-svn22699/mclient/crmtgs.c
+--- discuss-svn22699-orig/mclient/crmtgs.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/mclient/crmtgs.c	2008-01-28 22:53:24.000000000 -0500
+@@ -37,7 +37,7 @@
+ 	char **aliasv;
+ 	int naliases;
+ 	
+-	init_dsc_err_tbl();
++	initialize_dsc_error_table();
+ 
+ 	dsc_expand_mtg_set(NULL, "*", &set, &n_matches, &code);
+ 
+diff -ur discuss-svn22699-orig/mclient/dsmail.c discuss-svn22699/mclient/dsmail.c
+--- discuss-svn22699-orig/mclient/dsmail.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/mclient/dsmail.c	2008-01-28 22:53:24.000000000 -0500
+@@ -89,7 +89,7 @@
+      int i,ok_prev=0,iscont = 0, have_signature = 0, len, d;
+      char filename[60], signature[35], field_name[100];
+      
+-     init_dsc_err_tbl();
++     initialize_dsc_error_table();
+ 
+      PRS(argc,argv);				/* Parse args */
+ 
+diff -ur discuss-svn22699-orig/mclient/dspipe.c discuss-svn22699/mclient/dspipe.c
+--- discuss-svn22699-orig/mclient/dspipe.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/mclient/dspipe.c	2008-01-28 22:53:24.000000000 -0500
+@@ -44,7 +44,7 @@
+ 	tfile tf;
+ 	int i,nread,d,exit_code;
+ 
+-	init_dsc_err_tbl();
++	initialize_dsc_error_table();
+ 	for (i = 1; i < argc; i++) {
+ 		if (*argv[i] == '-')
+ 			switch (argv[i][1]) {
+diff -ur discuss-svn22699-orig/mclient/mkds.c discuss-svn22699/mclient/mkds.c
+--- discuss-svn22699-orig/mclient/mkds.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/mclient/mkds.c	2008-01-28 22:53:24.000000000 -0500
+@@ -63,7 +63,7 @@
+ 	tfile tf;
+ 	char hostname[256];
+ 
+-	init_dsc_err_tbl();
++	initialize_dsc_error_table();
+ 
+ 	nbsrc.user_id = malloc(132);
+ 
+diff -ur discuss-svn22699-orig/mclient/pmtg.c discuss-svn22699/mclient/pmtg.c
+--- discuss-svn22699-orig/mclient/pmtg.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/mclient/pmtg.c	2008-01-28 22:53:24.000000000 -0500
+@@ -35,7 +35,7 @@
+ 	tfile tfstdout;
+ 	char machine [50],mtg_name[100];
+ 
+-	init_dsc_err_tbl();
++	initialize_dsc_error_table();
+ 	argc--; argv++;
+ 	if (argc != 1)
+ 		goto lusage;
+diff -ur discuss-svn22699-orig/server/expunge.c discuss-svn22699/server/expunge.c
+--- discuss-svn22699-orig/server/expunge.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/server/expunge.c	2008-01-28 22:53:24.000000000 -0500
+@@ -72,7 +72,7 @@
+      static struct flock lock;
+ 
+ 
+-     init_dsc_err_tbl();
++     initialize_dsc_error_table();
+ 
+      for (i = 1; i < argc; i++) {
+ 	  if (*argv[i] == '-') switch (argv[i][1]) {
+diff -ur discuss-svn22699-orig/server/expunge2.c discuss-svn22699/server/expunge2.c
+--- discuss-svn22699-orig/server/expunge2.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/server/expunge2.c	2008-01-28 22:53:24.000000000 -0500
+@@ -55,7 +55,7 @@
+      char control_name[256];
+      int control_fd;
+      
+-     init_dsc_err_tbl();
++     initialize_dsc_error_table();
+ 
+      for (i = 1; i < argc; i++) {
+ 	  if (*argv[i] == '-') switch (argv[i][1]) {
+diff -ur discuss-svn22699-orig/server/recover.c discuss-svn22699/server/recover.c
+--- discuss-svn22699-orig/server/recover.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/server/recover.c	2008-01-28 22:53:24.000000000 -0500
+@@ -101,7 +101,7 @@
+      has_privs = TRUE;
+      use_zephyr = 0;
+ 
+-     init_dsc_err_tbl();
++     initialize_dsc_error_table();
+ 
+      for (i = 1; i < argc; i++) {
+ 	  if (*argv[i] == '-') switch (argv[i][1]) {
+diff -ur discuss-svn22699-orig/server/rpproc.c discuss-svn22699/server/rpproc.c
+--- discuss-svn22699-orig/server/rpproc.c	2008-01-28 21:21:46.000000000 -0500
++++ discuss-svn22699/server/rpproc.c	2008-01-28 22:53:24.000000000 -0500
+@@ -316,7 +316,7 @@
+         result = krb_rd_req (&ticket, service, instance, haddr, &kdata,
+ 	                     filename);
+ 	if (result) {
+-	    result += krb_err_base;
++	    result += ERROR_TABLE_BASE_krb;
+ 	    goto punt_kerberos;
+ 	}
+ #ifdef KERBEROS5
