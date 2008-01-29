@@ -1,2 +1,2 @@
 install:
-	security add-trusted-cert -d %b/mitCA.pem
+	security add-trusted-cert -d mitCA.pem
