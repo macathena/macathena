@@ -1,5 +1,5 @@
 Package: macathena-ssl-certificates
-Version: 87
+Version: 88
 Revision: 1
 Source: http://macathena.mit.edu/dist/ssl-certificates-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -10,7 +10,7 @@ DescPackaging: <<
 	This package installs the MIT CA into the system keychain. Uninstalling
 	this package does not remove the certificate.
 <<
-Source-MD5: 17817c67ae0b7e32fc1ce6d39b607349
+Source-MD5: 0dee4abcd1fc98e747e10dc7e6fc2673
 DocFiles: copyright
 
 CompileScript: <<
