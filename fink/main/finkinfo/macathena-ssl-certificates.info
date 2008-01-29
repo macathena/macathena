@@ -1,0 +1,24 @@
+Package: macathena-ssl-certificates
+Version: 87
+Revision: 1
+Source: http://macathena.mit.edu/dist/ssl-certificates-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Install the MIT CA into the Keychain
+DescPackaging: <<
+	This package installs the MIT CA into the system keychain. Uninstalling
+	this package does not remove the certificate.
+<<
+Source-MD5: 17817c67ae0b7e32fc1ce6d39b607349
+DocFiles: copyright
+
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %i/share/%n/
+	cp %b/mitCA.pem %i/share/%n/
+<<
+PostInstScript: <<
+	security add-trusted-cert -d -k /Library/Keychains/System.keychain %p/share/%n/mitCA.pem
+<<
