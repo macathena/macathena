@@ -122,7 +122,8 @@ svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
 	'base': ['trunk/source/base', False, 'https://macathena.mit.edu/svn'],
 	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn'],
-	'update': ['trunk/source/update', False, 'https://macathena.mit.edu/svn']
+	'update': ['trunk/source/update', False, 'https://macathena.mit.edu/svn'],
+	'ssl-certificates': ['trunk/source/ssl-certificates', False, 'https://macathena.mit.edu/svn']
 }
 
 if __name__ == '__main__':
