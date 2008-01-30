@@ -1,0 +1,16 @@
+html {
+    background: #325768 url("/images/gradient.png") repeat-x;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    padding: .75em;
+}
+body {
+    position: relative;
+    max-width: 50em;
+    margin: 2em auto 2em;
+    padding: 3em;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    border-radius: 0.8em;
+    background: #fff;
+}
