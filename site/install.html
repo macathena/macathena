@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>MacAthena: Install Instructions</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles/style" type="text/css" />
+    <link rel="stylesheet" href="styles/layout" type="text/css" media="screen" />
+</head>
+<body>
+    <h1><a href="/">MacAthena</a>: Install Instructions</h1>
+    
+    <h2 id="preinstall">Preparing Your System</h2>
+    
+    <p>MacAthena takes advantage of several other software packages that are required to install MacAthena.</p>
+    
+    <ol>
+    
+    <li><p>First, you should install the <a href="http://web.mit.edu/macdev/KfM/Common/Documentation/osx-kerberos-extras.html">OS X Kerberos Extras</a>. These will configure your computer for the <tt>ATHENA.MIT.EDU</tt> Kerberos realm.</p></li>
+    
+    <li><p>Second, many components in MacAthena depend on <a href="http://www.openafs.org/macos.html">AFS</a>, the distributed network filesystem. MacAthena is tested on <a href="http://www.openafs.org/macos.html">version 1.4.6 </a>of OpenAFS.</p></li>
+    
+    <li><p>You'll also need the Mac OS X Developer Tools, which can be installed either from your Mac OS X install CD or DVD, or downloaded from the <a href="http://developer.apple.com/tools/xcode/">Apple Developer Connection</a>.</p></li>
+    
+    <li><p>Finally, MacAthena uses the <a href="http://www.finkproject.org/index.php">Fink</a> project for package management. If you are using Mac OS X Tiger, there is a <a href="http://www.finkproject.org/download/index.php?phpLang=en">binary distribution</a> available. If you're using Mac OS X Leopard, you'll need to download the <a href="http://www.finkproject.org/download/srcdist.php">source distribution</a> and bootstrap using the instructions on that page.</p>
+    
+    <p>When you install Fink, there are a few important settings to ensure the best compatibility with MacAthena. You should be sure to <strong>enable the unstable branch</strong>. Also, in the mirror selection section, you should be sure to &#8216;Search &#8220;Master&#8221; source mirrors last.&#8217; If you've already installed fink, you can change these settings by running <tt>fink configure</tt>.</p>
+    
+    <blockquote><pre>The Fink team maintains mirrors known as "Master" mirrors, which contain the
+sources for all fink packages. You can choose to use these mirrors first, last,
+never, or mixed in with regular mirrors. If you don't care, just select the
+default.
+
+(1)	Search "Master" source mirrors first.
+(2)	Search "Master" source mirrors last.
+(3)	Never use "Master" source mirrors.
+(4)	Search closest source mirrors first. (combine all mirrors into one set)
+
+What mirror order should fink use when downloading sources? [2] <kbd>2</kbd>
+    </pre></blockquote>
+    
+    <p>Once you've finished installing Fink, you'll want to run:</p>
+    
+    <pre>/sw/bin/pathsetup.sh</pre>
+    
+    <p>and click OK in the dialog that displays.</p></li>
+    
+    <li><p>If you have used Google's installer for MacFUSE, you may want to uninstall it. We will install our own version of FUSE as part of the MacAthena install process. Google maintains <a href="http://code.google.com/p/macfuse/wiki/FAQ#2._Install/Uninstall_Questions">instructions</a> on how to uninstall FUSE</p></li>
+    
+    </ol>
+    
+    <h2 id="checkout">Installing MacAthena</h2>
+    
+    <p>To install MacAthena, first run:</p>
+    
+    <pre><kbd>cd /svn/fink/dists</kbd>
+<kbd>sudo svn co https://macathena.mit.edu/svn/trunk/fink/ macathena</kbd></pre>
+    
+    <p>You'll get a warning about the SSL certificate. If you'd like, you can verify it against the fingerprint on <a href="https://macathena.mit.edu/" class="tooltip" title="This page is accessible from HTTPS, and your browser should be able to verify the server's authenticity becuase the certificate is signed by the MIT Certificate Authority">a secure page</a>: <tt>F8:C5:9C:10:22:23:2E:56:1D:8A:53:7C:FD:9C:3B:96:8A:A2:71:BA</tt></p>
+    
+    <p>Next, edit <tt>/sw/etc/fink.conf</tt> with whatever text editor you prefer, and edit the <tt>Trees:</tt> line to read:</p>   
+    
+    <pre>Trees: local/main stable/main stable/crypto unstable/main unstable/crypto macathena/main</pre>
+    
+    <h2 id="binary">Using a Binary Distribution</h2>
+    
+    <p>If you are using an Intel Mac, we are testing a binary distributions. If you are not using an Intel Mac or wish to compile all packages from source, feel free to skip to the <a href="#package-install">Install the Packages</a> section.</p>
+    
+    <p>To use the binary distribution, first find the <tt>UseBinaryDist</tt> line in <tt>/sw/etc/fink.conf</tt> and set it to</p>
+    
+    <pre>UseBinaryDist: true</pre>
+    
+    <p>Next, edit <tt>/sw/etc/apt/sources.list</tt> and add the following lines to the very beginning of the file:</p>
+    
+    <pre>deb http://macathena.mit.edu/fink macathena main
+deb http://macathena.mit.edu/fink stable main crypto
+deb http://macathena.mit.edu/fink unstable main crypto</pre>
+    
+    <h2 id="package-install">Installing the Packages</h2>
+    
+    <p>Once you've setup the MacAthena trees in Fink, you can install the MacAthena software:</p>
+    
+    <pre><kbd>fink index</kbd>
+<kbd>fink install <var>macathena-standard</var></kbd></pre>
+    
+    <p>Finally, please subscribe to our announcement list, so that we can send updates about new development:</p>
+    
+    <pre><kbd>blanche macathena-announce -a $USER</kbd></pre>
+    
+    <h2 id="update">Updating MacAthena</h2>
+    
+    <p>MacAthena is under active development, and new changes to the packages are released frequently. To access these new changes, run the command:</p>
+    
+    <pre><kbd>macathena-update</kbd></pre>
+    
+    <p>which is installed by both <tt>macathena-standard</tt> and <tt>macathena-login</tt>. Once that finishes, run</p>
+    
+    <pre><kbd>fink update-all</kbd></pre>
+    
+    <p>to update the packages to their latest versions.</p>
+</body>
+</html>

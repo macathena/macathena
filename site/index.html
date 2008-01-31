@@ -12,6 +12,8 @@
     
     <p>The <strong>MacAthena</strong> project is working to bring the functionality of the <a href="http://web.mit.edu/is/topics/athena/">Athena system</a> to your <a href="http://www.apple.com/macosx/">Mac OS X</a> Tiger or Leopard system.</p>
     
+    <p>MacAthena is a project of <a href="http://stuff.mit.edu/sipb/">SIPB</a>. If you have questions or comments, please contact the <a href="mailto:sipb-macathena@mit.edu">MacAthena maintainers</a>.</p>
+    
     <h2>Goals</h2>
     
     <p>Eventually, the MacAthena project would like to offer:</p>
@@ -23,83 +25,35 @@
     <li>Support in common lockers, providing MacAthena users with access to the wealth of software available in AFS</li>
     </ul>
     
-    <h2>Install Instructions</h2>
+    <h2><a href="/install">Installing MacAthena</a></h2>
     
-    <h3 id="preinstall">Preparing Your System</h3>
+    <h2>What We Have</h2>
     
-    <p>MacAthena takes advantage of several other software packages that are required to install MacAthena.</p>
+    <p>At this point, we have the following major features:</p>
     
-    <ol>
+    <h3>Available By Installing <tt>macathena-basic</tt></h3>
     
-    <li><p>First, you should install the <a href="http://web.mit.edu/macdev/KfM/Common/Documentation/osx-kerberos-extras.html">OS X Kerberos Extras</a>. These will configure your computer for the ATHENA.MIT.EDU Kerberos realm.</p></li>
+    <ul>
     
-    <li><p>Second, many components in MacAthena depend on <a href="http://www.openafs.org/macos.html">AFS</a>, the distributed network filesystem. MacAthena is tested on <a href="http://www.openafs.org/macos.html">version 1.4.6 </a>of OpenAFS.</p></li>
+    <li><tt>/mit</tt> automounter&mdash;Access AFS lockers simply accessing paths of the form <tt>/mit/<var>locker</var></tt>, eliminating the need to actually attach lockers.</li>
+    <li><tt>add</tt></li>
+    <li>Moira clients&mdash;including <tt>blanche</tt>, <tt>stella</tt>, and <tt>moira</tt></li>
     
-    <li><p>You'll also need the Mac OS X Developer Tools, which can be installed either from your Mac OS X install CD or DVD, or downloaded from the <a href="http://developer.apple.com/tools/xcode/">Apple Developer Connection</a>.</p></li>
+    </ul>
     
-    <li><p>Finally, MacAthena uses the <a href="http://www.finkproject.org/index.php">Fink</a> project for package management. If you are using Mac OS X Tiger, there is a <a href="http://www.finkproject.org/download/index.php?phpLang=en">binary distribution</a> available. If you're using Mac OS X Leopard, you'll need to download the <a href="http://www.finkproject.org/download/srcdist.php">source distribution</a> and bootstrap using the instructions on that page.</p>
+    <h3>Available By Installing <tt>macathena-standard</tt> (in addition to the packages from <tt>macathena-basic</tt>)</h3>
     
-    <p>When you install Fink, there are a few important settings to ensure the best compatibility with MacAthena. You should be sure to enable the unstable branch. Also, in the mirror selection section, you should be sure to &#8216;Search &#8220;Master&#8221; source mirrors last.&#8217;</p>
+    <p>Many of these commands are not frequently used, but some locker programs depend on their presence</p>
     
-    <blockquote><pre>The Fink team maintains mirrors known as "Master" mirrors, which contain the
-sources for all fink packages. You can choose to use these mirrors first, last,
-never, or mixed in with regular mirrors. If you don't care, just select the
-default.
-
-(1)	Search "Master" source mirrors first.
-(2)	Search "Master" source mirrors last.
-(3)	Never use "Master" source mirrors.
-(4)	Search closest source mirrors first. (combine all mirrors into one set)
-
-What mirror order should fink use when downloading sources? [2] <kbd>2</kbd>
-    </pre></blockquote>
+    <ul>
     
-    <p>Once you've finished installing Fink, you'll want to run:</p>
+    <li><tt>athinfo</tt></li>
+    <li><tt>delete</tt></li>
+    <li><tt>discuss</tt></li>
+    <li><tt>get-cluster</tt></li>
+    <li><tt>just</tt></li>
+    <li><tt>machtype</tt></li>
     
-    <pre>/sw/bin/pathsetup.sh</pre>
-    
-    <p>and click OK in the dialog that displays.</p></li>
-    
-    <li><p>If you have used Google's installer for MacFUSE, you may want to uninstall it. We will install our own version of FUSE as part of the MacAthena install process. Google maintains <a href="http://code.google.com/p/macfuse/wiki/FAQ#2._Install/Uninstall_Questions">instructions</a> on how to uninstall FUSE</p></li>
-    
-    </ol>
-    
-    <h3 id="checkout">Installing MacAthena</h3>
-    
-    <p>To install MacAthena, first run:</p>
-    
-    <pre><kbd>cd /svn/fink/dists</kbd>
-<kbd>sudo svn co https://macathena.mit.edu/svn/trunk/fink/ macathena</kbd></pre>
-    
-    <p>You'll get a warning about the SSL certificate. If you'd like, you can verify it against the fingerprint on <a href="https://macathena.mit.edu/" class="tooltip" title="This page is accessible from HTTPS, and your browser should be able to verify the server's authenticity becuase the certificate is signed by the MIT Certificate Authority">a secure page</a>: <tt>F8:C5:9C:10:22:23:2E:56:1D:8A:53:7C:FD:9C:3B:96:8A:A2:71:BA</tt></p>
-    
-    <p>Next, edit <tt>/sw/etc/fink.conf</tt> with whatever text editor you prefer, and edit the <tt>Trees:</tt> line to read:</p>   
-    
-    <pre>Trees: local/main stable/main stable/crypto unstable/main unstable/crypto macathena/main</pre>
-    
-    <h3 id="binary">Using a Binary Distribution</h3>
-    
-    <p>If you are using an Intel Mac, we are testing a binary distributions. If you are not using an Intel Mac or wish to compile all packages from source, feel free to skip to the <a href="#package-install">Install the Packages</a> section.</p>
-    
-    <p>To use the binary distribution, first find the <tt>UseBinaryDist</tt> line in <tt>/sw/etc/fink.conf</tt> and set it to</p>
-    
-    <pre>UseBinaryDist: true</pre>
-    
-    <p>Next, edit <tt>/sw/etc/apt/sources.list</tt> and add the following lines to the very beginning of the file:</p>
-    
-    <pre>deb http://macathena.mit.edu/fink macathena main
-deb http://macathena.mit.edu/fink stable main crypto
-deb http://macathena.mit.edu/fink unstable main crypto</pre>
-    
-    <h3 id="package-install">Installing the Packages</h3>
-    
-    <p>Once you've setup the MacAthena trees in Fink, run:</p>
-    
-    <pre><kbd>fink index</kbd>
-<kbd>fink install <var>macathena-standard</var></kbd></pre>
-    
-    <p>Finally, please subscribe to our announcement list, so that we can send updates about new development:</p>
-    
-    <pre><kbd>blanche macathena-announce -a $USER</kbd></pre>
+    </ul>
 </body>
 </html>
