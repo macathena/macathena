@@ -84,3 +84,6 @@ var {
 .clear {
     clear: both;
 }
+.tooltip {
+    cursor: help;
+}
