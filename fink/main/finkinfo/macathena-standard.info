@@ -7,4 +7,4 @@ HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: Metapackage providing MacAthena standard environment
 
-Depends: macathena-basic, macathena-athinfo, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-libgms, macathena-libxj, macathena-machtype, macathena-update
+Depends: macathena-basic, macathena-athinfo, macathena-delete, macathena-discuss, macathena-getcluster, macathena-just, macathena-libgms, macathena-libxj, macathena-machtype, macathena-tellme, macathena-update

@@ -1,0 +1,22 @@
+Package: macathena-tellme
+Version: 22685
+Revision: 1
+Source: http://macathena.mit.edu/dist/tellme-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: BSD
+Description: Reports combos and passwords for Athena
+DescDetail: <<
+	This package provides a symlink to the tellme program, which reports
+	combos and passwords for Athena.
+<<
+Source-MD5: 97db443af6163cb09f1540943ea80668
+DocFiles: debian/copyright
+
+Depends: macathena-machtype
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %i/bin
+	install %b/tellme %i/bin/
+<<

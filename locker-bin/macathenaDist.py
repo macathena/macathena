@@ -116,6 +116,7 @@ svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 	'libgms': ['trunk/athena/lib/gms'],
 	'libxj': ['trunk/athena/lib/Xj'],
 	'machtype': ['trunk/athena/bin/machtype'],
+	'tellme': ['trunk/debathena/config/tellme'],
 	'xcluster': ['trunk/athena/bin/xcluster', ['attic/packs/build/aclocal.m4']],
 # Our packages:
 	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
