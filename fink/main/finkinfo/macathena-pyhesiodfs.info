@@ -1,7 +1,7 @@
-Package: pyhesiodfs
+Package: macathena-pyhesiodfs
 Version: 77
-Revision: 1
-Source: http://macathena.mit.edu/dist/%n-svn%v.tar.gz
+Revision: 2
+Source: http://macathena.mit.edu/dist/pyhesiodfs-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: GPL
@@ -10,6 +10,7 @@ Source-MD5: 2d321c4c4fadb67025aff9eb57e02d5f
 DocFiles: COPYING copyright
 
 Depends: fuse-py25, pydns-py25
+Replaces: pyhesiodfs
 BuildDepends: automake1.9
 PatchScript: sed -i ".bak" -e 's|/usr/local|%p|g' edu.mit.sipb.mit-automounter.plist
 CompileScript: <<
