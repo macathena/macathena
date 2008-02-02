@@ -2,4 +2,5 @@
 
 sudo svn up @FINKPREFIX@/fink/dists/macathena/
 fink index
-echo "You should run fink update-all to make sure you have the latest packages"
+fink update `fink list --installed --tab macathena | awk '{ print $2 }' | xargs echo`
+echo "All MacAthena packages should have been updated, but you should run fink update-all to make sure you have the latest packages"
