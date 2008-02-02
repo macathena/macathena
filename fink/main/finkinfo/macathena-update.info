@@ -6,7 +6,7 @@ Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: Update MacAthena packages
-Source-MD5: 908e375ad7c401d1fb1beed9bfa05987
+Source-MD5: b5fb4ab9e6595320fdae56d6bb93616c
 DocFiles: copyright
 
 PatchScript: sed -i ".bak" -e 's|@FINKPREFIX@|%p|g' macathena-update
