@@ -33,10 +33,6 @@ pre, code, samp, kbd, tt {
 :visited {
     color: #039;
 }
-#logo {
-    float: right;
-    margin: -1em -1em 0 0;
-}
 :link img, :visited img {
     border: none;
 }
