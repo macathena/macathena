@@ -1,0 +1,7 @@
+This package ensures the application of the OpenAFS patch,
+macos-packaging-using-afs-conf-when-possible-20080121, due to be incorporated
+into OpenAFS 1.4.7.
+
+If this package fails to install, download and install the MacAthena project's
+patch at http://macathena.mit.edu/dist/openafs-config-update.pkg.tar.gz and then
+try to install this package again.
