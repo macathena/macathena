@@ -120,6 +120,7 @@ svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 	'xcluster': ['trunk/athena/bin/xcluster', ['attic/packs/build/aclocal.m4']],
 # Our packages:
 	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
+	'afs-conf-patch': ['trunk/source/afs-conf-patch', False, 'https://macathena.mit.edu/svn'],
 	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
 	'base': ['trunk/source/base', False, 'https://macathena.mit.edu/svn'],
 	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn'],
