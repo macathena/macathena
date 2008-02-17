@@ -18,7 +18,7 @@ PostInstScript: <<
 	if [ ! -e /var/db/openafs/etc/config/afs.conf ]; then
 		printf "\n\n== ERROR: ==\n"
 		cat %p/share/doc/%n/readme
-		printf "\n\n"
+		printf "\n============\n\n"
 		exit 1
 	fi
 <<
