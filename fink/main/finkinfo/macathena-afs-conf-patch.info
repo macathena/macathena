@@ -1,12 +1,12 @@
 Package: macathena-afs-conf-patch
-Version: 107
+Version: 109
 Revision: 1
 Source: http://macathena.mit.edu/dist/afs-conf-patch-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: Ensure installation of afs.conf OpenAFS patch
-Source-MD5: fb434f86e08fae5eb6b6dd3ae22898c2
+Source-MD5: d76a40bff859099e0db6837419d3bbad
 DocFiles: copyright readme
 
 CompileScript: <<
@@ -18,7 +18,7 @@ PostInstScript: <<
 	if [ ! -e /var/db/openafs/etc/config/afs.conf ]; then
 		printf "\n\n== ERROR: ==\n"
 		cat %p/share/doc/%n/readme
-		printf "\n============\n\n"
+		printf "============\n\n"
 		exit 1
 	fi
 <<
