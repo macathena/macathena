@@ -121,8 +121,10 @@ svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 # Our packages:
 	'add': ['trunk/source/add', False, 'https://macathena.mit.edu/svn'],
 	'afs-conf-patch': ['trunk/source/afs-conf-patch', False, 'https://macathena.mit.edu/svn'],
+	'afs-config': ['trunk/source/afs-config', False, 'https://macathena.mit.edu/svn'],
 	'attach': ['trunk/source/attach', False, 'https://macathena.mit.edu/svn'],
 	'base': ['trunk/source/base', False, 'https://macathena.mit.edu/svn'],
+	'config-common': ['trunk/source/config-common', False, 'https://macathena.mit.edu/svn'],
 	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn'],
 	'update': ['trunk/source/update', False, 'https://macathena.mit.edu/svn'],
 	'ssl-certificates': ['trunk/source/ssl-certificates', False, 'https://macathena.mit.edu/svn']
