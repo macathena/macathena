@@ -1,0 +1,48 @@
+Package: macathena-afs-config
+Version: 113
+Revision: 1
+Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: AFS configuration for MacAthena
+Source-MD5: 6e1f693ad73d430288ef4d2085fcf4aa
+DocFiles: copyright
+
+Depends: macathena-config-common, macathena-afs-conf-patch, macathena-machtype
+CompileScript: <<
+	autoconf
+	./configure %c
+<<
+InstallScript: <<
+	mkdir -p %d/var/db/openafs/etc/config/
+	cp CellAlias.macathena %d/var/db/openafs/etc/
+	cp CellServDB.macathena %d/var/db/openafs/etc/
+	cp ThisCell.macathena %d/var/db/openafs/etc/
+	cp afs.conf.macathena %d/var/db/openafs/etc/config/
+<<
+PostInstScript: <<
+	#!/bin/bash
+	
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	divert_link /var/db/openafs/etc/CellAlias
+	divert_link /var/db/openafs/etc/CellServDB
+	divert_link /var/db/openafs/etc/ThisCell
+	divert_link /var/db/openafs/etc/config/afs.conf
+	
+	/Library/StartupItems/OpenAFS/OpenAFS restart
+<<
+PreRmScript: <<
+	#!/bin/bash
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	undivert_unlink /var/db/openafs/etc/CellAlias
+	undivert_unlink /var/db/openafs/etc/CellServDB
+	undivert_unlink /var/db/openafs/etc/ThisCell
+	undivert_unlink /var/db/openafs/etc/config/afs.conf
+	
+	/Library/StartupItems/OpenAFS/OpenAFS restart
+<<

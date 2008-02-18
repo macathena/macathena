@@ -1,6 +1,6 @@
 Package: macathena-machtype
 Version: 22699
-Revision: 2
+Revision: 3
 Source: http://macathena.mit.edu/dist/machtype-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -13,7 +13,7 @@ Depends: macathena-base
 BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 PatchFile: %n.patch
-PatchFile-MD5: b3640db9d86c7e3800da8ae75c3bca3d
+PatchFile-MD5: 0449dc3fae00f6f1e327ab5c0e19bf8b
 PatchScript: patch -p0 < %{PatchFile}
 CompileScript: <<
 	cp %p/share/macathena-base/athena-copyright %b/

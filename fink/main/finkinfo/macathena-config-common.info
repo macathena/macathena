@@ -1,0 +1,17 @@
+Package: macathena-config-common
+Version: 111
+Revision: 1
+Source: http://macathena.mit.edu/dist/config-common-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Support files for building MacAthena packages
+Source-MD5: 5dcea0028fea12dc8e15c2e10503061b
+DocFiles: copyright
+
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %i/share/%n
+	cp divert.sh %i/share/%n/
+<<
