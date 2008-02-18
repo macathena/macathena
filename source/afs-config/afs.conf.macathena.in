@@ -63,7 +63,7 @@ OPTIONS="-afsdb -stat 2000 -dcache 800 -daemons 3 -volumes 70 -dynroot -fakestat
 # If you would like to override the client sysname, uncomment this line and
 # set the variable to a space-separated list of sysnames.  The AFS client will
 # attempt to resolve @sys to each directory name in the order given.
-AFS_SYSNAME="$(machtype -S) $(machtype -C | sed "s/:/ /g")"
+AFS_SYSNAME="$(@prefix@/bin/machtype -S) $(@prefix@/bin/machtype -C | sed "s/:/ /g")"
 
 # If you want to prefer particular servers for replicated volumes, you can
 # configure that by defining an afs_server_prefs function here and then
