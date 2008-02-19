@@ -1,12 +1,12 @@
 Package: macathena-afs-config
-Version: 113
-Revision: 1
+Version: 116
+Revision: 1s
 Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: AFS configuration for MacAthena
-Source-MD5: 6e1f693ad73d430288ef4d2085fcf4aa
+Source-MD5: cfa784fe2e218d1935dccce043d0ee24
 DocFiles: copyright
 
 Depends: macathena-config-common, macathena-afs-conf-patch, macathena-machtype
@@ -20,6 +20,7 @@ InstallScript: <<
 	cp CellServDB.macathena %d/var/db/openafs/etc/
 	cp ThisCell.macathena %d/var/db/openafs/etc/
 	cp afs.conf.macathena %d/var/db/openafs/etc/config/
+	cp settings.plist.macathena %d/var/db/openafs/etc/config/
 <<
 PostInstScript: <<
 	#!/bin/bash
@@ -31,8 +32,11 @@ PostInstScript: <<
 	divert_link /var/db/openafs/etc/CellServDB
 	divert_link /var/db/openafs/etc/ThisCell
 	divert_link /var/db/openafs/etc/config/afs.conf
+	divert_link /var/db/openafs/etc/config/settings.plist
 	
 	/Library/StartupItems/OpenAFS/OpenAFS restart
+	
+	fs setcrypt on
 <<
 PreRmScript: <<
 	#!/bin/bash
@@ -43,6 +47,7 @@ PreRmScript: <<
 	undivert_unlink /var/db/openafs/etc/CellServDB
 	undivert_unlink /var/db/openafs/etc/ThisCell
 	undivert_unlink /var/db/openafs/etc/config/afs.conf
+	undivert_unlink /var/db/openafs/etc/config/settings.plist
 	
 	/Library/StartupItems/OpenAFS/OpenAFS restart
 <<
