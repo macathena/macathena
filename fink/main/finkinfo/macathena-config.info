@@ -1,0 +1,10 @@
+Package: macathena-config
+Version: 1
+Revision: 1
+Type: bundle
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Meta-package of MacAthena configuration packages
+
+Depends: macathena-afs-config
