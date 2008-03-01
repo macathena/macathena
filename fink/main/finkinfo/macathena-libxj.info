@@ -5,7 +5,7 @@ Source: http://macathena.mit.edu/dist/libxj-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
-Description: Widget library used by many Athena programs.
+Description: Widget library used by many Athena programs
 Source-MD5: 2a65781fb7171c82b78f7ca4aa213604
 DocFiles: athena-copyright
 

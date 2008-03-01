@@ -1,6 +1,6 @@
 Package: macathena-afs-conf-patch
 Version: 109
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/afs-conf-patch-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -14,7 +14,6 @@ CompileScript: <<
 InstallScript: <<
 <<
 PostInstScript: <<
-	#!/bin/bash
 	if [ ! -e /var/db/openafs/etc/config/afs.conf ]; then
 		printf "\n\n== ERROR: ==\n"
 		cat %p/share/doc/%n/readme

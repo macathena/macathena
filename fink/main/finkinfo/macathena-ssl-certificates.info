@@ -21,11 +21,11 @@ InstallScript: <<
 	openssl x509 -inform pem -outform der -in %i/share/%n/mitCA.pem -out %i/share/%n/mitCA.der
 <<
 PostInstScript: <<
-	#!/bin/bash
-	if [ "$(/usr/bin/sw_vers -productVersion | cut -d. -f1-2)" == "10.5" ]
+	VERSION=`/usr/bin/sw_vers -productVersion | cut -d. -f1-2`
+	if [ "$VERSION" == "10.5" ]
 	then
 		security find-certificate -e "MIT Certification Authority" || security add-trusted-cert -d -k /Library/Keychains/System.keychain %p/share/%n/mitCA.pem
 	else
-		security add-cert -k /System/Library/Keychains/X509Anchors %p/share/%n/mitCA.der || :
+		security find-certificate -e "MIT Certification Authority" /Library/Keychains/System.keychain /System/Library/Keychains/X509Anchors || security add-cert -k /System/Library/Keychains/X509Anchors %p/share/%n/mitCA.der
 	fi
 <<

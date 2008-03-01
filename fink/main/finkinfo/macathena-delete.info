@@ -5,7 +5,7 @@ Source: http://macathena.mit.edu/dist/delete-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
-Description: A friendlier version of rm for Athena
+Description: Athena's friendlier version of rm
 DescDetail: <<
 	The delete utility marks files and directories for later permanent 
 	removal by prefixing them with '.#'.  Files accidentally marked for 

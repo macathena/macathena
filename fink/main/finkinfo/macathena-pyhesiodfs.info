@@ -1,6 +1,6 @@
 Package: macathena-pyhesiodfs
 Version: 77
-Revision: 2
+Revision: 3
 Source: http://macathena.mit.edu/dist/pyhesiodfs-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -20,7 +20,7 @@ InstallScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	
-	%b/mkinstalldirs %d/mit %d/bin %i/lib/python2.5/site-packages %i
+	%b/mkinstalldirs %d/mit %i/bin %i/lib/python2.5/site-packages %i
 	python2.5 setup.py install --root=%d
 <<
 PostInstScript: <<

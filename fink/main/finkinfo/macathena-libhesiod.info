@@ -1,6 +1,6 @@
 Package: macathena-libhesiod
 Version: 3.1.0
-Revision: 2
+Revision: 3
 Source: ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/hesiod-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -15,3 +15,8 @@ PatchFile: %n.patch
 PatchFile-MD5: 45c91d60be7876e6d3a7fa00f8a4fc55
 PatchScript: patch -p0 < %{PatchFile}
 ConfigureParams: LIBS=-lresolv
+InstallScript: <<
+	make install prefix=%i
+	mkdir -p %i/share/
+	mv %i/man %i/share/man
+<<

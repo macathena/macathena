@@ -5,7 +5,7 @@ Source: http://macathena.mit.edu/dist/discuss-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
-Description: A conferencing and mail archiving system
+Description: Conferencing and mail archiving system
 DescDetail: <<
 	Discuss is a user-interface front end to a networked conferencing 
 	system.

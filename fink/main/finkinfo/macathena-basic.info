@@ -5,6 +5,6 @@ Type: bundle
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
-Description: Metapackage providing basic MacAthena software
+Description: Metapackage for basic MacAthena software
 
 Depends: macathena-athrun, macathena-moira, macathena-pyhesiodfs, macathena-ssl-certificates, macathena-update

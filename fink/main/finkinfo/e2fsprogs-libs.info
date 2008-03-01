@@ -10,7 +10,7 @@ Source-MD5: fff603ce42c0e51d5b2500c36138d874
 DocFiles: COPYING
 
 Depends: libss (= %v-%r), libcomerr (= %v-%r), libblkid (= %v-%r), libuuid (= %v-%r)
-
+BuildDepends: fink (>= 0.24.12)
 PatchFile: %n.patch
 PatchFile-MD5: 7f934a671ac597defa64fc5866be68cb
 

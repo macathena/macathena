@@ -1,6 +1,6 @@
 Package: macathena-base
 Version: 76
-Revision: 1
+Revision: 3
 Source: http://macathena.mit.edu/dist/base-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -20,8 +20,8 @@ InstallScript: <<
 	cp %p/share/automake-1.9/install-sh %b/
 	cp %p/share/automake-1.9/mkinstalldirs %b/
 	
-	%b/mkinstalldirs %d/etc/athena %d/usr %d/bin %i/share/%n/
-	%b/install-sh %b/version %b/reactivate %d/etc/athena/
+	%b/mkinstalldirs %d/private/etc/athena %d/usr %d/bin %i/share/%n/
+	%b/install-sh %b/version %b/reactivate %d/private/etc/athena/
 	%b/install-sh -m 644 %b/athena-copyright %i/share/%n/
 	
 	ln -s /usr %d/usr/athena

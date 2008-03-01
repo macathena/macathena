@@ -1,6 +1,6 @@
 Package: macathena-afs-config
 Version: 116
-Revision: 1s
+Revision: 2
 Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -15,39 +15,36 @@ CompileScript: <<
 	./configure %c
 <<
 InstallScript: <<
-	mkdir -p %d/var/db/openafs/etc/config/
-	cp CellAlias.macathena %d/var/db/openafs/etc/
-	cp CellServDB.macathena %d/var/db/openafs/etc/
-	cp ThisCell.macathena %d/var/db/openafs/etc/
-	cp afs.conf.macathena %d/var/db/openafs/etc/config/
-	cp settings.plist.macathena %d/var/db/openafs/etc/config/
+	mkdir -p %d/private/var/db/openafs/etc/config/
+	cp CellAlias.macathena %d/private/var/db/openafs/etc/
+	cp CellServDB.macathena %d/private/var/db/openafs/etc/
+	cp ThisCell.macathena %d/private/var/db/openafs/etc/
+	cp afs.conf.macathena %d/private/var/db/openafs/etc/config/
+	cp settings.plist.macathena %d/private/var/db/openafs/etc/config/
 <<
 PostInstScript: <<
-	#!/bin/bash
-	
 	source %p/share/macathena-config-common/divert.sh
 	package=%n
 	
-	divert_link /var/db/openafs/etc/CellAlias
-	divert_link /var/db/openafs/etc/CellServDB
-	divert_link /var/db/openafs/etc/ThisCell
-	divert_link /var/db/openafs/etc/config/afs.conf
-	divert_link /var/db/openafs/etc/config/settings.plist
+	divert_link /private/var/db/openafs/etc/CellAlias
+	divert_link /private/var/db/openafs/etc/CellServDB
+	divert_link /private/var/db/openafs/etc/ThisCell
+	divert_link /private/var/db/openafs/etc/config/afs.conf
+	divert_link /private/var/db/openafs/etc/config/settings.plist
 	
 	/Library/StartupItems/OpenAFS/OpenAFS restart
 	
 	fs setcrypt on
 <<
 PreRmScript: <<
-	#!/bin/bash
 	source %p/share/macathena-config-common/divert.sh
 	package=%n
 	
-	undivert_unlink /var/db/openafs/etc/CellAlias
-	undivert_unlink /var/db/openafs/etc/CellServDB
-	undivert_unlink /var/db/openafs/etc/ThisCell
-	undivert_unlink /var/db/openafs/etc/config/afs.conf
-	undivert_unlink /var/db/openafs/etc/config/settings.plist
+	undivert_unlink /private/var/db/openafs/etc/CellAlias
+	undivert_unlink /private/var/db/openafs/etc/CellServDB
+	undivert_unlink /private/var/db/openafs/etc/ThisCell
+	undivert_unlink /private/var/db/openafs/etc/config/afs.conf
+	undivert_unlink /private/var/db/openafs/etc/config/settings.plist
 	
 	/Library/StartupItems/OpenAFS/OpenAFS restart
 <<

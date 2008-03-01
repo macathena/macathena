@@ -5,7 +5,7 @@ Source: http://macathena.mit.edu/dist/libgms-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
-Description: A library for the global Athena message service
+Description: Global Athena message service library
 DescDetail: <<
 	A library used by the global Athena message service
 	The gms library defines error codes and constants used by get_message 

@@ -5,6 +5,6 @@ Type: bundle
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
-Description: Meta-package of MacAthena configuration packages
+Description: Metapackage for MacAthena configuration
 
 Depends: macathena-afs-config
