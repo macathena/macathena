@@ -1,6 +1,6 @@
-Package: macathena-lprng
+Package: lprng
 Version: 3.8.28
-Revision: 1
+Revision: 2
 Source: http://www.lprng.com/DISTRIB/LPRng/LPRng-%v.tgz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://www.lprng.com/
@@ -12,7 +12,7 @@ ConfFiles: %p/etc/lpd/lpd.conf
 
 BuildDepends: fink (>= 0.24.12)
 PatchFile: %n.patch
-PatchFile-MD5: 1eaa5ded276757cb6491f8791d044907
+PatchFile-MD5: 1861c8f6b59fee58d20581dfbee3bf95
 ConfigureParams: --disable-rpath --disable-setuid --disable-werror --enable-kerberos_checks --enable-kerberos
 InstallScript: <<
 	#!/bin/bash -ev
@@ -37,9 +37,12 @@ InstallScript: <<
 	done
 	
 	mkdir -p %i/etc/lpd/
-	cp %b/lpd.conf.macathena %i/etc/lpd/lpd.conf
+	cp %b/lpd.conf %i/etc/lpd/lpd.conf
+	cp %b/lpd.perms %i/etc/lpd/lpd.perms
 	cp %b/printcap %i/etc/printcap
-	cp %b/get_hesiod_pcap %i/libexec/get_hesiod_pcap
+	
+	mkdir -p %i/share
+	mv %i/libexec %i/share/lprng
 	
 	mv %i/man %i/share
 <<

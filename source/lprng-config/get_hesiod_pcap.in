@@ -1,0 +1,45 @@
+#!/bin/sh
+# $Id: get_hesiod_pcap.sh,v 1.3 1999/09/02 14:33:29 ghudson Exp $
+
+# Support script used by LPRng to fetch Hesiod printcap entries
+
+PATH=$PATH:@PREFIX@/bin
+
+read printer
+
+case "$printer" in
+all)
+    # If printer is "all", it wants a list of all available printers, the
+    # first of which will be considered the default printer. We can't get
+    # all printers, so just give the default.
+
+    if [ -z "$PRINTER" ]; then
+	host=`hostname`
+	PRINTER=`hesinfo "$host" cluster 2>/dev/null | \
+	    awk '/^lpr / {print $2; exit;}'`
+	if [ -z "$PRINTER" ]; then
+	    # We have no default.  Let LPRng come up with its own default.
+	    exit 0
+	fi
+    fi
+    echo "all:all=$PRINTER"
+    ;;
+
+*)
+    # Otherwise just look up the printer it asked for
+    PCAP=`hesinfo "$printer" pcap 2>/dev/null`
+
+    # If the user has no tickets, and the printer supports, but does
+    # not require, Kerberos authentication, then don't attempt
+    # it. (andersk, following suggestion by jdreed)
+    if ! klist -s 2>/dev/null; then
+	PCAP=`echo "$PCAP" | sed '/ka#0/ s/:auth=kerberos5//g'`
+    fi
+
+    PCAP=`echo $PCAP | sed s/:auth=none//g`
+
+    echo "$PCAP"
+    ;;
+esac
+
+exit 0

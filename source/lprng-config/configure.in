@@ -1,0 +1,6 @@
+AC_INIT()
+
+AC_PROG_CC
+
+AC_OUTPUT(lpd.conf.macathena)
+AC_OUTPUT(get_hesiod_pcap)

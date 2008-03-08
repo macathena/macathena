@@ -1,0 +1,9 @@
+# Debian-Athena lprng configuration
+force_localhost@
+kerberos_service=daemon
+pass_env=KRB5CCNAME
+#printcap_path=/etc/printcap:|/usr/lib/get_hesiod_pcap
+printcap_path=|@prefix@/share/macathena-lprng-config/get_hesiod_pcap
+reuse_addr
+use_date@
+retry_econnrefused@
