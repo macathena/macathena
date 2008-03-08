@@ -1,0 +1,45 @@
+Package: macathena-lprng
+Version: 3.8.28
+Revision: 1
+Source: http://www.lprng.com/DISTRIB/LPRng/LPRng-%v.tgz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://www.lprng.com/
+License: GPL
+Description: Enhanced implementation of Berkeley LPR
+Source-MD5: 1b3a0abd291b260eab6087ac0e61ed84
+DocFiles: COPYRIGHT DOCS
+ConfFiles: %p/etc/lpd/lpd.conf
+
+BuildDepends: fink (>= 0.24.12)
+PatchFile: %n.patch
+PatchFile-MD5: 1eaa5ded276757cb6491f8791d044907
+ConfigureParams: --disable-rpath --disable-setuid --disable-werror --enable-kerberos_checks --enable-kerberos
+InstallScript: <<
+	#!/bin/bash -ev
+	
+	make install prefix=%i POSTINSTALL=NO
+	for prog in cancel lp lpq lpr lprm lpstat
+	do
+		mv %i/bin/$prog %i/bin/$prog.lprng
+		mv %i/man/man1/$prog.1 %i/man/man1/$prog.lprng.1
+	done
+	
+	for prog in checkpc lpc lpd
+	do
+		mv %i/sbin/$prog %i/sbin/$prog.lprng
+		mv %i/man/man8/$prog.8 %i/man/man8/$prog.lprng.8
+	done
+	
+	for prog in lprng_certs lprng_index_certs
+	do
+		mv %i/sbin/$prog %i/sbin/$prog.lprng
+		mv %i/man/man1/$prog.1 %i/man/man1/$prog.lprng.1
+	done
+	
+	mkdir -p %i/etc/lpd/
+	cp %b/lpd.conf.macathena %i/etc/lpd/lpd.conf
+	cp %b/printcap %i/etc/printcap
+	cp %b/get_hesiod_pcap %i/libexec/get_hesiod_pcap
+	
+	mv %i/man %i/share
+<<
