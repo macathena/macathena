@@ -3,7 +3,7 @@
 
 # Support script used by LPRng to fetch Hesiod printcap entries
 
-PATH=$PATH:@PREFIX@/bin
+PATH=$PATH:@prefix@/bin
 
 read printer
 

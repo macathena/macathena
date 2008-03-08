@@ -1,6 +1,6 @@
 Package: lprng
 Version: 3.8.28
-Revision: 2
+Revision: 3
 Source: http://www.lprng.com/DISTRIB/LPRng/LPRng-%v.tgz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://www.lprng.com/
@@ -8,7 +8,7 @@ License: GPL
 Description: Enhanced implementation of Berkeley LPR
 Source-MD5: 1b3a0abd291b260eab6087ac0e61ed84
 DocFiles: COPYRIGHT DOCS
-ConfFiles: %p/etc/lpd/lpd.conf
+ConfFiles: %p/etc/lpd/lpd.conf %p/etc/lpd/lpd.perms %p/etc/printcap
 
 BuildDepends: fink (>= 0.24.12)
 PatchFile: %n.patch

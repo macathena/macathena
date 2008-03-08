@@ -1,0 +1,37 @@
+Package: macathena-lprng-config
+Version: 124
+Revision: 1
+Source: http://macathena.mit.edu/dist/lprng-config-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: LPRng configuration for MacAthena
+Source-MD5: 51554e663ef69640308bc3d080d1df2a
+DocFiles: copyright
+ConfFiles: %p/etc/lpd/lpd.conf.macathena
+
+Depends: macathena-config-common, lprng	, macathena-hesiod
+CompileScript: <<
+	autoconf
+	./configure %c
+<<
+InstallScript: <<
+	mkdir -p %i/etc/lpd/
+	cp lpd.conf.macathena %i/etc/lpd/
+	
+	mkdir -p %i/share/macathena-lprng-config/
+	cp get_hesiod_pcap %i/share/macathena-lprng-config/
+	chmod +x %i/share/macathena-lprng-config/get_hesiod_pcap
+<<
+PostInstScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	divert_link %p/etc/lpd/lpd.conf
+<<
+PreRmScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	undivert_unlink %p/etc/lpd/lpd.conf
+<<

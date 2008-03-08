@@ -8,6 +8,7 @@ License: Public Domain
 Description: AFS configuration for MacAthena
 Source-MD5: cfa784fe2e218d1935dccce043d0ee24
 DocFiles: copyright
+ConfFiles: /private/var/db/openafs/etc/CellAlias.macathena /private/var/db/openafs/etc/CellServDB.macathena /private/var/db/openafs/etc/ThisCell.macathena /private/var/db/openafs/etc/config/afs.conf.macathena /private/var/db/openafs/etc/config/settings.plist.macathena
 
 Depends: macathena-config-common, macathena-afs-conf-patch, macathena-machtype
 CompileScript: <<
