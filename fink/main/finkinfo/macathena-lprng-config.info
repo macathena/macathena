@@ -10,7 +10,7 @@ Source-MD5: bbebb716da08c3bd448615c106cb7726
 DocFiles: copyright
 ConfFiles: %p/etc/lpd/lpd.conf.macathena
 
-Depends: macathena-config-common, lprng	, macathena-hesiod
+Depends: macathena-config-common, lprng, macathena-hesiod
 CompileScript: <<
 	autoconf
 	./configure %c
