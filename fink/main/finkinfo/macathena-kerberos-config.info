@@ -1,0 +1,33 @@
+Package: macathena-kerberos-config
+Version: 129
+Revision: 1
+Source: http://macathena.mit.edu/dist/kerberos-config-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Kerberos configuration for MacAthena
+Source-MD5: 8f73202b018da33de98be82005631325
+DocFiles: copyright
+ConfFiles: /Library/Preferences/edu.mit.Kerberos.macathena
+
+Depends: macathena-config-common
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %d/Library/Preferences/ %d/Applications/Utilities
+	cp edu.mit.Kerberos.macathena %d/Library/Preferences
+	
+	ln -s /System/Library/CoreServices/Kerberos.app %d/Applications/Utilities/Kerberos.app
+<<
+PostInstScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	divert_link /Library/Preferences/edu.mit.Kerberos
+<<
+PreRmScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	undivert_unlink /Library/Preferences/edu.mit.Kerberos
+<<

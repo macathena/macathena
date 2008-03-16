@@ -1,12 +1,12 @@
 Package: macathena-afs-config
-Version: 116
-Revision: 2
+Version: 130
+Revision: 1
 Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: AFS configuration for MacAthena
-Source-MD5: cfa784fe2e218d1935dccce043d0ee24
+Source-MD5: 40e05a84afe8a86dad6ce88a8cfe9847
 DocFiles: copyright
 ConfFiles: /private/var/db/openafs/etc/CellAlias.macathena /private/var/db/openafs/etc/CellServDB.macathena /private/var/db/openafs/etc/ThisCell.macathena /private/var/db/openafs/etc/config/afs.conf.macathena /private/var/db/openafs/etc/config/settings.plist.macathena
 
@@ -34,8 +34,6 @@ PostInstScript: <<
 	divert_link /private/var/db/openafs/etc/config/settings.plist
 	
 	/Library/StartupItems/OpenAFS/OpenAFS restart
-	
-	fs setcrypt on
 <<
 PreRmScript: <<
 	source %p/share/macathena-config-common/divert.sh

@@ -1,0 +1,31 @@
+Package: macathena-ssh-server-config
+Version: 129
+Revision: 1
+Source: http://macathena.mit.edu/dist/ssh-server-config-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: SSH server configuration for MacAthena
+Source-MD5: dffb783e951306298baded3dda65594b
+DocFiles: copyright
+ConfFiles: /private/etc/sshd_config.macathena
+
+Depends: macathena-config-common
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %d/private/etc
+	cp sshd_config.macathena %d/private/etc
+<<
+PostInstScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	divert_link /private/etc/sshd_config
+<<
+PreRmScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	undivert_unlink /private/etc/sshd_config
+<<

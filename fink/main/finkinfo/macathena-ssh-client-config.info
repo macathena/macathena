@@ -1,0 +1,31 @@
+Package: macathena-ssh-client-config
+Version: 129
+Revision: 1
+Source: http://macathena.mit.edu/dist/ssh-client-config-svn%v.tar.gz
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: SSH client configuration for MacAthena
+Source-MD5: 79ef859a64c1d9d464e4bb8fc0c145ee
+DocFiles: copyright
+ConfFiles: /private/etc/ssh_config.macathena
+
+Depends: macathena-config-common
+CompileScript: <<
+<<
+InstallScript: <<
+	mkdir -p %d/private/etc
+	cp ssh_config.macathena %d/private/etc
+<<
+PostInstScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	divert_link /private/etc/ssh_config
+<<
+PreRmScript: <<
+	source %p/share/macathena-config-common/divert.sh
+	package=%n
+	
+	undivert_unlink /private/etc/ssh_config
+<<

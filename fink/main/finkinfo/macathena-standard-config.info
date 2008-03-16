@@ -1,0 +1,12 @@
+Package: macathena-standard-config
+Version: 1
+Revision: 1
+Type: bundle
+Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
+HomePage: http://macathena.mit.edu/
+License: Public Domain
+Description: Metapackage for MacAthena configuration
+
+Depends: macathena-basic-config, macathena-lprng-config
+Conflicts: macathena-config
+Replaces: macathena-config
