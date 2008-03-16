@@ -79,7 +79,7 @@ AFS_SYSNAME="$(@prefix@/bin/machtype -S) $(@prefix@/bin/machtype -C | sed "s/:/ 
 # or ; or similar shell meta-characters.  If you want to run multiple
 # commands, define a shell function instead and put the name of the shell
 # function here.
-AFS_POST_INIT=
+AFS_POST_INIT=fs setcrypt -crypt on
 
 # Uncomment this line if you defined an afs_server_prefs function.  (If you
 # have other commands that you also want to run, you'll have to put them in
