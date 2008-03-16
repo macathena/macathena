@@ -126,9 +126,13 @@ svnModules = {'athdir': ['trunk/athena/bin/athdir'],
 	'base': ['trunk/source/base', False, 'https://macathena.mit.edu/svn'],
 	'config-common': ['trunk/source/config-common', False, 'https://macathena.mit.edu/svn'],
 	'hes': ['trunk/source/hes', False, 'https://macathena.mit.edu/svn'],
+	'hesiod-config': ['trunk/source/hesiod-config', False, 'https://macathena.mit.edu/svn'],
+	'kerberos-config': ['trunk/source/kerberos-config', False, 'https://macathena.mit.edu/svn'],
 	'lprng-config': ['trunk/source/lprng-config', False, 'https://macathena.mit.edu/svn'],
 	'pyhesiodfs': ['trunk/source/pyhesiodfs', False, 'https://macathena.mit.edu/svn'],
 	'update': ['trunk/source/update', False, 'https://macathena.mit.edu/svn'],
+	'ssh-client-config': ['trunk/source/ssh-client-config', False, 'https://macathena.mit.edu/svn'],
+	'ssh-server-config': ['trunk/source/ssh-server-config', False, 'https://macathena.mit.edu/svn'],
 	'ssl-certificates': ['trunk/source/ssl-certificates', False, 'https://macathena.mit.edu/svn']
 }
 
