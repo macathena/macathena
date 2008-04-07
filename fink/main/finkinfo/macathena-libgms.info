@@ -1,5 +1,5 @@
 Package: macathena-libgms
-Version: 22699
+Version: 22873
 Revision: 1
 Source: http://macathena.mit.edu/dist/libgms-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -11,12 +11,11 @@ DescDetail: <<
 	The gms library defines error codes and constants used by get_message 
 	and messaged, the components of the global Athena message service.
 <<
-Source-MD5: ec1c32a06b11224f995c8c72029921f6
+Source-MD5: fde2960663bae9845a1cf0acdb7e5158
 DocFiles: athena-copyright
 
 BuildDepends: automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
-PatchScript: sed -i ".bak" -e 's|/usr/tmp/.messages|%p/var/cache/macathena-libgms/messages|g' globalmessage.h
 CompileScript: <<
 	cp %p/share/macathena-base/athena-copyright %b/
 	

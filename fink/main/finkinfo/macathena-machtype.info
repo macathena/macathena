@@ -1,19 +1,19 @@
 Package: macathena-machtype
-Version: 22699
-Revision: 3
+Version: 22847
+Revision: 1
 Source: http://macathena.mit.edu/dist/machtype-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Print Athena machine type to standard output
-Source-MD5: f03f88e7ae085b16979d4ecd5a5f75d9
+Source-MD5: 947cc516faaea0c9bf9352450c8d3f0f
 DocFiles: athena-copyright
 
 Depends: macathena-base
 BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1)
 UpdateConfigGuess: true
 PatchFile: %n.patch
-PatchFile-MD5: 0449dc3fae00f6f1e327ab5c0e19bf8b
+PatchFile-MD5: 3adc3811fca2e9adc1968617c5a6efe2
 PatchScript: patch -p0 < %{PatchFile}
 CompileScript: <<
 	cp %p/share/macathena-base/athena-copyright %b/

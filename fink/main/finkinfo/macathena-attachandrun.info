@@ -1,6 +1,6 @@
 Package: macathena-attachandrun
-Version: 22699
-Revision: 2
+Version: 22847
+Revision: 1
 Source: http://macathena.mit.edu/dist/attachandrun-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -11,7 +11,7 @@ DescDetail: <<
 	The attachandrun utility allows a script to robustly run a program from 
 	a specified locker.
 <<
-Source-MD5: 9312e52dbd055c62861d9c5d0a076d9e
+Source-MD5: 8ea0fd361b9e73af6ccdda6f5eb64337
 DocFiles: athena-copyright
 
 Depends: macathena-attach

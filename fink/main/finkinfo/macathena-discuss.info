@@ -1,6 +1,6 @@
 Package: macathena-discuss
 Version: 22713
-Revision: 2
+Revision: 1
 Source: http://macathena.mit.edu/dist/discuss-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -16,8 +16,6 @@ DocFiles: athena-copyright
 Depends: libss, readline-shlibs
 BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1), readline
 UpdateConfigGuess: true
-PatchFile: %n.patch
-PatchFile-MD5: dfd9f5a28f4a01ca59d2f8fb2e18e7a5
 ConfigureParams: --with-krb5 --with-ss=%p
 CompileScript: <<
 	cp %p/share/macathena-base/athena-copyright %b/
