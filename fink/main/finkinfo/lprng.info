@@ -1,7 +1,7 @@
 Package: lprng
 Version: 3.8.28
-Revision: 3
-Source: http://www.lprng.com/DISTRIB/LPRng/LPRng-%v.tgz
+Revision: 4
+Source: http://macathena.mit.edu/dist/LPRng-%v.tgz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://www.lprng.com/
 License: GPL
