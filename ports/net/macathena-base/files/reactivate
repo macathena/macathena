@@ -1,3 +1,0 @@
-#!/bin/sh
-
-echo "/etc/athena/reactivate is not supported on MacAthena." >&2
