@@ -1,0 +1,22 @@
+Info2: <<
+	Package: macathena-hesiod-py%type_pkg[python]
+	Type: python (2.3 2.4 2.5)
+	Version: 0.2.2
+	Revision: 1
+	Source: http://pypi.python.org/packages/source/P/PyHesiod/PyHesiod-%v.tar.gz
+	Maintainer: Evan Broder <ebroder@ebroder.net>
+	HomePage: http://ebroder.net/code/PyHesiod
+	License: BSD
+	Description: Python bindings for the Hesiod name resolution library
+	Source-MD5: 60f82d3aeb3ed5bb8d0e843fe6e9e51b
+	DocFiles: COPYING
+	
+	Depends: macathena-libhesiod, pyrex-py%type_pkg[python], setuptools-py%type_pkg[python], python%type_pkg[python]
+	Conflicts: macathena-pyhesiodfs (<= 144)
+	CompileScript: <<
+		%p/bin/python%type_raw[python] setup.py build
+	<<
+	InstallScript: <<
+		%p/bin/python%type_raw[python] setup.py install --root=%d
+	<<
+<<
