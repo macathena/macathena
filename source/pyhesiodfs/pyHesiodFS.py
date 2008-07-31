@@ -46,10 +46,11 @@ class PyHesiodFS(Fuse):
     def __init__(self, *args, **kwargs):
         Fuse.__init__(self, *args, **kwargs)
         self.fuse_args.add("allow_other", True)
-        self.fuse_args.add("noappledouble", True)
-        self.fuse_args.add("noapplexattr", True)
         self.fuse_args.add("fsname", "pyHesiodFS")
-        self.fuse_args.add("volname", "MIT")
+        if sys.platform == 'darwin':
+            self.fuse_args.add("noappledouble", True)
+            self.fuse_args.add("noapplexattr", True)
+            self.fuse_args.add("volname", "MIT")
         self.mounts = {}
     
     def getattr(self, path):
