@@ -96,8 +96,8 @@ class PyHesiodFS(Fuse):
         else:
             filsys = hesiod.FilsysLookup(name)
             # FIXME check if the first locker is valid
-            if len(filsys.getFilsys()) >= 1:
-                pointers = filsys.getFilsys()
+            if len(filsys.filsys) >= 1:
+                pointers = filsys.filsys
                 pointer = pointers[0]
                 if pointer['type'] != 'AFS' and pointer['type'] != 'LOC':
                     print >>sys.stderr, "Unknown locker type "+pointer.type+" for locker "+name+" ("+repr(pointer)+" )"
