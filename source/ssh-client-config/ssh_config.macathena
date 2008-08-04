@@ -16,7 +16,7 @@
 # System-wide defaults set by MIT Kerberos Extras
 Host *
   GSSAPIAuthentication yes
-  GSSAPIDelegateCredentials yes
+  GSSAPIDelegateCredentials no
   GSSAPIKeyExchange yes
 
 
