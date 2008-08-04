@@ -1,12 +1,12 @@
 Package: macathena-ssh-client-config
-Version: 129
+Version: 147
 Revision: 1
 Source: http://macathena.mit.edu/dist/ssh-client-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: SSH client configuration for MacAthena
-Source-MD5: 79ef859a64c1d9d464e4bb8fc0c145ee
+Source-MD5: d2e8dd5cbb098762da45cb75fb2470e4
 DocFiles: copyright
 ConfFiles: /private/etc/ssh_config.macathena
 
