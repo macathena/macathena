@@ -94,7 +94,13 @@ class PyHesiodFS(Fuse):
         if name in self.mounts:
             return self.mounts[name]
         else:
-            filsys = hesiod.FilsysLookup(name)
+            try:
+                filsys = hesiod.FilsysLookup(name)
+            except IOError, e:
+                if e.errno in (errno.ENOENT, errno.EMSGSIZE):
+                    raise IOError(errno.ENOENT, os.strerror(errno.ENOENT))
+                else:
+                    raise IOError(errno.EIO, os.strerror(errno.EIO))
             # FIXME check if the first locker is valid
             if len(filsys.filsys) >= 1:
                 pointers = filsys.filsys
