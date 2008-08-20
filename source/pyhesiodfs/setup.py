@@ -10,7 +10,6 @@ setup(name='pyHesiodFS',
       version='1.0',
       author='Quentin Smith',
       author_email='pyhesiodfs@mit.edu',
-      py_modules=['hesiod'],
       scripts=['pyHesiodFS.py'],
       requires=['PyHesiod (>=0.2.0)'],
       **extra_options)
