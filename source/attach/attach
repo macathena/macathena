@@ -38,9 +38,9 @@ for o, a in optlist:
 		elif len(args) != 1:
 			print_usage = True
 		else:
-			filsys = hesiod.FilsysLookup(args[0])
+			filsys = hesiod.FilsysLookup(args[0]).filsys
 			if filsys:
-				os.symlink(filsys.getFilsys()[0]['location'], a)
+				os.symlink(filsys[0]['location'], a)
 				sys.exit(0)
 			else:
 				sys.stderr.write('%s: Locker unknown' % args[0])
@@ -59,8 +59,8 @@ for arg in args:
 		sys.stderr.write('%s: Locker unknown\n' % arg)
 		exit_code = 2
 	if noise_level == 'verbose':
-		filsys = hesiod.FilsysLookup(args[0])
-		print 'attach: %s attached to /mit/%s for filesystem %s' % (filsys.getFilsys()[0]['location'], arg, arg)
+		filsys = hesiod.FilsysLookup(args[0]).filsys
+		print 'attach: %s attached to /mit/%s for filesystem %s' % (filsys[0]['location'], arg, arg)
 	elif noise_level == 'path':
 		print '/mit/%s' % arg
 	elif noise_level == 'lookup':
