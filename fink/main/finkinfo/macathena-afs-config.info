@@ -1,12 +1,12 @@
 Package: macathena-afs-config
-Version: 130
+Version: 153
 Revision: 1
 Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: AFS configuration for MacAthena
-Source-MD5: 40e05a84afe8a86dad6ce88a8cfe9847
+Source-MD5: 7deff29640f67ad77e485af61d7b102c
 DocFiles: copyright
 ConfFiles: /private/var/db/openafs/etc/CellAlias.macathena /private/var/db/openafs/etc/CellServDB.macathena /private/var/db/openafs/etc/ThisCell.macathena /private/var/db/openafs/etc/config/afs.conf.macathena /private/var/db/openafs/etc/config/settings.plist.macathena
 
