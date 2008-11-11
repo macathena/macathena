@@ -4,29 +4,27 @@
 
 import os
 import sys
+import hesiod
 
 keys = ["passwd", "filsys", "pobox", "gid", "uid", "grplist", "sloc", "cluster",
 "group", "pcap", "service", "lpralias", "printinfo", "palladium", "tloc"]
 
 usage = """
-Usage: hes thing_you_want_info_about  [next_thing ...]  [type]
+Usage: hes thing_you_want_info_about  [next_thing ...]	[type]
 
 Where 'type' is: %s
 """ % ", ".join(keys)
 
-def query(thing, type):
-	input, output, err = os.popen3(('hesinfo', thing, type))
-	# hesinfo prints errors (like queries not existing) to stderr, so if it's
-	# empty, we're probably good
-	if err.read() == '':
-		return output.read().strip()
-
 def printQuery(thing, type):
 	"""printQuery takes the output of a Hesiod query, formats it, and prints it
 	out"""
-	info = query(thing, type)
-	if info != None:
-		print "%s: %s" % (type.upper().rjust(10), info)
+	try:
+		info = hesiod.resolve(thing, type)
+		for ent in info:
+			print "%s: %s" % (type.upper().rjust(10), ent)
+	except IOError, e:
+		if e.errno != 2:
+			raise
 
 def main():
 	# Print the usage information if there were no arguments
