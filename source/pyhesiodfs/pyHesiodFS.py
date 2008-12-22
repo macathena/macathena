@@ -16,6 +16,30 @@ from fuse import Fuse
 
 import hesiod
 
+try:
+    from collections import defaultdict
+except ImportError:
+    class defaultdict(dict):
+        """
+        A dictionary that automatically will fill in keys that don't exist
+        with the result from some default value factory
+        
+        Based on the collections.defaultdict object in Python 2.5
+        """
+        
+        def __init__(self, default_factory):
+            self.default_factory = default_factory
+            super(defaultdict, self).__init__()
+        
+        def __getitem__(self, y):
+            if y not in self:
+                self[y] = self.default_factory()
+            return super(defaultdict, self).__getitem__(y)
+        
+        def __str__(self):
+            print 'defaultdict(%s, %s)' % (self.default_factory, 
+                                           super(defaultdict, self).__str__())
+        
 new_fuse = hasattr(fuse, '__version__')
 
 fuse.fuse_python_api = (0, 2)
@@ -65,7 +89,10 @@ class PyHesiodFS(Fuse):
             self.fuse_args.add("noapplexattr", True)
             self.fuse_args.add("volname", "MIT")
             self.fuse_args.add("fsname", "pyHesiodFS")
-        self.mounts = {}
+        self.mounts = defaultdict(dict)
+    
+    def _user(self):
+        return fuse.FuseGetContext()['uid']
     
     def getattr(self, path):
         st = MyStat()
@@ -91,12 +118,12 @@ class PyHesiodFS(Fuse):
             return st.toTuple()
 
     def getCachedLockers(self):
-        return self.mounts.keys()
+        return self.mounts[self._user()].keys()
 
     def findLocker(self, name):
         """Lookup a locker in hesiod and return its path"""
-        if name in self.mounts:
-            return self.mounts[name]
+        if name in self.mounts[self._user()]:
+            return self.mounts[self._user()][name]
         else:
             try:
                 filsys = hesiod.FilsysLookup(name)
@@ -113,7 +140,7 @@ class PyHesiodFS(Fuse):
                     syslog(LOG_NOTICE, "Unknown locker type "+pointer['type']+" for locker "+name+" ("+repr(pointer)+" )")
                     return None
                 else:
-                    self.mounts[name] = pointer['location']
+                    self.mounts[self._user()][name] = pointer['location']
                     syslog(LOG_INFO, "Mounting "+name+" on "+pointer['location'])
                     return pointer['location']
             else:
