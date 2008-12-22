@@ -206,6 +206,16 @@ class PyHesiodFS(Fuse):
             buf = ''
         return buf
     
+    def symlink(self, src, path):
+        if path == '/' or path == hello_path:
+            return -errno.EPERM
+        elif '/' not in path[1:]:
+            self.mounts[self._user()][path[1:]] = src
+            self.negcache.remove(path[1:])
+            print self.mounts[self._user()]
+        else:
+            return -errno.EPERM
+    
     def unlink(self, path):
         if path == '/' or path == hello_path:
             return -errno.EPERM
