@@ -116,9 +116,9 @@ class PyHesiodFS(Fuse):
             self.fuse_args.add("fsname", "pyHesiodFS")
         self.mounts = defaultdict(dict)
         
-        # Cache deletions for 10 seconds - should give people time to
-        # make a new symlink
-        self.negcache = negcache(10)
+        # Cache deletions for half a second - should give `ln -nsf`
+        # enough time to make a new symlink
+        self.negcache = negcache(0.5)
     
     def _user(self):
         return fuse.FuseGetContext()['uid']
