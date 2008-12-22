@@ -97,7 +97,7 @@ class PyHesiodFS(Fuse):
     def getattr(self, path):
         st = MyStat()
         if path == '/':
-            st.st_mode = stat.S_IFDIR | 0755
+            st.st_mode = stat.S_IFDIR | 0777
             st.st_nlink = 2
         elif path == hello_path:
             st.st_mode = stat.S_IFREG | 0444
@@ -106,6 +106,7 @@ class PyHesiodFS(Fuse):
         elif '/' not in path[1:]:
             if self.findLocker(path[1:]):
                 st.st_mode = stat.S_IFLNK | 0777
+                st.st_uid = self._user()
                 st.st_nlink = 1
                 st.st_size = len(self.findLocker(path[1:]))
             else:
@@ -175,6 +176,14 @@ class PyHesiodFS(Fuse):
         else:
             buf = ''
         return buf
+    
+    def unlink(self, path):
+        if path == '/' or path == hello_path:
+            return -errno.EPERM
+        elif '/' not in path[1:]:
+            del self.mounts[self._user()][path[1:]]
+        else:
+            return -errno.EPERM
 
 def main():
     global hello_str
