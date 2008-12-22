@@ -9,7 +9,7 @@
 #    See the file COPYING.
 #
 
-import sys, os, stat, errno
+import sys, os, stat, errno, time
 from syslog import *
 import fuse
 from fuse import Fuse
@@ -39,7 +39,32 @@ except ImportError:
         def __str__(self):
             print 'defaultdict(%s, %s)' % (self.default_factory, 
                                            super(defaultdict, self).__str__())
-        
+
+class negcache(dict):
+    """
+    A set-like object that automatically expunges entries after
+    they're been there for a certain amount of time.
+    
+    This only supports add, remove, and __contains__
+    """
+    
+    def __init__(self, cache_time):
+        self.cache_time = cache_time
+    
+    def add(self, obj):
+        self[obj] = time.time()
+    
+    def remove(self, obj):
+        del self[obj]
+    
+    def __contains__(self, k):
+        if super(negcache, self).__contains__(k):
+            if self[k] + self.cache_time > time.time():
+                return True
+            else:
+                del self[k]
+        return False
+
 new_fuse = hasattr(fuse, '__version__')
 
 fuse.fuse_python_api = (0, 2)
@@ -90,6 +115,10 @@ class PyHesiodFS(Fuse):
             self.fuse_args.add("volname", "MIT")
             self.fuse_args.add("fsname", "pyHesiodFS")
         self.mounts = defaultdict(dict)
+        
+        # Cache deletions for 10 seconds - should give people time to
+        # make a new symlink
+        self.negcache = negcache(10)
     
     def _user(self):
         return fuse.FuseGetContext()['uid']
@@ -104,7 +133,7 @@ class PyHesiodFS(Fuse):
             st.st_nlink = 1
             st.st_size = len(hello_str)
         elif '/' not in path[1:]:
-            if self.findLocker(path[1:]):
+            if path[1:] not in self.negcache and self.findLocker(path[1:]):
                 st.st_mode = stat.S_IFLNK | 0777
                 st.st_uid = self._user()
                 st.st_nlink = 1
@@ -182,6 +211,7 @@ class PyHesiodFS(Fuse):
             return -errno.EPERM
         elif '/' not in path[1:]:
             del self.mounts[self._user()][path[1:]]
+            self.negcache.add(path[1:])
         else:
             return -errno.EPERM
 
