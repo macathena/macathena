@@ -135,7 +135,7 @@ class PyHesiodFS(Fuse):
     def getattr(self, path):
         st = MyStat()
         if path == '/':
-            st.st_mode = stat.S_IFDIR | 0775
+            st.st_mode = stat.S_IFDIR | 0755
             st.st_gid = self._gid()
             st.st_nlink = 2
         elif path == hello_path:

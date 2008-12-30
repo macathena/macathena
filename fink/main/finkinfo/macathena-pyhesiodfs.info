@@ -1,12 +1,12 @@
 Package: macathena-pyhesiodfs
-Version: 163
+Version: 165
 Revision: 1
 Source: http://macathena.mit.edu/dist/pyhesiodfs-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: GPL
 Description: Automatically mounts AFS lockers in /mit
-Source-MD5: 2d5bc9d526c87867b6a056b081e0fad1
+Source-MD5: 67f1a6abd2dae0054e22117a3105263f
 DocFiles: AUTHORS COPYING
 
 Depends: fuse-py25, macathena-hesiod-py25
