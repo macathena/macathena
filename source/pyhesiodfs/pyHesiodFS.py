@@ -143,7 +143,7 @@ class PyHesiodFS(Fuse):
             st.st_nlink = 1
             st.st_size = len(hello_str)
         elif '/' not in path[1:]:
-            if path[1:] not in self.negcache[self._pid()] and self.findLocker(path[1:]):
+            if path[1:] not in self.negcache[self._uid()] and self.findLocker(path[1:]):
                 st.st_mode = stat.S_IFLNK | 0777
                 st.st_uid = self._uid()
                 st.st_nlink = 1
@@ -221,7 +221,7 @@ class PyHesiodFS(Fuse):
             return -errno.EPERM
         elif '/' not in path[1:]:
             self.mounts[self._uid()][path[1:]] = src
-            self.negcache[self._pid()].remove(path[1:])
+            self.negcache[self._uid()].remove(path[1:])
         else:
             return -errno.EPERM
     
@@ -230,7 +230,7 @@ class PyHesiodFS(Fuse):
             return -errno.EPERM
         elif '/' not in path[1:]:
             del self.mounts[self._uid()][path[1:]]
-            self.negcache[self._pid()].add(path[1:])
+            self.negcache[self._uid()].add(path[1:])
         else:
             return -errno.EPERM
 
