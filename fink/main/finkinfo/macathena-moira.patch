@@ -1,7 +1,7 @@
-Index: Makefile.in
+Index: moira/Makefile.in
 ===================================================================
---- Makefile.in	2007-02-14 01:59:19.000000000 -0500
-+++ Makefile.in	2007-02-14 02:06:36.000000000 -0500
+--- moira.orig/Makefile.in
++++ moira/Makefile.in	
 @@ -35,11 +35,11 @@
  	@for d in $(SUBDIRS); do (echo "### Making $@ in $$d"; cd $$d; $(MAKE) $@) || exit 1; done
  
@@ -16,10 +16,10 @@ Index: Makefile.in
  	@for d in $(SVRDIRS); do (echo "### Making install in $$d"; cd $$d; $(MAKE) install) || exit 1; done
  
  world: depend all
-Index: clients/addusr/Makefile.in
+Index: moira/clients/addusr/Makefile.in
 ===================================================================
---- clients/addusr/Makefile.in	2007-02-14 01:59:19.000000000 -0500
-+++ clients/addusr/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/addusr/Makefile.in
++++ moira/clients/addusr/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -29,10 +29,10 @@ Index: clients/addusr/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/blanche/Makefile.in
+Index: moira/clients/blanche/Makefile.in
 ===================================================================
---- clients/blanche/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/blanche/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/blanche/Makefile.in
++++ moira/clients/blanche/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -42,10 +42,10 @@ Index: clients/blanche/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/chfn/Makefile.in
+Index: moira/clients/chfn/Makefile.in
 ===================================================================
---- clients/chfn/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/chfn/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/chfn/Makefile.in
++++ moira/clients/chfn/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -55,10 +55,10 @@ Index: clients/chfn/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: clients/chpobox/Makefile.in
+Index: moira/clients/chpobox/Makefile.in
 ===================================================================
---- clients/chpobox/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/chpobox/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/chpobox/Makefile.in
++++ moira/clients/chpobox/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -68,10 +68,10 @@ Index: clients/chpobox/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: clients/chsh/Makefile.in
+Index: moira/clients/chsh/Makefile.in
 ===================================================================
---- clients/chsh/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/chsh/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/chsh/Makefile.in
++++ moira/clients/chsh/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -81,10 +81,10 @@ Index: clients/chsh/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: clients/mailmaint/Makefile.in
+Index: moira/clients/mailmaint/Makefile.in
 ===================================================================
---- clients/mailmaint/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/mailmaint/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/mailmaint/Makefile.in
++++ moira/clients/mailmaint/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -94,10 +94,10 @@ Index: clients/mailmaint/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/mitch/Makefile.in
+Index: moira/clients/mitch/Makefile.in
 ===================================================================
---- clients/mitch/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/mitch/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/mitch/Makefile.in
++++ moira/clients/mitch/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -107,10 +107,10 @@ Index: clients/mitch/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/moira/Makefile.in
+Index: moira/clients/moira/Makefile.in
 ===================================================================
---- clients/moira/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/moira/Makefile.in	2007-02-14 02:07:47.000000000 -0500
+--- moira.orig/clients/moira/Makefile.in
++++ moira/clients/moira/Makefile.in	
 @@ -44,14 +44,14 @@
  depend:
  
@@ -134,10 +134,10 @@ Index: clients/moira/Makefile.in
  
  moira: $(MOBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(MOBJS) $(LIBS)
-Index: clients/mrcheck/Makefile.in
+Index: moira/clients/mrcheck/Makefile.in
 ===================================================================
---- clients/mrcheck/Makefile.in	2007-02-14 01:59:20.000000000 -0500
-+++ clients/mrcheck/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/mrcheck/Makefile.in
++++ moira/clients/mrcheck/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -147,10 +147,10 @@ Index: clients/mrcheck/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/mrtest/Makefile.in
+Index: moira/clients/mrtest/Makefile.in
 ===================================================================
---- clients/mrtest/Makefile.in	2007-02-14 01:59:21.000000000 -0500
-+++ clients/mrtest/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/mrtest/Makefile.in
++++ moira/clients/mrtest/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -160,10 +160,10 @@ Index: clients/mrtest/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/stanley/Makefile.in
+Index: moira/clients/stanley/Makefile.in
 ===================================================================
---- clients/stanley/Makefile.in	2007-02-14 01:59:21.000000000 -0500
-+++ clients/stanley/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+--- moira.orig/clients/stanley/Makefile.in
++++ moira/clients/stanley/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -173,10 +173,10 @@ Index: clients/stanley/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: clients/stella/Makefile.in
+Index: moira/clients/stella/Makefile.in
 ===================================================================
---- clients/stella/Makefile.in	2007-02-14 01:59:21.000000000 -0500
-+++ clients/stella/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+--- moira.orig/clients/stella/Makefile.in
++++ moira/clients/stella/Makefile.in	
 @@ -40,7 +40,7 @@
  depend:
  
@@ -186,10 +186,10 @@ Index: clients/stella/Makefile.in
  
  $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: man/Makefile.in
+Index: moira/man/Makefile.in
 ===================================================================
---- man/Makefile.in	2007-02-14 01:59:21.000000000 -0500
-+++ man/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+--- moira.orig/man/Makefile.in
++++ moira/man/Makefile.in	
 @@ -32,6 +32,7 @@
  depend:
  
@@ -201,10 +201,10 @@ Index: man/Makefile.in
 +	for m in $(MAN1); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man1; done
 +	for m in $(MAN3); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man3; done
 +	for m in $(MAN8); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man8; done
-Index: update/Makefile.in
+Index: moira/update/Makefile.in
 ===================================================================
---- update/Makefile.in	2007-02-14 01:59:21.000000000 -0500
-+++ update/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+--- moira.orig/update/Makefile.in
++++ moira/update/Makefile.in	
 @@ -43,8 +43,8 @@
  depend:
  
@@ -216,3 +216,39 @@ Index: update/Makefile.in
  
  update_test: $(COBJS) $(MR_LIBDEP)
  	$(CC) -o $@ $(LDFLAGS) $(COBJS) $(LIBS)
+diff -ur moira.orig/clients/mrtest/mrtest.c moira/clients/mrtest/mrtest.c
+--- moira.orig/clients/mrtest/mrtest.c	2008-08-30 18:22:14.000000000 -0400
++++ moira/clients/mrtest/mrtest.c	2009-01-04 03:20:08.000000000 -0500
+@@ -97,8 +97,13 @@
+ 	}
+     }
+ 
++#ifndef __APPLE__
+   initialize_sms_error_table();
+   initialize_krb_error_table();
++#else
++  add_error_table(&et_sms_error_table);
++  add_error_table(&et_krb_error_table);
++#endif
+ 
+ #ifdef HAVE_READLINE
+   /* we don't want filename completion */
+diff -ur moira.orig/lib/mr_init.c moira/lib/mr_init.c
+--- moira.orig/lib/mr_init.c	2008-08-30 18:22:14.000000000 -0400
++++ moira/lib/mr_init.c	2009-01-04 03:19:06.000000000 -0500
+@@ -20,8 +20,15 @@
+   if (mr_inited)
+     return;
+ 
++#ifndef __APPLE__
+   initialize_sms_error_table();
+   initialize_krb_error_table();
+   initialize_ureg_error_table();
++#else
++  add_error_table(&et_sms_error_table);
++  add_error_table(&et_krb_error_table);
++  add_error_table(&et_ureg_error_table);
++#endif
++
+   mr_inited = 1;
+ }

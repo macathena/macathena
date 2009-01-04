@@ -1,6 +1,6 @@
 Package: macathena-moira
 Version: 20080830
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/moira-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -17,8 +17,8 @@ Depends: macathena-hesiod, libncurses5
 BuildDepends: fink (>= 0.24.12)
 UpdateConfigGuess: true
 PatchFile: %n.patch
-PatchFile-MD5: ddba5b97628f0cad674cd20bce153bde
-PatchScript: patch -p0 < %{PatchFile}
+PatchFile-MD5: 7e555a88ae3cbec212434b5e0311e468
+PatchScript: patch -p1 < %{PatchFile}
 ConfigureParams: --with-krb5 --with-com_err --with-hesiod
 CompileScript: <<
 	autoconf
