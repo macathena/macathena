@@ -1,221 +1,3 @@
-Index: moira/Makefile.in
-===================================================================
---- moira.orig/Makefile.in
-+++ moira/Makefile.in	
-@@ -35,11 +35,11 @@
- 	@for d in $(SUBDIRS); do (echo "### Making $@ in $$d"; cd $$d; $(MAKE) $@) || exit 1; done
- 
- install:
--	$(srcdir)/mkinstalldirs $(bindir) $(sbindir) $(mrbindir) $(mandir)
-+	$(srcdir)/mkinstalldirs $(DESTDIR)$(bindir) $(DESTDIR)$(sbindir) $(DESTDIR)$(mandir)
- 	@for d in $(SUBDIRS); do (echo "### Making $@ in $$d"; cd $$d; $(MAKE) $@) || exit 1; done
- 
- svrinstall:
--	$(srcdir)/mkinstalldirs $(mrbindir)
-+	$(srcdir)/mkinstalldirs $(DESTDIR)$(mrbindir)
- 	@for d in $(SVRDIRS); do (echo "### Making install in $$d"; cd $$d; $(MAKE) install) || exit 1; done
- 
- world: depend all
-Index: moira/clients/addusr/Makefile.in
-===================================================================
---- moira.orig/clients/addusr/Makefile.in
-+++ moira/clients/addusr/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) -m 755 addusr $(bindir)
-+	$(INSTALL_PROGRAM) -m 755 addusr $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/blanche/Makefile.in
-===================================================================
---- moira.orig/clients/blanche/Makefile.in
-+++ moira/clients/blanche/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) blanche $(bindir)
-+	$(INSTALL_PROGRAM) blanche $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/chfn/Makefile.in
-===================================================================
---- moira.orig/clients/chfn/Makefile.in
-+++ moira/clients/chfn/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
-+	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: moira/clients/chpobox/Makefile.in
-===================================================================
---- moira.orig/clients/chpobox/Makefile.in
-+++ moira/clients/chpobox/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
-+	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: moira/clients/chsh/Makefile.in
-===================================================================
---- moira.orig/clients/chsh/Makefile.in
-+++ moira/clients/chsh/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
-+	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
-Index: moira/clients/mailmaint/Makefile.in
-===================================================================
---- moira.orig/clients/mailmaint/Makefile.in
-+++ moira/clients/mailmaint/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) mailmaint $(bindir)
-+	$(INSTALL_PROGRAM) mailmaint $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/mitch/Makefile.in
-===================================================================
---- moira.orig/clients/mitch/Makefile.in
-+++ moira/clients/mitch/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) mitch $(bindir)
-+	$(INSTALL_PROGRAM) mitch $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/moira/Makefile.in
-===================================================================
---- moira.orig/clients/moira/Makefile.in
-+++ moira/clients/moira/Makefile.in	
-@@ -44,14 +44,14 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) namespace $(bindir)
--	$(INSTALL_PROGRAM) moira $(bindir)
--	rm -f $(bindir)/listmaint	
--	ln -s moira $(bindir)/listmaint
--	rm -f $(bindir)/dcmmaint
--	ln -s moira $(bindir)/dcmmaint
--	rm -f $(bindir)/usermaint
--	ln -s moira $(bindir)/usermaint
-+	$(INSTALL_PROGRAM) namespace $(DESTDIR)$(bindir)
-+	$(INSTALL_PROGRAM) moira $(DESTDIR)$(bindir)
-+	rm -f $(DESTDIR)$(bindir)/listmaint
-+	ln -s moira $(DESTDIR)$(bindir)/listmaint
-+	rm -f $(DESTDIR)$(bindir)/dcmmaint
-+	ln -s moira $(DESTDIR)$(bindir)/dcmmaint
-+	rm -f $(DESTDIR)$(bindir)/usermaint
-+	ln -s moira $(DESTDIR)$(bindir)/usermaint
- 
- moira: $(MOBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(MOBJS) $(LIBS)
-Index: moira/clients/mrcheck/Makefile.in
-===================================================================
---- moira.orig/clients/mrcheck/Makefile.in
-+++ moira/clients/mrcheck/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) mrcheck $(bindir)
-+	$(INSTALL_PROGRAM) mrcheck $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/mrtest/Makefile.in
-===================================================================
---- moira.orig/clients/mrtest/Makefile.in
-+++ moira/clients/mrtest/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) mrtest $(bindir)
-+	$(INSTALL_PROGRAM) mrtest $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/stanley/Makefile.in
-===================================================================
---- moira.orig/clients/stanley/Makefile.in
-+++ moira/clients/stanley/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) stanley $(bindir)
-+	$(INSTALL_PROGRAM) stanley $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/clients/stella/Makefile.in
-===================================================================
---- moira.orig/clients/stella/Makefile.in
-+++ moira/clients/stella/Makefile.in	
-@@ -40,7 +40,7 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) stella $(bindir)
-+	$(INSTALL_PROGRAM) stella $(DESTDIR)$(bindir)
- 
- $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
-Index: moira/man/Makefile.in
-===================================================================
---- moira.orig/man/Makefile.in
-+++ moira/man/Makefile.in	
-@@ -32,6 +32,7 @@
- depend:
- 
- install:
--	for m in $(MAN1); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man1; done
--	for m in $(MAN3); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man3; done
--	for m in $(MAN8); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man8; done
-+	$(srcdir)/../mkinstalldirs $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man8
-+	for m in $(MAN1); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man1; done
-+	for m in $(MAN3); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man3; done
-+	for m in $(MAN8); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man8; done
-Index: moira/update/Makefile.in
-===================================================================
---- moira.orig/update/Makefile.in
-+++ moira/update/Makefile.in	
-@@ -43,8 +43,8 @@
- depend:
- 
- install: all
--	$(INSTALL_PROGRAM) update_test $(bindir)
--	$(INSTALL_PROGRAM) update_server $(sbindir)
-+	$(INSTALL_PROGRAM) update_test $(DESTDIR)$(bindir)
-+	$(INSTALL_PROGRAM) update_server $(DESTDIR)$(sbindir)
- 
- update_test: $(COBJS) $(MR_LIBDEP)
- 	$(CC) -o $@ $(LDFLAGS) $(COBJS) $(LIBS)
 diff -ur moira.orig/clients/mrtest/mrtest.c moira/clients/mrtest/mrtest.c
 --- moira.orig/clients/mrtest/mrtest.c	2008-08-30 18:22:14.000000000 -0400
 +++ moira/clients/mrtest/mrtest.c	2009-01-04 03:20:08.000000000 -0500
@@ -223,12 +5,12 @@ diff -ur moira.orig/clients/mrtest/mrtest.c moira/clients/mrtest/mrtest.c
  	}
      }
  
-+#ifndef __APPLE__
-   initialize_sms_error_table();
-   initialize_krb_error_table();
-+#else
++#if defined(__APPLE__) && defined(__MACH__)
 +  add_error_table(&et_sms_error_table);
 +  add_error_table(&et_krb_error_table);
++#else
+   initialize_sms_error_table();
+   initialize_krb_error_table();
 +#endif
  
  #ifdef HAVE_READLINE
@@ -240,14 +22,14 @@ diff -ur moira.orig/lib/mr_init.c moira/lib/mr_init.c
    if (mr_inited)
      return;
  
-+#ifndef __APPLE__
-   initialize_sms_error_table();
-   initialize_krb_error_table();
-   initialize_ureg_error_table();
-+#else
++#if defined(__APPLE__) && defined(__MACH__)
 +  add_error_table(&et_sms_error_table);
 +  add_error_table(&et_krb_error_table);
 +  add_error_table(&et_ureg_error_table);
++#else
+   initialize_sms_error_table();
+   initialize_krb_error_table();
+   initialize_ureg_error_table();
 +#endif
 +
    mr_inited = 1;
