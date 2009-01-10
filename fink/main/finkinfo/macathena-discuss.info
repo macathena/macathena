@@ -1,5 +1,5 @@
 Package: macathena-discuss
-Version: 22864
+Version: 23282
 Revision: 1
 Source: http://macathena.mit.edu/dist/discuss-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -10,7 +10,7 @@ DescDetail: <<
 	Discuss is a user-interface front end to a networked conferencing 
 	system.
 <<
-Source-MD5: c1b2b93233673f855ec8ca795576f8ff
+Source-MD5: 72e52079c21022c7077253698dcee70d
 DocFiles: athena-copyright
 
 Depends: libss, readline-shlibs

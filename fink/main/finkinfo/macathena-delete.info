@@ -1,5 +1,5 @@
 Package: macathena-delete
-Version: 22699
+Version: 23271
 Revision: 1
 Source: http://macathena.mit.edu/dist/delete-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -14,7 +14,7 @@ DescDetail: <<
 	utility lists the files that have been marked for deletion but not yet 
 	removed.
 <<
-Source-MD5: d7753f3b6735d5dd544ed05cf5d027dc
+Source-MD5: 441cc4e16d28a9d84a27349074dd3029
 DocFiles: athena-copyright
 
 BuildDepends: automake1.9, macathena-base (>= 76-1)
