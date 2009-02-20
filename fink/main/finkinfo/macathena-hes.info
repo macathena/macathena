@@ -1,12 +1,12 @@
 Package: macathena-hes
-Version: 119
+Version: 158
 Revision: 1
 Source: http://macathena.mit.edu/dist/hes-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: BSD
 Description: Hesiod lookups for common Hesiod entries
-Source-MD5: 4493d2a6d0a7ef52b46a70a880ac2d76
+Source-MD5: fb9fbcaddabfae64f9c3dbb8b6044c91
 DocFiles: copyright
 
 Depends: macathena-hesiod, python25
