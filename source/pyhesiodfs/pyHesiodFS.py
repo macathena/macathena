@@ -174,6 +174,15 @@ class PyHesiodFS(Fuse):
         """Lookup a locker in hesiod and return its path"""
         if name in self.mounts[self._uid()]:
             return self.mounts[self._uid()][name]
+        elif name.startswith('.'):
+            ro = self.findLocker(name[1:])
+            if ro is None:
+                return
+            else:
+                rw = ro.replace('/afs/', '/afs/.')
+                self.mounts[self._uid()][name] = rw
+                syslog(LOG_INFO, "Mounting "+name+" on "+rw)
+                return rw
         else:
             try:
                 filsys = hesiod.FilsysLookup(name)
