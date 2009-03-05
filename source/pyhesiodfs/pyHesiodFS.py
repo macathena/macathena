@@ -135,7 +135,17 @@ class PyHesiodFS(Fuse):
     def getattr(self, path):
         st = MyStat()
         if path == '/':
-            st.st_mode = stat.S_IFDIR | 0755
+            # The old liblocker attach expects /mit to not be group-
+            # or other-writeable, but OS X's pre-operation access
+            # checks make it impossible to unlink or symlink if
+            # traditional UNIX permissions say you don't have bits
+            #
+            # This is a temporary work around that can be punted when
+            # I get around to writing the new attach
+            if sys.platform == 'darwin':
+                st.st_mode = stat.S_IFDIR | 0777
+            else:
+                st.st_mode = stat.S_IFDIR | 0755
             st.st_gid = self._gid()
             st.st_nlink = 2
         elif path == hello_path:
