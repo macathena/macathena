@@ -179,7 +179,7 @@ class PyHesiodFS(Fuse):
             if ro is None or ro.startswith('/afs/.'):
                 return
             else:
-                rw = ro.replace('/afs/', '/afs/.')
+                rw = ro.replace('/afs/', '/afs/.', 1)
                 self.mounts[self._uid()][name] = rw
                 syslog(LOG_INFO, "Mounting "+name+" on "+rw)
                 return rw
