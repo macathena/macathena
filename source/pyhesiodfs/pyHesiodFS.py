@@ -176,7 +176,7 @@ class PyHesiodFS(Fuse):
             return self.mounts[self._uid()][name]
         elif name.startswith('.'):
             ro = self.findLocker(name[1:])
-            if ro is None:
+            if ro is None or ro.startswith('/afs/.'):
                 return
             else:
                 rw = ro.replace('/afs/', '/afs/.')
