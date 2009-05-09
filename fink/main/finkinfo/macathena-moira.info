@@ -1,6 +1,6 @@
 Package: macathena-moira
 Version: 20090105
-Revision: 1
+Revision: 2
 Source: http://macathena.mit.edu/dist/moira-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -13,20 +13,20 @@ DescDetail: <<
 <<
 Source-MD5: afded014c91f64801d6d87e4b6aad038
 
-Depends: macathena-hesiod, libncurses5
-BuildDepends: fink (>= 0.24.12)
+Depends: macathena-hesiod, libncurses5-shlibs
+BuildDepends: fink (>= 0.24.12), libncurses5
 UpdateConfigGuess: true
 PatchFile: %n.patch
 PatchFile-MD5: 94503d049c26fb82527ca045902cb794
 PatchScript: patch -p1 < %{PatchFile}
-ConfigureParams: --with-krb5 --with-com_err --with-hesiod
+ConfigureParams: --with-krb5 --with-com_err --with-hesiod --mandir=%p/share/man
 CompileScript: <<
 	autoconf
 	env TERM=vt100 ./configure %c
 	make
 <<
 InstallScript: <<
-	make install prefix=%i
+	make install DESTDIR=%d
 	mv %i/bin/chfn %i/bin/chfn.moira
 	mv %i/bin/chsh %i/bin/chsh.moira
 	mv %i/share/man/man1/chfn.1 %i/share/man/man1/chfn.moira.1
