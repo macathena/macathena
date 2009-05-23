@@ -1,5 +1,5 @@
 Package: macathena-athrun
-Version: 22847
+Version: 23826
 Revision: 1
 Source: http://macathena.mit.edu/dist/athrun-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -11,7 +11,7 @@ DescDetail: <<
 	The athrun utility allows a script to robustly run a program from 
 	a specified locker.
 <<
-Source-MD5: e917ba48b3c96b77e767cf6cac8ecc0b
+Source-MD5: 068219d0f5a5282e2872133a5aec63cd
 DocFiles: athena-copyright
 
 Depends: macathena-attachandrun
