@@ -1,6 +1,6 @@
 Package: macathena-moira
-Version: 20090105
-Revision: 2
+Version: 20091016
+Revision: 1
 Source: http://macathena.mit.edu/dist/moira-%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -11,15 +11,15 @@ DescDetail: <<
 	central repository for information about users, groups hosts, print 
 	queues, and several other aspects of the Athena environment.
 <<
-Source-MD5: afded014c91f64801d6d87e4b6aad038
+Source-MD5: f97903ce5b82af35247705b9aeeb33d3
 
 Depends: macathena-hesiod, libncurses5-shlibs
 BuildDepends: fink (>= 0.24.12), libncurses5
 UpdateConfigGuess: true
 PatchFile: %n.patch
-PatchFile-MD5: 94503d049c26fb82527ca045902cb794
+PatchFile-MD5: e05590ac3f1b07dad64b082f9673c382
 PatchScript: patch -p1 < %{PatchFile}
-ConfigureParams: --with-krb5 --with-com_err --with-hesiod --mandir=%p/share/man
+ConfigureParams: --with-krb5 --without-krb4 --with-com_err --with-hesiod --mandir=%p/share/man
 CompileScript: <<
 	autoconf
 	env TERM=vt100 ./configure %c
@@ -34,7 +34,6 @@ InstallScript: <<
 	
 	%b/mkinstalldirs %i/include/moira %i/lib
 	cp %b/include/moira.h %b/lib/mr_et.h %b/lib/krb_et.h %b/lib/ureg_err.h %i/include/moira
-	cp %b/lib/libmoira.a %i/lib
 	
 	%b/mkinstalldirs %i/share/doc/%n
 	cat %b/include/mit-copyright.h | python -c "import sys; print ''.join(sys.stdin.readlines()[2:-2])" >%i/share/doc/%n/copyright

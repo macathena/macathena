@@ -1,6 +1,6 @@
-diff -ur moira.orig/clients/mrtest/mrtest.c moira/clients/mrtest/mrtest.c
---- moira.orig/clients/mrtest/mrtest.c	2008-08-30 18:22:14.000000000 -0400
-+++ moira/clients/mrtest/mrtest.c	2009-01-04 03:20:08.000000000 -0500
+diff -ur moira-20091016.orig/clients/mrtest/mrtest.c moira-20091016/clients/mrtest/mrtest.c
+--- moira-20091016.orig/clients/mrtest/mrtest.c	2009-10-16 16:37:18.000000000 -0400
++++ moira-20091016/clients/mrtest/mrtest.c	2009-10-18 17:26:49.000000000 -0400
 @@ -97,8 +97,13 @@
  	}
      }
@@ -15,9 +15,28 @@ diff -ur moira.orig/clients/mrtest/mrtest.c moira/clients/mrtest/mrtest.c
  
  #ifdef HAVE_READLINE
    /* we don't want filename completion */
-diff -ur moira.orig/lib/mr_init.c moira/lib/mr_init.c
---- moira.orig/lib/mr_init.c	2008-08-30 18:22:14.000000000 -0400
-+++ moira/lib/mr_init.c	2009-01-04 03:19:06.000000000 -0500
+diff -ur moira-20091016.orig/configure.in moira-20091016/configure.in
+--- moira-20091016.orig/configure.in	2009-10-16 16:37:18.000000000 -0400
++++ moira-20091016/configure.in	2009-10-18 17:27:47.000000000 -0400
+@@ -464,12 +464,12 @@
+ if test "$zephyr" != no; then
+   KLIBS="-lzephyr $KLIBS"
+ fi
+-LIBS="-lmoira $KLIBS"
+-AC_SUBST(KLIBS)
+-
+ MR_LIBDEP='$(BUILDTOP)/lib/libmoira.la'
+ AC_SUBST(MR_LIBDEP)
+ 
++LIBS="$MR_LIBDEP $KLIBS"
++AC_SUBST(KLIBS)
++
+ AC_OUTPUT(Makefile lib/Makefile include/Makefile clients/Makefile \
+ 	  clients/lib/Makefile clients/addusr/Makefile \
+ 	  clients/blanche/Makefile clients/chfn/Makefile \
+diff -ur moira-20091016.orig/lib/mr_init.c moira-20091016/lib/mr_init.c
+--- moira-20091016.orig/lib/mr_init.c	2009-10-16 16:37:18.000000000 -0400
++++ moira-20091016/lib/mr_init.c	2009-10-18 17:26:49.000000000 -0400
 @@ -20,8 +20,15 @@
    if (mr_inited)
      return;
