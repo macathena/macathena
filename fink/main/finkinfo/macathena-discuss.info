@@ -1,5 +1,5 @@
 Package: macathena-discuss
-Version: 23282
+Version: 24188
 Revision: 1
 Source: http://macathena.mit.edu/dist/discuss-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
@@ -10,13 +10,13 @@ DescDetail: <<
 	Discuss is a user-interface front end to a networked conferencing 
 	system.
 <<
-Source-MD5: 72e52079c21022c7077253698dcee70d
+Source-MD5: d6cb1b1cd4ec8be47e7682fa7e082ab3
 DocFiles: athena-copyright
 
 Depends: libss, readline-shlibs
 BuildDepends: fink (>= 0.24.12), automake1.9, macathena-base (>= 76-1), readline
 UpdateConfigGuess: true
-ConfigureParams: --with-krb5 --with-ss=%p
+ConfigureParams: --with-krb5 --without-krb4 --with-ss=%p
 CompileScript: <<
 	cp %p/share/macathena-base/athena-copyright %b/
 	
