@@ -293,9 +293,9 @@ and stop using these private Kerberos functions.
  			close_on_exec(3);
 -			execvp( args->list[0],args->list );
 +			if (action==OP_LPQ)
-+				execvp("lpq.lprng" ,args->list);
++				execvp("mit-lpq" ,args->list);
 +		    else
-+		        execvp("lprm.lprng", args->list);
++		        execvp("mit-lprm", args->list);
  			DIEMSG( _("execvp failed - '%s'"), Errormsg(errno) );
  			exit(0);
  		} else if( pid < 0 ) {

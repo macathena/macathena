@@ -1,6 +1,6 @@
 Package: lprng
 Version: 3.8.28
-Revision: 4
+Revision: 5
 Source: http://macathena.mit.edu/dist/LPRng-%v.tgz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://www.lprng.com/
@@ -12,7 +12,7 @@ ConfFiles: %p/etc/lpd/lpd.conf %p/etc/lpd/lpd.perms %p/etc/printcap
 
 BuildDepends: fink (>= 0.24.12)
 PatchFile: %n.patch
-PatchFile-MD5: 1861c8f6b59fee58d20581dfbee3bf95
+PatchFile-MD5: 48e98ec41e0fc7947024fff839531b46
 ConfigureParams: --disable-rpath --disable-setuid --disable-werror --enable-kerberos_checks --enable-kerberos
 InstallScript: <<
 	#!/bin/bash -ev
@@ -20,20 +20,20 @@ InstallScript: <<
 	make install prefix=%i POSTINSTALL=NO
 	for prog in cancel lp lpq lpr lprm lpstat
 	do
-		mv %i/bin/$prog %i/bin/$prog.lprng
-		mv %i/man/man1/$prog.1 %i/man/man1/$prog.lprng.1
+		mv %i/bin/$prog %i/bin/mit-$prog
+		mv %i/man/man1/$prog.1 %i/man/man1/mit-$prog.1
 	done
 	
 	for prog in checkpc lpc lpd
 	do
-		mv %i/sbin/$prog %i/sbin/$prog.lprng
-		mv %i/man/man8/$prog.8 %i/man/man8/$prog.lprng.8
+		mv %i/sbin/$prog %i/sbin/mit-$prog
+		mv %i/man/man8/$prog.8 %i/man/man8/mit-$prog.8
 	done
 	
 	for prog in lprng_certs lprng_index_certs
 	do
-		mv %i/sbin/$prog %i/sbin/$prog.lprng
-		mv %i/man/man1/$prog.1 %i/man/man1/$prog.lprng.1
+		mv %i/sbin/$prog %i/sbin/mit-$prog
+		mv %i/man/man1/$prog.1 %i/man/man1/mit-$prog.1
 	done
 	
 	mkdir -p %i/etc/lpd/
