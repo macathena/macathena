@@ -1,6 +1,6 @@
 Package: macathena-athinfo
-Version: 22699
-Revision: 2
+Version: 24429
+Revision: 1
 Source: http://macathena.mit.edu/dist/athinfo-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
@@ -13,7 +13,7 @@ DescDetail: <<
 	current software installation state, the number of users logged on, and
 	various other informational state queries.
 <<
-Source-MD5: 12043897f54c0c7a955b0600175ac6bb
+Source-MD5: 560a476c35e837253c46dd56d42efe4b
 DocFiles: athena-copyright
 
 BuildDepends: automake1.9, macathena-base (>= 76-1)
