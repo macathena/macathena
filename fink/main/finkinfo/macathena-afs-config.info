@@ -1,12 +1,12 @@
 Package: macathena-afs-config
-Version: 184
+Version: 196
 Revision: 1
 Source: http://macathena.mit.edu/dist/afs-config-svn%v.tar.gz
 Maintainer: SIPB MacAthena Project <sipb-macathena@mit.edu>
 HomePage: http://macathena.mit.edu/
 License: Public Domain
 Description: AFS configuration for MacAthena
-Source-MD5: af2c2499a61eea204dcedae68957439a
+Source-MD5: d1412db9d53ef79315b4f4e211ac5d52
 DocFiles: copyright
 ConfFiles: /private/var/db/openafs/etc/CellAlias.macathena /private/var/db/openafs/etc/CellServDB.macathena /private/var/db/openafs/etc/ThisCell.macathena /private/var/db/openafs/etc/config/afs.conf.macathena /private/var/db/openafs/etc/config/settings.plist.macathena
 
@@ -22,6 +22,9 @@ InstallScript: <<
 	cp ThisCell.macathena %d/private/var/db/openafs/etc/
 	cp afs.conf.macathena %d/private/var/db/openafs/etc/config/
 	cp settings.plist.macathena %d/private/var/db/openafs/etc/config/
+
+	mkdir -p %i/libexec/macathena-afs-config
+	cp update-cellservdb %i/libexec/macathena-afs-config
 <<
 PostInstScript: <<
 	source %p/share/macathena-config-common/divert.sh
@@ -32,8 +35,13 @@ PostInstScript: <<
 	divert_link /private/var/db/openafs/etc/ThisCell
 	divert_link /private/var/db/openafs/etc/config/afs.conf
 	divert_link /private/var/db/openafs/etc/config/settings.plist
-	
-	/Library/StartupItems/OpenAFS/OpenAFS restart
+
+	if [ -n "$(mount -t afs)" ]; then
+		%p/libexec/macathena-afs-config/update-cellservdb
+
+		. /private/var/db/openafs/etc/config/afs.conf
+		fs sysname $AFS_SYSNAME || true
+	fi
 <<
 PreRmScript: <<
 	source %p/share/macathena-config-common/divert.sh
@@ -45,5 +53,10 @@ PreRmScript: <<
 	undivert_unlink /private/var/db/openafs/etc/config/afs.conf
 	undivert_unlink /private/var/db/openafs/etc/config/settings.plist
 	
-	/Library/StartupItems/OpenAFS/OpenAFS restart
+	if [ -n "$(mount -t afs)" ]; then
+		%p/libexec/macathena-afs-config/update-cellservdb
+
+		. /private/var/db/openafs/etc/config/afs.conf
+		fs sysname $AFS_SYSNAME || true
+	fi
 <<
