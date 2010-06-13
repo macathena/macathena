@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my %cm_servers;
+open(FS, '-|', 'fs', 'listcells', '-numeric') or die;
+while (<FS>) {
+    if (/^Cell dynroot on hosts\.$/) {
+    } elsif (/^Cell (\S+) on hosts (.+)\.$/) {
+	$cm_servers{$1} = [split(' ', $2)];
+    } else {
+	die;
+    }
+}
+close(FS) or die;
+
+my %csdb_servers;
+my $cell;
+open(CSDB, '<', '/etc/openafs/CellServDB') or die;
+while (<CSDB>) {
+    if (/^>([^#\s]+)/) {
+	$cell = $1;
+    } elsif (/^([^#\s]+)/) {
+	push(@{$csdb_servers{$cell}}, $1);
+    } else {
+	die;
+    }
+}
+close(CSDB);
+
+while (my ($cell, $servers) = each(%csdb_servers)) {
+    if (!exists($cm_servers{$cell}) or
+	join(' ', sort(@{$cm_servers{$cell}})) ne join(' ', sort(@$servers))) {
+	system('fs', 'newcell', '-name', $cell, '-servers', @$servers);
+    }
+}

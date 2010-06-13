@@ -2,3 +2,6 @@ This fink package was created as part of the MacAthena Project
 <http://macathena.mit.edu/> using code from the Debian-Athena Project
 <http://debathena.mit.edu>, both projects of the MIT Student Information
 Processing Board, and is released to the public domain.
+
+update-cellservdb is Copyright (C) 2009 Anders Kaseorg
+<andersk@mit.edu>, and is released under the MIT license.
