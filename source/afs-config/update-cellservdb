@@ -16,7 +16,7 @@ close(FS) or die;
 
 my %csdb_servers;
 my $cell;
-open(CSDB, '<', '/etc/openafs/CellServDB') or die;
+open(CSDB, '<', '/var/db/openafs/etc/CellServDB') or die;
 while (<CSDB>) {
     if (/^>([^#\s]+)/) {
 	$cell = $1;
