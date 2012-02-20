@@ -36,7 +36,7 @@ class MyTarFile(tarfile.TarFile):
 		
 		return info
 
-def packageSvn(module, svnModule, extras=[], svnroot='file:///afs/dev.mit.edu/source/svn-repos', revision='HEAD'):
+def packageSvn(module, svnModule, extras=[], svnroot='file:///afs/athena.mit.edu/astaff/source/svn-repos', revision='HEAD'):
 	global mtime
 	
 	os.system('attach macathena >/dev/null 2>/dev/null')
