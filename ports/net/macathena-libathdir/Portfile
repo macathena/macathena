@@ -1,0 +1,15 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-libathdir
+version			20050915
+distname		libathdir-${version}
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+master_sites	http://macathena.mit.edu/dist/
+checksums		md5 c380791e745e4c6f4eefcaf51eb20a6f \
+				sha1 34c6e8591311279e2123fbd42608925d6249cdf1 \
+				rmd160 e46685f922d621b8f1c63b881768ad99de113c08
+
+use_autoconf	yes

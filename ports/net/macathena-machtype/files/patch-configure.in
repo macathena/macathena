@@ -1,0 +1,11 @@
+--- configure.in.orig	2007-12-25 00:06:52.000000000 -0600
++++ configure.in	2007-12-25 00:07:19.000000000 -0600
+@@ -17,7 +17,7 @@
+ irix*)
+ 	OS=irix
+ 	;;
+-linux*)
++linux* | darwin*)
+ 	OS=linux
+ 	;;
+ netbsd*)

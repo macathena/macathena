@@ -1,0 +1,218 @@
+Index: Makefile.in
+===================================================================
+--- Makefile.in	2007-02-14 01:59:19.000000000 -0500
++++ Makefile.in	2007-02-14 02:06:36.000000000 -0500
+@@ -35,11 +35,11 @@
+ 	@for d in $(SUBDIRS); do (echo "### Making $@ in $$d"; cd $$d; $(MAKE) $@) || exit 1; done
+ 
+ install:
+-	$(srcdir)/mkinstalldirs $(bindir) $(sbindir) $(mrbindir) $(mandir)
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(bindir) $(DESTDIR)$(sbindir) $(DESTDIR)$(mandir)
+ 	@for d in $(SUBDIRS); do (echo "### Making $@ in $$d"; cd $$d; $(MAKE) $@) || exit 1; done
+ 
+ svrinstall:
+-	$(srcdir)/mkinstalldirs $(mrbindir)
++	$(srcdir)/mkinstalldirs $(DESTDIR)$(mrbindir)
+ 	@for d in $(SVRDIRS); do (echo "### Making install in $$d"; cd $$d; $(MAKE) install) || exit 1; done
+ 
+ world: depend all
+Index: clients/addusr/Makefile.in
+===================================================================
+--- clients/addusr/Makefile.in	2007-02-14 01:59:19.000000000 -0500
++++ clients/addusr/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) -m 755 addusr $(bindir)
++	$(INSTALL_PROGRAM) -m 755 addusr $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/blanche/Makefile.in
+===================================================================
+--- clients/blanche/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/blanche/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) blanche $(bindir)
++	$(INSTALL_PROGRAM) blanche $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/chfn/Makefile.in
+===================================================================
+--- clients/chfn/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/chfn/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
++	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
+Index: clients/chpobox/Makefile.in
+===================================================================
+--- clients/chpobox/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/chpobox/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
++	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
+Index: clients/chsh/Makefile.in
+===================================================================
+--- clients/chsh/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/chsh/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) $(TARGET) $(bindir)
++	$(INSTALL_PROGRAM) $(TARGET) $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $@.o $(LIBS)
+Index: clients/mailmaint/Makefile.in
+===================================================================
+--- clients/mailmaint/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/mailmaint/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) mailmaint $(bindir)
++	$(INSTALL_PROGRAM) mailmaint $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/mitch/Makefile.in
+===================================================================
+--- clients/mitch/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/mitch/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) mitch $(bindir)
++	$(INSTALL_PROGRAM) mitch $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/moira/Makefile.in
+===================================================================
+--- clients/moira/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/moira/Makefile.in	2007-02-14 02:07:47.000000000 -0500
+@@ -44,14 +44,14 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) namespace $(bindir)
+-	$(INSTALL_PROGRAM) moira $(bindir)
+-	rm -f $(bindir)/listmaint	
+-	ln -s moira $(bindir)/listmaint
+-	rm -f $(bindir)/dcmmaint
+-	ln -s moira $(bindir)/dcmmaint
+-	rm -f $(bindir)/usermaint
+-	ln -s moira $(bindir)/usermaint
++	$(INSTALL_PROGRAM) namespace $(DESTDIR)$(bindir)
++	$(INSTALL_PROGRAM) moira $(DESTDIR)$(bindir)
++	rm -f $(DESTDIR)$(bindir)/listmaint
++	ln -s moira $(DESTDIR)$(bindir)/listmaint
++	rm -f $(DESTDIR)$(bindir)/dcmmaint
++	ln -s moira $(DESTDIR)$(bindir)/dcmmaint
++	rm -f $(DESTDIR)$(bindir)/usermaint
++	ln -s moira $(DESTDIR)$(bindir)/usermaint
+ 
+ moira: $(MOBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(MOBJS) $(LIBS)
+Index: clients/mrcheck/Makefile.in
+===================================================================
+--- clients/mrcheck/Makefile.in	2007-02-14 01:59:20.000000000 -0500
++++ clients/mrcheck/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) mrcheck $(bindir)
++	$(INSTALL_PROGRAM) mrcheck $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/mrtest/Makefile.in
+===================================================================
+--- clients/mrtest/Makefile.in	2007-02-14 01:59:21.000000000 -0500
++++ clients/mrtest/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) mrtest $(bindir)
++	$(INSTALL_PROGRAM) mrtest $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/stanley/Makefile.in
+===================================================================
+--- clients/stanley/Makefile.in	2007-02-14 01:59:21.000000000 -0500
++++ clients/stanley/Makefile.in	2007-02-14 01:59:59.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) stanley $(bindir)
++	$(INSTALL_PROGRAM) stanley $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: clients/stella/Makefile.in
+===================================================================
+--- clients/stella/Makefile.in	2007-02-14 01:59:21.000000000 -0500
++++ clients/stella/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+@@ -40,7 +40,7 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) stella $(bindir)
++	$(INSTALL_PROGRAM) stella $(DESTDIR)$(bindir)
+ 
+ $(TARGET): $(OBJS) ../lib/libmrclient.a $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS)
+Index: man/Makefile.in
+===================================================================
+--- man/Makefile.in	2007-02-14 01:59:21.000000000 -0500
++++ man/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+@@ -32,6 +32,7 @@
+ depend:
+ 
+ install:
+-	for m in $(MAN1); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man1; done
+-	for m in $(MAN3); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man3; done
+-	for m in $(MAN8); do $(INSTALL_DATA) $(srcdir)/$$m $(mandir)/man8; done
++	$(srcdir)/../mkinstalldirs $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man8
++	for m in $(MAN1); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man1; done
++	for m in $(MAN3); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man3; done
++	for m in $(MAN8); do $(INSTALL_DATA) $(srcdir)/$$m $(DESTDIR)$(mandir)/man8; done
+Index: update/Makefile.in
+===================================================================
+--- update/Makefile.in	2007-02-14 01:59:21.000000000 -0500
++++ update/Makefile.in	2007-02-14 02:00:00.000000000 -0500
+@@ -43,8 +43,8 @@
+ depend:
+ 
+ install: all
+-	$(INSTALL_PROGRAM) update_test $(bindir)
+-	$(INSTALL_PROGRAM) update_server $(sbindir)
++	$(INSTALL_PROGRAM) update_test $(DESTDIR)$(bindir)
++	$(INSTALL_PROGRAM) update_server $(DESTDIR)$(sbindir)
+ 
+ update_test: $(COBJS) $(MR_LIBDEP)
+ 	$(CC) -o $@ $(LDFLAGS) $(COBJS) $(LIBS)

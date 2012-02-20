@@ -1,0 +1,27 @@
+# $Id$
+PortSystem		1.0
+
+name			macathena-base
+version			1
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+
+distfiles		
+
+destroot.violate_mtree	yes
+
+fetch			{}
+checksum		{}
+configure		{}
+build			{}
+destroot		{
+	file mkdir ${destroot}/etc/athena
+	file copy ${filespath}/reactivate ${destroot}/etc/athena
+	file copy ${filespath}/version ${destroot}/etc/athena
+	
+	file mkdir ${destroot}/usr
+	file mkdir ${destroot}/bin
+	ln -s /usr ${destroot}/usr/athena
+	ln -s /bin ${destroot}/bin/athena
+}

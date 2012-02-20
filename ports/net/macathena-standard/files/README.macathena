@@ -1,0 +1,15 @@
+macathena-standard for MacAthena
+
+This is a metapackage.  It provides no files, and its only purpose is to cause
+the installation of a set of other packages related to a certain task.  We
+recommend that you leave this package installed, so that other related packages
+that may be added to a future version of this metapackage will be installed as
+well.  If you do not want that to happen, you may safely remove this
+metapackage.
+
+The special dependencies used in this package are:
+
+Depends: macathena-moira
+ macathena-machtype
+ macathena-athdir
+ hesiod
