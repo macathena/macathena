@@ -1,0 +1,10 @@
+--- lib/Makefile.in.orig	2012-02-08 14:57:50.000000000 -0500
++++ lib/Makefile.in	2012-02-20 15:42:16.000000000 -0500
+@@ -42,6 +42,7 @@
+ 
+ .et.c:
+ 	$(COMPILE_ET) $<
++	sed -i '' 's/et\/com_err.h/com_err.h/' $(ET_H) || :
+ 
+ all: depend libmoira.la
+ 
