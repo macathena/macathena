@@ -2,28 +2,35 @@
 PortSystem		1.0
 
 name			macathena-machtype
-version			20030812
+version			svn25436
 distname		machtype-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
-description		Hesiod is the Project Athena service name resolution protocol
+description		Provides basic information about the running system
 platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
-patchfiles		patch-configure.in \
-				patch-machtype_linux.sh \
-				patch-config.sub \
-				patch-config.guess
-checksums		md5 377829b5da0c05cf334d2fa2e9124c4f \
-				sha1 ea18209e214b35238ed31955c6ceb1fbabcfdcb2 \
-				rmd160 021db450b6af4aaa3e46eab678c01e5bcc9cfa4b
+patchfiles		patch-machtype_linux.sh \
+			patch-configure.in
+checksums		md5 d01a977c9c6d5b74aa9c0d888d963c28 \
+				sha1 427dad33c2589136b36b87fd2f4a0d737e61320d \
+				rmd160 efc130d5cd2cb334f610bffe110b867d52cca519
 
 use_autoconf	yes
 
-configure.env-append	ATHENA_MAJOR_VERSION=9 \
-						ATHENA_MINOR_VERSION=4
+configure.env-append	ATHENA_MAJOR_VERSION=10 \
+						ATHENA_MINOR_VERSION=0
 
 depends_lib		port:macathena-base
 
+depends_build		port:automake
+
 destroot.violate_mtree	yes
+
+post-patch {
+     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
+}
 
 configure.env-append	[exec ${filespath}/getSysnameList.py]
