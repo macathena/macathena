@@ -2,17 +2,26 @@
 PortSystem		1.0
 
 name			macathena-getcluster
-version			20071108
+version			svn25442
 distname		getcluster-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
-checksums		md5 e1072fd89168519b3e5fc997747ab026 \
-				sha1 3726957864f51484c1d44fe66b1cf76ed1dd2f08 \
-				rmd160 61ace87bd263955b474f608690833c45deb602b9
+checksums		md5 3db1d7235bbc38709da1a6a10559b4a3 \
+				sha1 d722f095902a81873fe6d6dc14fe24ec85e9dcb9 \
+				rmd160 11dcb5e668cfc904050cb74a6b2664f47b9ee588
 
 use_autoconf	yes
+
+
+depends_build		port:automake
+post-patch {
+     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
+}
 
 depends_lib		port:libhesiod \
 				port:macathena-base
