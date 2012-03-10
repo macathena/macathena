@@ -1,0 +1,22 @@
+# $Id$
+PortSystem		1.0
+
+name			mosh
+version			0.98c
+distname		mosh-${version}
+categories		net
+platforms		darwin
+maintainers		mit.edu:quentin
+description		Mobile Shell
+long_description	Mosh is a replacement for ssh that better handles \
+			high-latency, high-packet-loss, dynamically-addressed \
+			network links
+homepage		http://mosh.mit.edu/
+master_sites		https://github.com/downloads/keithw/mosh/
+checksums		md5	ea7b11726d64b9125f40e5bf9cbd4921 \
+			sha1	affb27a7e2d32a3ad427d912267507ca505f8af8 \
+			rmd160	bceea38cca4810a7ca366f25cb1c1199656f4af9
+
+depends_lib		port:boost \
+			port:protobuf-cpp \
+			port:p5-io-tty
