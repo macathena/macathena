@@ -19,8 +19,6 @@ destroot		{
 	file mkdir ${destroot}/etc/athena
 	file copy ${filespath}/reactivate ${destroot}/etc/athena
 	file copy ${filespath}/version ${destroot}/etc/athena
-	file copy /Library/Caches/com.apple.desktop.admin.png /Library/Caches/com.apple.desktop.admin.bak
-	file copy ${filespath}/com.apple.desktop.admin.png /Library/Caches
 	
 	file mkdir ${destroot}/usr
 	file mkdir ${destroot}/bin

@@ -1,0 +1,20 @@
+# $Id$
+PortSystem		1.0
+name			login-config
+version			1
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+
+distfiles		
+
+destroot.violate_mtree	yes
+
+fetch			{}
+checksum		{}
+configure		{}
+build			{}
+destroot		{
+	file copy /Library/Caches/com.apple.desktop.admin.png /Library/Caches/com.apple.desktop.admin.bak
+	file copy ${filespath}/com.apple.desktop.admin.png /Library/Caches
+}
