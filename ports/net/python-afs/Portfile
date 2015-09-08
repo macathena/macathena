@@ -1,0 +1,15 @@
+# $Id$
+PortSystem		1.0
+PortGroup 		github 1.0
+PortGroup 		python 1.0
+github.setup		mit-athena python-afs 0.2.2
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+
+configure.python    	${prefix}/bin/python2.7
+depends_build		port:python27
+depends_build		port:py27-setuptools
+depends_build		port:py27-cython 
+depends_build		port:py27-pyrex
+
