@@ -1,43 +1,13 @@
 # $Id$
 PortSystem		1.0
-
-name			macathena-moira
-version			svn4072
-distname		moira-${version}
+PortGroup 		github 1.0
+github.setup		mit-athena moira xxx
 categories		net
 maintainers		mit.edu:sipb-macathena
-description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-patchfiles		patch-lib-Makefile.in
 
-checksums		md5 c1172fa62593b39c7c11a3e90ba096fc \
-				sha1 60a089fd8018de579aabd4a0929b51d7cb6bed2c \
-				rmd160 74cb87c6bd9c5ed50bc90db642698ca3e5284b0e
+depends_build		port:python27
+depends_build		port:py27-setuptools
+depends_build		port:py27-cython 
+depends_build		port:py27-pyrex
 
-use_autoconf	yes
-
-configure.args	--with-krb5 \
-				--with-com_err \
-				--with-hesiod
-
-
-configure.env-append	TERM=vt100
-
-post-destroot	{
-	file rename ${destroot}${prefix}/bin/chfn \
-		${destroot}${prefix}/bin/chfn.moira
-	file rename ${destroot}${prefix}/bin/chsh \
-		${destroot}${prefix}/bin/chsh.moira
-	file rename ${destroot}${prefix}/share/man/man1/chfn.1 \
-		${destroot}${prefix}/share/man/man1/chfn.moira.1
-	file rename ${destroot}${prefix}/share/man/man1/chsh.1 \
-		${destroot}${prefix}/share/man/man1/chsh.moira.1
-}
-
-depends_build		port:e2fsprogs
-
-depends_lib		port:libhesiod \
-				port:ncurses
-
-destroot.violate_mtree	yes
