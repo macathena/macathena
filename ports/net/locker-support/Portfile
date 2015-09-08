@@ -1,0 +1,23 @@
+# $Id$
+PortSystem		1.0
+PortGroup 		github 1.0
+PortGroup		python 1.0
+
+github.setup		mit-athena locker-support 10.4.7
+categories		net
+maintainers		mit.edu:sipb-macathena
+platforms		darwin
+checksums           rmd160  9a84ffdaa107301e47716b56ee5dc95ae22b15d5 \
+                    sha256  478dd116ecfac621c8ca648d095ccd2cdab480499f28a5d8be0336a193810a23
+
+configure.python    	${prefix}/bin/python2.7
+depends_build		port:python27
+depends_build		port:py27-setuptools
+depends_build		port:py27-cython 
+depends_build		port:py27-pyrex
+depends_build		port:py27-fuse
+depends_build		port:libtool
+depends_build		port:autoconf
+depends_build		port:automake
+depends_build		port:python-hesiod
+# depends_build		port:python-afs
