@@ -1,16 +1,11 @@
 # $Id$
 PortSystem		1.0
+PortGroup 		github 1.0
 
-name			macathena-libathdir
-version			svn25431
-distname		libathdir-${version}
+github.setup	mit-athena libathdir 10.1.2
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-checksums		md5 02032a3da2d658e1089a34549e99e95b \
-				sha1 530a5ca7bb04b55ad28ceb98023f759bd3fe5cb0 \
-				rmd160 0e31afa28fc80f53e2e76572d89da1e8deb774fb
 use_autoreconf	yes
 use_autoconf	yes
 
