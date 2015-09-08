@@ -22,15 +22,16 @@ configure.env-append	ATHENA_MAJOR_VERSION=10 \
 
 depends_lib		port:macathena-base
 
-depends_build		port:automake
+depends_build		port:automake \
+			port:autoconf
 
 destroot.violate_mtree	yes
 
 post-patch {
-     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.14/install-sh ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.14/mkinstalldirs ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.14/config.sub ${worksrcpath}/
+     file copy ${prefix}/share/automake-1.14/config.guess ${worksrcpath}/
 }
 
 configure.env-append	[exec ${filespath}/getSysnameList.py]
