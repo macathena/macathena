@@ -1,7 +1,9 @@
-hesiod 269
-variants universal portdir net/hesiod description {Hesiod is the Project Athena service name resolution protocol} epoch 0 platforms darwin name hesiod depends_lib port:libhesiod license unknown maintainers mit.edu:sipb-macathena categories net version 3.1.0 revision 0
 libhesiod 248
 variants universal portdir net/libhesiod description {Hesiod is the Project Athena service name resolution protocol} epoch 0 platforms darwin name libhesiod license unknown maintainers mit.edu:sipb-macathena categories net version 3.1.0 revision 0
+locker-support 270
+variants universal depends_build port:python-hesiod portdir net/locker-support homepage https://github.com/mit-athena/locker-support epoch 0 platforms darwin name locker-support maintainers mit.edu:sipb-macathena license unknown version 10.4.7 categories net revision 0
+login-config 174
+variants universal portdir net/login-config epoch 0 platforms darwin name login-config license unknown maintainers mit.edu:sipb-macathena version 1 categories net revision 0
 macathena-athdir 283
 variants universal depends_build {port:autoconf port:automake port:libtool} portdir net/macathena-athdir epoch 0 platforms darwin name macathena-athdir depends_lib port:macathena-libathdir license unknown maintainers mit.edu:sipb-macathena categories net version 19991101 revision 0
 macathena-athinfo 280
@@ -18,19 +20,23 @@ macathena-getcluster 274
 variants universal depends_build port:automake portdir net/macathena-getcluster epoch 0 platforms darwin name macathena-getcluster depends_lib {port:libhesiod port:macathena-base} license unknown maintainers mit.edu:sipb-macathena categories net version svn25442 revision 0
 macathena-hes 291
 variants universal portdir net/macathena-hes description {Hesiod lookups for common Hesiod entries} epoch 0 depends_run port:py27-hesiod platforms darwin name macathena-hes depends_lib port:python27 maintainers mit.edu:sipb-macathena license unknown version svn158 categories net revision 0
-macathena-libathdir 223
-variants universal depends_build port:automake portdir net/macathena-libathdir epoch 0 platforms darwin name macathena-libathdir license unknown maintainers mit.edu:sipb-macathena categories net version svn25431 revision 0
+libathdir 260
+variants universal depends_build port:automake portdir net/macathena-libathdir homepage https://github.com/mit-athena/libathdir epoch 0 platforms darwin name libathdir maintainers mit.edu:sipb-macathena license unknown categories net version 10.1.2 revision 0
 macathena-libxj 244
 variants universal depends_build {port:autoconf port:automake port:libtool} portdir net/macathena-libxj epoch 0 platforms darwin name macathena-libxj license unknown maintainers mit.edu:sipb-macathena categories net version 20040802 revision 0
 macathena-machtype 335
 variants universal depends_build {port:automake port:autoconf} portdir net/macathena-machtype description {Provides basic information about the running system} epoch 0 platforms darwin name macathena-machtype depends_lib port:macathena-base maintainers mit.edu:sipb-macathena license unknown categories net version svn25436 revision 0
-macathena-moira 333
-variants universal depends_build port:e2fsprogs portdir net/macathena-moira description {Hesiod is the Project Athena service name resolution protocol} epoch 0 platforms darwin name macathena-moira depends_lib {port:libhesiod port:ncurses} maintainers mit.edu:sipb-macathena license unknown categories net version svn4072 revision 0
 macathena-standard 247
 variants universal portdir net/macathena-standard epoch 0 depends_run {port:macathena-moira port:macathena-machtype} platforms darwin name macathena-standard license unknown maintainers mit.edu:sipb-macathena categories net version 0.1 revision 1
+moira 237
+variants universal depends_build port:py27-pyrex portdir net/moira homepage https://github.com/mit-athena/moira epoch 0 platforms darwin name moira maintainers mit.edu:sipb-macathena license unknown categories net version xxx revision 0
 mosh 407
 variants universal portdir net/mosh description {Mobile Shell} homepage http://mosh.mit.edu/ epoch 0 platforms darwin name mosh depends_lib {port:boost port:protobuf-cpp port:p5-io-tty} long_description {Mosh is a replacement for ssh that better handles high-latency, high-packet-loss, dynamically-addressed network links} maintainers mit.edu:quentin license unknown categories net version 0.98c revision 0
+pyhesiodfs 252
+variants universal depends_build port:python-afs portdir net/pyhesiodfs homepage https://github.com/mit-athena/pyhesiodfs epoch 0 platforms darwin name pyhesiodfs maintainers mit.edu:sipb-macathena license unknown version 1.1 categories net revision 0
+python-afs 254
+variants universal depends_build port:py27-pyrex portdir net/python-afs homepage https://github.com/mit-athena/python-afs epoch 0 platforms darwin name python-afs maintainers mit.edu:sipb-macathena license unknown version 0.2.2 categories net revision 0
+python-hesiod 263
+variants universal depends_build port:libhesiod portdir net/python-hesiod homepage https://github.com/mit-athena/python-hesiod epoch 0 platforms darwin name python-hesiod maintainers mit.edu:sipb-macathena license unknown version 0.2.12 categories net revision 0
 remctl 457
 variants universal portdir net/remctl description {Kerberos-authenticated remote command execution} homepage http://www.eyrie.org/~eagle/software/remctl/ epoch 0 platforms darwin name remctl depends_lib port:pcre long_description {remctl implements a client/server protocol for running single commands on a remote host using Kerberos v5 authentication and returning the output.} maintainers mit.edu:quentin license MIT categories net version 3.1 revision 0
-py27-hesiod 390
-variants universal portdir python/py27-hesiod description {Python bindings for the Hesiod name resolution library} homepage https://github.com/ebroder/python-hesiod epoch 0 platforms darwin depends_lib {port:python27 port:libhesiod port:py27-pyrex port:py27-setuptools} name py27-hesiod maintainers mit.edu:sipb-macathena license unknown version 0.2.10 categories {python devel} revision 0
