@@ -9,8 +9,10 @@ categories		net
 maintainers		mit.edu:sipb-macathena
 description		Hesiod is the Project Athena service name resolution protocol
 platforms		darwin
+
 checksums           	rmd160  d389f71825340e994840d4ccee7a0dbd5d97a470 \
                     	sha256  4722f4f5d57f00fff168c11a89259418ce47fbfb7ed34c8e09e91b48d27dd8d5
+
 use_autoreconf      	yes
 configure.ldflags	-L/opt/local/lib
 configure.cppflags	-I/opt/local/include
