@@ -1,6 +1,7 @@
 # $Id$
 PortSystem		1.0
 PortGroup 		github 1.0
+name                	libhesiod
 
 github.setup		achernya hesiod hesiod-3.2.1
 version			3.2.1
