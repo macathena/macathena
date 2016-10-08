@@ -1,13 +1,21 @@
 # $Id$
 PortSystem		1.0
 PortGroup 		github 1.0
-github.setup		mit-athena moira xxx
+name			moira
+	
+github.setup		mit-athena moira 4.0.0.2
+version			4.0.0.2	
 categories		net
 maintainers		mit.edu:sipb-macathena
+description		MIT Athena's Moira service management system
 platforms		darwin
 
-depends_build		port:python27
-depends_build		port:py27-setuptools
-depends_build		port:py27-cython 
-depends_build		port:py27-pyrex
+checksums           	rmd160  9bcb6161551b2f829162caa56209fb5ec9a8a2f4 \
+                    	sha256  a7d928310e9e8c6b31d550eea357994e1b76378dc2d164c4baf161d9d996ec71
+
+worksrcdir		${distname}/moira
+configure.ldflags	-L/opt/local/lib
+configure.cflags	-I/opt/local/include
+configure.args		--with-hesiod --with-com_err --with-afs=/usr/local --with-openssl --with-krb5=/opt/local
+depends_lib		port:libhesiod port:kerberos5
 
