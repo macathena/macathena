@@ -2,7 +2,7 @@
 PortSystem		1.0
 PortGroup 		github 1.0
 
-github.setup	mit-athena libhesiod adc9f2b9aebb53faf4b465ba392e9bd312e15470
+github.setup	achernya libhesiod hesiod-3.2.1
 version			3.2.1
 categories		net
 maintainers		mit.edu:sipb-macathena
@@ -11,4 +11,8 @@ platforms		darwin
 checksums           	rmd160  6b1cd8bd7bc2c12386e53a56dfb2f2d81b699011 \
                     	sha256  9329342c41a6fa83758a837d9746628c6770746d532d2a84cc7b91272c6e28df
 use_autoreconf      	yes
-configure.args	LIBS=-lresolv
+configure.args		prefix=/opt/local
+configure.ldflags	“-L/opt/local/lib”
+configure.cppflags	“-I/opt/local/include”
+depends_build       	port:autoconf port:automake 
+depends_lib		port:libidn
