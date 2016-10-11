@@ -18,3 +18,6 @@ configure.ldflags	-L/opt/local/lib
 configure.cflags	-I/opt/local/include
 configure.args		--with-hesiod=/opt/local --with-com_err --with-krb5=/opt/local
 depends_lib		port:libhesiod port:kerberos5
+patchfiles		patch-include-moira.h.diff \
+			patch-lib-strs.c.diff \
+			patch-clients-moira-menu.c.diff

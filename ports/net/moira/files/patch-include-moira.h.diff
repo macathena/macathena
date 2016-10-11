@@ -1,0 +1,10 @@
+--- include/moira.h.orig	2016-10-11 00:02:11.000000000 -0400
++++ include/moira.h	2016-10-11 00:06:39.000000000 -0400
+@@ -137,6 +137,7 @@
+ void sq_destroy(struct save_queue *sq);
+ 
+ /* prototypes from strs.c */
++char *strmove(char *dest, char *src);
+ char *strtrim(char *s);
+ char *uppercase(char *s);
+ char *lowercase(char *s);
