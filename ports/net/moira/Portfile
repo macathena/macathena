@@ -14,8 +14,6 @@ checksums           	rmd160  9bcb6161551b2f829162caa56209fb5ec9a8a2f4 \
                     	sha256  a7d928310e9e8c6b31d550eea357994e1b76378dc2d164c4baf161d9d996ec71
 
 worksrcdir		${distname}/moira
-configure.ldflags	-L/opt/local/lib
-configure.cflags	-I/opt/local/include
 configure.args		--with-hesiod=/opt/local --with-com_err --with-krb5=/opt/local
 depends_lib		port:libhesiod port:kerberos5
 patchfiles		patch-include-moira.h.diff \
