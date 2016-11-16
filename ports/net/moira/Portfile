@@ -18,6 +18,6 @@ configure.args		--with-hesiod=${prefix} --with-com_err --without-krb4 --with-krb
 depends_lib		port:libhesiod port:kerberos5
 
 post-destroot {
-mv ${destroot}${prefix}/bin/chfn ${destroot}${prefix}/bin/chfn.moira
-mv ${destroot}${prefix}/bin/chsh ${destroot}${prefix}/bin/chsh.moira
+move ${destroot}${prefix}/bin/chfn ${destroot}${prefix}/bin/chfn.moira
+move ${destroot}${prefix}/bin/chsh ${destroot}${prefix}/bin/chsh.moira
 }
