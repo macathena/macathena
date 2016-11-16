@@ -15,7 +15,7 @@ checksums           rmd160  d6afb08b5a0e5646b1a8e1859d0bb4c214626657 \
                     
 worksrcdir		${distname}/moira
 configure.args		--with-hesiod=${prefix} --with-com_err --without-krb4 --with-krb5=${prefix} --disable-dependency-tracking --disable-silent-rules --disable-rpath --without-zephyr --without-oracle --without-afs
-depends_lib		port:libhesiod port:kerberos5
+depends_lib		port:hesiod port:kerberos5
 
 post-destroot {
 move ${destroot}${prefix}/bin/chfn ${destroot}${prefix}/bin/chfn.moira
