@@ -3,7 +3,7 @@ PortSystem		1.0
 PortGroup 		github 1.0
 name			moira
 	
-github.setup		mit-athena moira 4.0.0.3
+github.setup	mit-athena moira 4.0.0.3
 version			4.0.0.3	
 categories		net
 maintainers		mit.edu:sipb-macathena
@@ -13,5 +13,5 @@ platforms		darwin
 checksums      	sha256 d418681ae4ec61a124c55fb67a6bba0d89b59dc760c4d1c9a1e8e1c9c7b69b19
 
 worksrcdir		${distname}/moira
-configure.args		--with-hesiod=${prefix} --with-com_err --with-krb5=${prefix}
+configure.args		--with-hesiod=${prefix} --with-com_err --without-krb4 --with-krb5=${prefix} --disable-dependency-tracking --disable-silent-rules --disable-rpath --without-zephyr --without-oracle --without-afs
 depends_lib		port:libhesiod port:kerberos5
