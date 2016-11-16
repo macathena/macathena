@@ -19,3 +19,8 @@ depends_lib		port:libhesiod port:kerberos5
 pre-fetch {
 port -f uninstall ncurses
 }
+
+post-destroot {
+mv ${destroot}${prefix}/bin/chfn ${destroot}${prefix}/bin/chfn.moira
+mv ${destroot}${prefix}/bin/chsh ${destroot}${prefix}/bin/chsh.moira
+}
