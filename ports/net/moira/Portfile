@@ -3,19 +3,15 @@ PortSystem		1.0
 PortGroup 		github 1.0
 name			moira
 	
-github.setup		mit-athena moira 4.0.0.2
-version			4.0.0.2	
+github.setup		mit-athena moira 4.0.0.3
+version			4.0.0.3	
 categories		net
 maintainers		mit.edu:sipb-macathena
 description		MIT Athena's Moira service management system
 platforms		darwin
 
-checksums           	rmd160  9bcb6161551b2f829162caa56209fb5ec9a8a2f4 \
-                    	sha256  a7d928310e9e8c6b31d550eea357994e1b76378dc2d164c4baf161d9d996ec71
+checksums      	sha256 d418681ae4ec61a124c55fb67a6bba0d89b59dc760c4d1c9a1e8e1c9c7b69b19
 
 worksrcdir		${distname}/moira
 configure.args		--with-hesiod=${prefix} --with-com_err --with-krb5=${prefix}
 depends_lib		port:libhesiod port:kerberos5
-patchfiles		patch-include-moira.h.diff \
-			patch-lib-strs.c.diff \
-			patch-clients-moira-menu.c.diff
