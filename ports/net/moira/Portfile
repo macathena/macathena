@@ -15,3 +15,7 @@ checksums      	sha256 d418681ae4ec61a124c55fb67a6bba0d89b59dc760c4d1c9a1e8e1c9c
 worksrcdir		${distname}/moira
 configure.args		--with-hesiod=${prefix} --with-com_err --without-krb4 --with-krb5=${prefix} --disable-dependency-tracking --disable-silent-rules --disable-rpath --without-zephyr --without-oracle --without-afs
 depends_lib		port:libhesiod port:kerberos5
+
+pre-fetch {
+port -f uninstall ncurses
+}
