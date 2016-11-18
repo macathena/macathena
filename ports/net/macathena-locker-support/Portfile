@@ -2,6 +2,7 @@
 PortSystem		1.0
 PortGroup 		github 1.0
 PortGroup		python 1.0
+name			macathena-locker-support	
 
 github.setup		mit-athena locker-support 10.4.7
 categories		net

@@ -1,6 +1,6 @@
 # $Id$
 PortSystem		1.0
-name			login-config
+name			macathena-login-config
 version			1
 categories		net
 maintainers		mit.edu:sipb-macathena
