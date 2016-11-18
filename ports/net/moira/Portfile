@@ -3,19 +3,21 @@ PortSystem		1.0
 PortGroup 		github 1.0
 name			moira
 	
-github.setup		mit-athena moira 4.0.0.2
-version			4.0.0.2	
+github.setup	mit-athena moira 4.0.0.3+51+g65d55c5
+version			4.0.0.3	
 categories		net
 maintainers		mit.edu:sipb-macathena
 description		MIT Athena's Moira service management system
 platforms		darwin
 
-checksums           	rmd160  9bcb6161551b2f829162caa56209fb5ec9a8a2f4 \
-                    	sha256  a7d928310e9e8c6b31d550eea357994e1b76378dc2d164c4baf161d9d996ec71
-
+checksums           rmd160  d6afb08b5a0e5646b1a8e1859d0bb4c214626657 \
+                    sha256  693a08ef05cc9919abef9371c879b2be49e7bd9a5c39b835619336c3fd993410
+                    
 worksrcdir		${distname}/moira
-configure.args		--with-hesiod=${prefix} --with-com_err --with-krb5=${prefix}
-depends_lib		port:libhesiod port:kerberos5
-patchfiles		patch-include-moira.h.diff \
-			patch-lib-strs.c.diff \
-			patch-clients-moira-menu.c.diff
+configure.args		--with-hesiod=${prefix} --with-com_err --without-krb4 --with-krb5=${prefix} --disable-dependency-tracking --disable-silent-rules --disable-rpath --without-zephyr --without-oracle --without-afs
+depends_lib		port:hesiod port:kerberos5
+
+post-destroot {
+move ${destroot}${prefix}/bin/chfn ${destroot}${prefix}/bin/chfn.moira
+move ${destroot}${prefix}/bin/chsh ${destroot}${prefix}/bin/chsh.moira
+}
