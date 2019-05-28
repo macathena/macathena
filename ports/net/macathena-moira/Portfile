@@ -2,7 +2,7 @@
 PortSystem		1.0
 
 name			macathena-moira
-version			svn4072
+version			20181023
 distname		moira-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
@@ -11,9 +11,13 @@ platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
 patchfiles		patch-lib-Makefile.in
 
-checksums		md5 c1172fa62593b39c7c11a3e90ba096fc \
-				sha1 60a089fd8018de579aabd4a0929b51d7cb6bed2c \
-				rmd160 74cb87c6bd9c5ed50bc90db642698ca3e5284b0e
+worksrcdir		moira-4
+
+checksums           md5     aa1e70b18c723241d392318f1e93923d \
+                    sha1    2d46e2a87825f160164a712ace9af3bf66bc1b99 \
+                    rmd160  de7ef989d8d8b1be44bc436aa5174fe81c97e16f \
+                    sha256  5589d19096725aaf0596e5d986324ce3a89cd9bcefe13c194d442796755cdf1e \
+                    size    1607033
 
 use_autoconf	yes
 
