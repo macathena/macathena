@@ -1,28 +1,29 @@
 # $Id$
-PortSystem		1.0
+PortSystem          1.0
 
-name			macathena-moira
-version			20181023
-distname		moira-${version}
-categories		net
-maintainers		mit.edu:sipb-macathena
-description		Hesiod is the Project Athena service name resolution protocol
-platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-patchfiles		patch-lib-Makefile.in
+name                macathena-moira
+version             20190912
+distname            moira-${version}
+categories          net
+maintainers         mit.edu:sipb-macathena
+description         Moira is the Project Athena service management system
+platforms           darwin
+homepage            https://github.mit.edu/ops/moira
+master_sites        http://macathena.mit.edu/dist/
+patchfiles          patch-lib-mr_init.c
 
-worksrcdir		moira-4
+worksrcdir          moira-b5abed703a6775e8c7ca795c29b58fd211b34780/moira
 
-checksums           md5     aa1e70b18c723241d392318f1e93923d \
-                    sha1    2d46e2a87825f160164a712ace9af3bf66bc1b99 \
-                    rmd160  de7ef989d8d8b1be44bc436aa5174fe81c97e16f \
-                    sha256  5589d19096725aaf0596e5d986324ce3a89cd9bcefe13c194d442796755cdf1e \
-                    size    1607033
+checksums           md5     3e301d66296002aa79a151afeb85b6d5 \
+                    sha1    d770c1eab15c74cac57e622431b4519daf297c67 \
+                    rmd160  077257328de1475545ab327315e3258fd093abe3 \
+                    sha256  1235824b7dcd1e4e067f841a2366dfd80555f7459a89d5202d927f72a0b57839 \
+                    size    1881295
 
 use_autoconf	yes
 
 configure.args	--with-krb5 \
-				--with-com_err \
+				--with-com_err=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr \
 				--with-hesiod
 
 
