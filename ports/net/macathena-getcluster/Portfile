@@ -23,5 +23,5 @@ post-patch {
      file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
 }
 
-depends_lib		port:libhesiod \
+depends_lib		port:hesiod \
 				port:macathena-base

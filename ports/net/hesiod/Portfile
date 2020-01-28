@@ -1,18 +1,18 @@
 # $Id$
-PortSystem		1.0
+PortSystem          1.0
+PortGroup           github 1.0
 
-name			hesiod
-version			3.1.0
-distname		hesinfo-${version}
-categories		net
-maintainers		mit.edu:sipb-macathena
-description		Hesiod is the Project Athena service name resolution protocol
-platforms		darwin
-master_sites	ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/
-checksums		md5 376b3af2bb3f59a972c218312527eadf \
-				sha1 30a92f80f0e8754a5dfc377c71b50f517b168d3a \
-				rmd160 b7ac55b67992748cbc7b9cd64b0c6b4b4e4cb6bf
+github.setup        achernya hesiod 3.2.1 hesiod-
+categories          net
+maintainers         mit.edu:sipb-macathena
+description         Hesiod is the Project Athena service name resolution protocol
+platforms           darwin
+checksums           md5     af10415fc09bace6f2f44ffed5f8d2ba \
+                    sha1    db6ebbddb020f0ed6cf5ce68b0b851e777cc70fe \
+                    rmd160  d389f71825340e994840d4ccee7a0dbd5d97a470 \
+                    sha256  4722f4f5d57f00fff168c11a89259418ce47fbfb7ed34c8e09e91b48d27dd8d5 \
+                    size    46889
 
-depends_lib		port:libhesiod
+use_autoreconf      yes
 
-destroot.violate_mtree	yes
+#destroot.violate_mtree	yes

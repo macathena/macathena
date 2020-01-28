@@ -1,22 +1,9 @@
 # $Id$
-PortSystem		1.0
+PortSystem          1.0
+PortGroup           obsolete 1.0
 
-name			libhesiod
-version			3.1.0
-distname		hesiod-${version}
-categories		net
-maintainers		mit.edu:sipb-macathena
-description		Hesiod is the Project Athena service name resolution protocol
-platforms		darwin
-master_sites	ftp://athena-dist.mit.edu/pub/ATHENA/hesiod/
-patchfiles		patch-Makefile.in \
-				patch-hesiod.c \
-				patch-config.sub \
-				patch-config.guess
-checksums		md5 89c785d350e75d6628754659ee4583e8 \
-				sha1 bcffa55ee3c04ddb49d90f231191e5bc31762c7a \
-				rmd160 d5c38ffabb2491a80a05a4805bbffd333b9d4b14
-
-configure.args	LIBS=-lresolv
-
-destroot.violate_mtree	yes
+name                libhesiod
+replaced_by         hesiod
+version             3.1.0
+revision            1
+categories          net
