@@ -199,7 +199,7 @@ class PyHesiodFS(Fuse):
                     syslog(LOG_NOTICE, "Unknown locker type "+pointer['type']+" for locker "+name+" ("+repr(pointer)+" )")
                     return None
                 else:
-                    self.mounts[self._uid()][name] = pointer['location']
+                    self.mounts[self._uid()][name] = str(pointer['location'])
                     syslog(LOG_INFO, "Mounting "+name+" on "+pointer['location'])
                     return pointer['location']
             else:
