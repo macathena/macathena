@@ -15,4 +15,6 @@ checksums           md5     af10415fc09bace6f2f44ffed5f8d2ba \
 
 use_autoreconf      yes
 
+depends_lib-append  port:libidn
+
 #destroot.violate_mtree	yes
