@@ -1,0 +1,30 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           python 1.0
+
+name                macathena-pyhesiodfs
+version             214
+categories          fuse
+distname            pyhesiodfs-svn${version}
+master_sites        http://macathena.mit.edu/dist/
+platforms           darwin
+maintainers         {mit.edu:quentin @quentinmit} openmaintainer
+description         Automatically mounts AFS lockers in /mit
+long_description    Automatically mounts AFS lockers in /mit
+homepage            http://macathena.mit.edu/
+
+checksums           rmd160  a25d52647faf565db467f8ba18c99be6c67701ae \
+                    sha256  d8ca3a960a4ba41d2f786d2d6cf95d08079057f73d389c2ae5e540ceaa05e583 \
+                    size    10458
+
+license             GPL-2
+
+python.default_version 27
+
+post-patch {
+    reinplace "s|/usr/local|${prefix}|g" ${worksrcpath}/edu.mit.sipb.mit-automounter.plist
+}
+
+depends_lib         port:py${python.version}-hesiod \
+                    port:py${python.version}-fuse
