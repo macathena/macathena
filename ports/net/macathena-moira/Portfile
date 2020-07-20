@@ -42,11 +42,10 @@ post-destroot	{
 		${destroot}${prefix}/share/man/man1/chsh.moira.1
 }
 
-depends_build		port:e2fsprogs
+depends_build		port:e2fsprogs \
+			bin:autoconf:autoconf
 
 depends_lib		port:hesiod \
 				port:kerberos5 \
 				port:libcomerr \
 				port:ncurses
-
-destroot.violate_mtree	yes
