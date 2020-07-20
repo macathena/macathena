@@ -1,0 +1,80 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+
+name                osxfuse
+epoch               3
+version             3.11.0
+set branch          [join [lrange [split ${version} .] 0 1] .]
+categories          fuse devel
+platforms           macosx
+license             BSD APSL
+maintainers         mit.edu:sipb-macathena
+
+description         MacAthena binary installation of FUSE
+long_description    FUSE for OS X implements a mechanism that makes it \
+                    possible to implement a fully functional file system \
+                    in a user-space program on Mac OS X. It aims to be \
+                    API-compliant with the FUSE (File-system in USErspace) \
+                    mechanism that originated on Linux.  Therefore, many \
+                    existing FUSE file systems become readily usable on \
+                    Mac OS X. This port provides the user-space library \
+                    and header files for building filesystems.
+
+homepage            https://osxfuse.github.io/
+
+master_sites        https://github.com/osxfuse/osxfuse/releases/download/osxfuse-${version}
+distfiles           ${name}-${version}.dmg
+
+checksums           rmd160  45e5118d9af50cbb130558c3002a2f1281c17d81 \
+                    sha256  6e4adf8e939bb336ce51c28c71249019c1499ebdba4abddc7cc1ea5154a1feaf \
+                    size    7024368
+
+use_dmg yes
+
+# XXX: Needed?
+dist_subdir ${name}/${version}
+
+post-extract {
+    system -W ${workpath}/${name}-${version} "pkgutil --expand 'FUSE for macOS.pkg' ${workpath}/pkg"
+    file mkdir ${workpath}/pkg/unpacked
+    system -W ${workpath}/pkg/unpacked "gzip -dc ../Core.pkg/Payload | cpio -id"
+    system -W ${workpath}/pkg/unpacked "gzip -dc ../MacFUSE.pkg/Payload | cpio -id"
+}
+
+patch {
+    reinplace "s|prefix=/usr/local|prefix=${prefix}|" ${workpath}/pkg/unpacked/usr/local/lib/pkgconfig/osxfuse.pc
+    reinplace "s|prefix=/usr/local|prefix=${prefix}|" ${workpath}/pkg/unpacked/usr/local/lib/pkgconfig/macfuse.pc
+}
+
+use_configure   no
+build {}
+
+destroot {
+    delete ${destroot}${prefix}/Library
+    file copy -force ${workpath}/pkg/unpacked/Library \
+        ${destroot}${prefix}/Library
+    file mkdir ${destroot}/Library/Filesystems
+    ln -s ${prefix}/Library/Filesystems/osxfuse.fs ${destroot}/Library/Filesystems/osxfuse.fs
+    delete ${destroot}${prefix}/include ${destroot}${prefix}/lib
+    file copy -force ${workpath}/pkg/unpacked/usr/local/include ${workpath}/pkg/unpacked/usr/local/lib \
+        ${destroot}${prefix}/
+
+    # Set proper permissions
+    fs-traverse f ${destroot}${prefix}/Library {
+        file attributes $f -owner root -group wheel
+    }
+    # Enable setuid on helper binary
+    file attributes ${destroot}${prefix}/Library/Filesystems/osxfuse.fs/Contents/Resources/load_osxfuse -permissions 04755
+}
+
+destroot.violate_mtree yes
+
+notes {
+    When upgrading, unmount all FUSE filesystems and then unload the kernel extension.
+    Unloading can be done via: sudo kextunload -b com.github.osxfuse.filesystems.osxfuse
+    Alternatively (or if this fails), just reboot your computer now.
+}
+
+# Could probably be supported by setting ARCHS correctly above
+universal_variant no
