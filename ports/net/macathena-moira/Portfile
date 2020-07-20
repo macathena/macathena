@@ -3,6 +3,7 @@ PortSystem          1.0
 
 name                macathena-moira
 version             20190912
+revision            1
 distname            moira-${version}
 categories          net
 maintainers         mit.edu:sipb-macathena
@@ -11,6 +12,7 @@ platforms           darwin
 homepage            https://github.mit.edu/ops/moira
 master_sites        http://macathena.mit.edu/dist/
 patchfiles          patch-com_err
+patch.args          -p2
 
 worksrcdir          moira-b5abed703a6775e8c7ca795c29b58fd211b34780/moira
 

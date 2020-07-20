@@ -7,7 +7,7 @@ index de504c8d..32379a1f 100755
      fi
      MR_DEFINE(HAVE_KRB5)
 -    KRB5_LIBS="-lkrb5 -l${crypto} -lcom_err -lresolv"
-+    KRB5_LIBS="-lkrb5 -l${crypto} -l$prefix/lib/libcom_err.dylib -lresolv"
++    KRB5_LIBS="-lkrb5 -l${crypto} $prefix/lib/libcom_err.dylib -lresolv"
      KERBEROS_OUTPUT_FILES="incremental/kerberos/Makefile"
      KERBEROS_SUBDIRS="kerberos"
  fi
