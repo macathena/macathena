@@ -1,0 +1,34 @@
+diff --git a/moira/configure.in b/moira/configure.in
+index de504c8d..32379a1f 100755
+--- a/moira/configure.in
++++ b/moira/configure.in
+@@ -128,7 +128,7 @@ if test "$krb5" != no; then
+ 	MR_LIBS($krb5/lib)
+     fi
+     MR_DEFINE(HAVE_KRB5)
+-    KRB5_LIBS="-lkrb5 -l${crypto} -lcom_err -lresolv"
++    KRB5_LIBS="-lkrb5 -l${crypto} $prefix/lib/libcom_err.dylib -lresolv"
+     KERBEROS_OUTPUT_FILES="incremental/kerberos/Makefile"
+     KERBEROS_SUBDIRS="kerberos"
+ fi
+diff --git a/moira/lib/mr_init.c b/moira/lib/mr_init.c
+index c20ac017..2a4d6a56 100644
+--- a/moira/lib/mr_init.c
++++ b/moira/lib/mr_init.c
+@@ -13,6 +13,8 @@
+ 
+ RCSID("$HeadURL$ $Id$");
+ 
++extern struct error_table et_krb5_error_table;
++
+ int mr_inited = 0;
+ 
+ void mr_init(void)
+@@ -24,6 +26,7 @@ void mr_init(void)
+   add_error_table(&et_sms_error_table);
+   add_error_table(&et_krb_error_table);
+   add_error_table(&et_ureg_error_table);
++  add_error_table(&et_krb5_error_table);
+ #else
+   initialize_sms_error_table();
+   initialize_krb_error_table();

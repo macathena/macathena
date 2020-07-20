@@ -3,6 +3,7 @@ PortSystem          1.0
 
 name                macathena-moira
 version             20190912
+revision            1
 distname            moira-${version}
 categories          net
 maintainers         mit.edu:sipb-macathena
@@ -10,7 +11,8 @@ description         Moira is the Project Athena service management system
 platforms           darwin
 homepage            https://github.mit.edu/ops/moira
 master_sites        http://macathena.mit.edu/dist/
-patchfiles          patch-lib-mr_init.c
+patchfiles          patch-com_err
+patch.args          -p2
 
 worksrcdir          moira-b5abed703a6775e8c7ca795c29b58fd211b34780/moira
 
@@ -23,7 +25,7 @@ checksums           md5     3e301d66296002aa79a151afeb85b6d5 \
 use_autoconf	yes
 
 configure.args	--with-krb5 \
-				--with-com_err=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr \
+				--with-com_err \
 				--with-hesiod
 
 
@@ -40,9 +42,10 @@ post-destroot	{
 		${destroot}${prefix}/share/man/man1/chsh.moira.1
 }
 
-depends_build		port:e2fsprogs
+depends_build		port:e2fsprogs \
+			bin:autoconf:autoconf
 
 depends_lib		port:hesiod \
+				port:kerberos5 \
+				port:libcomerr \
 				port:ncurses
-
-destroot.violate_mtree	yes
