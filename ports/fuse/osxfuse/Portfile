@@ -3,7 +3,7 @@
 PortSystem          1.0
 
 name                osxfuse
-epoch               3
+epoch               2
 version             3.11.0
 set branch          [join [lrange [split ${version} .] 0 1] .]
 categories          fuse devel
@@ -40,6 +40,7 @@ post-extract {
     file mkdir ${workpath}/pkg/unpacked
     system -W ${workpath}/pkg/unpacked "gzip -dc ../Core.pkg/Payload | cpio -id"
     system -W ${workpath}/pkg/unpacked "gzip -dc ../MacFUSE.pkg/Payload | cpio -id"
+    system -W ${workpath}/pkg/unpacked "gzip -dc ../PrefPane.pkg/Payload | cpio -id"
 }
 
 patch {
@@ -51,9 +52,9 @@ use_configure   no
 build {}
 
 destroot {
-    delete ${destroot}${prefix}/Library
-    file copy -force ${workpath}/pkg/unpacked/Library \
-        ${destroot}${prefix}/Library
+    delete ${destroot}${prefix}/Library/Frameworks
+    file copy -force ${workpath}/pkg/unpacked/Library/Frameworks ${workpath}/pkg/unpacked/Library/Filesystems \
+        ${destroot}${prefix}/Library/
     file mkdir ${destroot}/Library/Filesystems
     ln -s ${prefix}/Library/Filesystems/osxfuse.fs ${destroot}/Library/Filesystems/osxfuse.fs
     delete ${destroot}${prefix}/include ${destroot}${prefix}/lib
@@ -68,6 +69,15 @@ destroot {
     file attributes ${destroot}${prefix}/Library/Filesystems/osxfuse.fs/Contents/Resources/load_osxfuse -permissions 04755
 }
 
+default_variants +prefpane
+
+variant prefpane description {Install preference pane} {
+    post-destroot {
+        xinstall -m 755 -d ${destroot}/Library/PreferencePanes
+        file copy ${workpath}/pkg/unpacked/Library/PreferencePanes/OSXFUSE.prefPane \
+            ${destroot}/Library/PreferencePanes
+    }
+}
 destroot.violate_mtree yes
 
 notes {
