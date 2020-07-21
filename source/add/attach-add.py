@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
 import getopt
@@ -28,15 +29,15 @@ for o, a in optlist:
 	if o == '-r': remove_locker = True
 	if o == '-b': shell = 'bash'
 
-if os.environ.has_key('PATH'):
+if 'PATH' in os.environ:
 	path = os.environ['PATH'].split(':')
 else: path = []
 
-if os.environ.has_key('MANPATH'):
+if 'MANPATH' in os.environ:
 	manpath = os.environ['MANPATH'].split(':')
 else: manpath = []
 
-if os.environ.has_key('INFOPATH'):
+if 'INFOPATH' in os.environ:
 	infopath = os.environ['INFOPATH'].split(':')
 else: infopath = []
 
@@ -76,6 +77,6 @@ for arg in args:
 			elif not remove_locker: infopath.append(new_info)
 
 if shell == 'bash':
-	print 'PATH="%s"; export PATH; MANPATH="%s"; export MANPATH; INFOPATH="%s"; export INFOPATH' % (':'.join(path), ':'.join(manpath), ':'.join(infopath))
+	print('PATH="%s"; export PATH; MANPATH="%s"; export MANPATH; INFOPATH="%s"; export INFOPATH' % (':'.join(path), ':'.join(manpath), ':'.join(infopath)))
 elif shell == 'csh':
-	print 'setenv PATH "%s"; setenv MANPATH "%s"; setenv INFOPATH "%s"' % (':'.join(path), ':'.join(manpath), ':'.join(infopath))
+	print('setenv PATH "%s"; setenv MANPATH "%s"; setenv INFOPATH "%s"' % (':'.join(path), ':'.join(manpath), ':'.join(infopath)))
