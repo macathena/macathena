@@ -49,7 +49,9 @@ patch {
 }
 
 use_configure   no
-build {}
+build {
+    system "install_name_tool -change /usr/local/lib/libfuse_ino64.2.dylib ${prefix}/lib/libfuse_ino64.2.dylib ${workpath}/pkg/unpacked/Library/Frameworks/MacFUSE.framework/Versions/A/MacFUSE"
+}
 
 destroot {
     delete ${destroot}${prefix}/Library/Frameworks
