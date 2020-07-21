@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
-from commands import getoutput
+from __future__ import print_function
 
-arch = getoutput('arch')
-darwin_ver = int(getoutput('uname -r').split('.')[0]) * 10
+import subprocess
+
+arch = subprocess.check_output(['arch'])
+darwin_ver = int(subprocess.check_output(['uname', '-r']).split(b'.')[0]) * 10
 
 ver_list = range(darwin_ver, 70, -10)
 x86_list = ["x86_darwin_%d" % ver for ver in ver_list]
@@ -18,4 +20,4 @@ else:
 
 versions += ['share', 'common', 'any', 'all']
 
-print 'ATHENA_SYS=%s ATHENA_SYS_COMPAT="%s"' % (versions[0], ':'.join(versions[1:]))
+print('ATHENA_SYS=%s ATHENA_SYS_COMPAT="%s"' % (versions[0], ':'.join(versions[1:])))
