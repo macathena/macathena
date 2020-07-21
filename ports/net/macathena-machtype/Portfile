@@ -2,8 +2,8 @@
 PortSystem		1.0
 
 name			macathena-machtype
-version			svn25436
-distname		machtype-${version}
+version			10.0.2
+distname		debathena-machtype-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
 description		Provides basic information about the running system
@@ -11,9 +11,11 @@ platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
 patchfiles		patch-machtype_linux.sh \
 			patch-configure.in
-checksums		md5 d01a977c9c6d5b74aa9c0d888d963c28 \
-				sha1 427dad33c2589136b36b87fd2f4a0d737e61320d \
-				rmd160 efc130d5cd2cb334f610bffe110b867d52cca519
+checksums           md5     b2ebb314fd2d08a2189d3c3ff714ff03 \
+                    sha1    d79e8fce059019ad3c33920eddb4874a48e76848 \
+                    rmd160  5002bf5bd1403a5207b89de9bc5ff891b04b1c79 \
+                    sha256  a7165749959ac2d2c498b795016b7502ddcf7e37e0c57b452ed782fd5cbc14e8 \
+                    size    69132
 
 use_autoconf	yes
 
@@ -22,15 +24,6 @@ configure.env-append	ATHENA_MAJOR_VERSION=10 \
 
 depends_lib		port:macathena-base
 
-depends_build		port:automake
-
 destroot.violate_mtree	yes
 
-post-patch {
-     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
-}
-
-configure.env-append	[exec ${filespath}/getSysnameList.py]
+configure.env-append	{*}[exec ${filespath}/getSysnameList.py]

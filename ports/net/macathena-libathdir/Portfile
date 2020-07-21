@@ -12,12 +12,7 @@ checksums		md5 02032a3da2d658e1089a34549e99e95b \
 				sha1 530a5ca7bb04b55ad28ceb98023f759bd3fe5cb0 \
 				rmd160 0e31afa28fc80f53e2e76572d89da1e8deb774fb
 use_autoreconf	yes
+autoreconf.args --install --verbose
 use_autoconf	yes
 
 depends_build		port:automake
-post-patch {
-     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
-}
