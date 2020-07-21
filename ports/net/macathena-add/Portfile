@@ -1,0 +1,23 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem	1.0
+PortGroup 	python 1.0
+
+name		macathena-add
+version		20200720
+categories	net
+maintainers	mit.edu:sipb-macathena
+platforms	darwin
+description	Lets you add Athena lockers to your path
+checksums           rmd160  f4bfa923dbc1fd19729d5efb58caa71d62b45991 \
+                    sha256  9b2afb0ce361c455261c705118fc190f5deaef7638679b4c00defd97886713d2 \
+                    size    2175
+distname	add-${version}
+master_sites 	http://macathena.mit.edu/dist/
+
+python.default_version 38
+
+depends_run	bin:athdir:macathena-athdir
+
+post-patch {
+reinplace -W ${worksrcpath} "s|@FINKPREFIX@|${prefix}|g" setup.py attach-add.py macathena-add.csh macathena-add.sh
+}

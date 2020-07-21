@@ -12,7 +12,7 @@ platforms		darwin
 distfiles		
 
 depends_lib		port:macathena-base \
-				port:macathena-hesiod
+				port:hesiod
 
 destroot.violate_mtree	yes
 

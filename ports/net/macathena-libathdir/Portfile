@@ -2,17 +2,23 @@
 PortSystem		1.0
 
 name			macathena-libathdir
-version			svn25431
-distname		libathdir-${version}
+version			10.1.1
+distname		debathena-libathdir-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
-checksums		md5 02032a3da2d658e1089a34549e99e95b \
-				sha1 530a5ca7bb04b55ad28ceb98023f759bd3fe5cb0 \
-				rmd160 0e31afa28fc80f53e2e76572d89da1e8deb774fb
-use_autoreconf	yes
-autoreconf.args --install --verbose
-use_autoconf	yes
+checksums           md5     6711e2d2b4910da37b7bb6ecb2318447 \
+                    sha1    8ac64cfe539a917d8d5cfcb8d763aa4fce2f11e9 \
+                    rmd160  15681898577260b254318cd32b52199a873451b7 \
+                    sha256  ebbc9daa9280e04c1e9c04d9252ea67694cab10a196c23c0bbdba7f5d8c6e91e \
+                    size    6679
 
-depends_build		port:automake
+use_autoreconf	yes
+use_autoconf	yes
+autoreconf.args --install
+
+configure.env-append ATHENA_SYS=[exec machtype -S]
+
+depends_build		port:automake \
+			port:macathena-machtype

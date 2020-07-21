@@ -2,16 +2,20 @@
 PortSystem		1.0
 
 name			macathena-athdir
-version			19991101
-distname		athdir-${version}
+version			10.1
+distname		debathena-athdir-${version}
 categories		net
 maintainers		mit.edu:sipb-macathena
 platforms		darwin
 master_sites	http://macathena.mit.edu/dist/
-checksums		md5 5007c383a3b12fdf9df9e2e0c967666a \
-				sha1 19588c1c1e660e4d357fdb96f78015faa859567d \
-				rmd160 d7dc9f85444e2375fe6d0105517ea4a9b5a54a50
+checksums           md5     68e98a5b1155b328c2bf0236ca48f9ad \
+                    sha1    a1643dc7cdfa1b12e664df83f10b61a75534492e \
+                    rmd160  3b7abd3d3808aa9d425f7f96f2c5548b6b7c646f \
+                    sha256  d634502915db68300864961968e2314349608e4cad7b5a9450e10eb0c466c70e \
+                    size    5513
 
 use_autoconf	yes
+use_autoreconf  yes
+autoreconf.args --install
 
 depends_lib		port:macathena-libathdir
