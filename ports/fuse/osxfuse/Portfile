@@ -5,7 +5,6 @@ PortSystem          1.0
 name                osxfuse
 epoch               2
 version             3.11.0
-set branch          [join [lrange [split ${version} .] 0 1] .]
 categories          fuse devel
 platforms           macosx
 license             BSD APSL
