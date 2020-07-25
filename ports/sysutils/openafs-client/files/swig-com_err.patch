@@ -1,0 +1,20 @@
+--- openafs-1.8.6-orig/src/libuafs/ukernel_swig.i	2020-06-29 13:03:45.000000000 -0400
++++ openafs-1.8.6/src/libuafs/ukernel_swig.i	2020-07-24 21:37:02.000000000 -0400
+@@ -26,6 +26,7 @@
+ #include <afsconfig.h>
+ #include <afs/param.h>
+ 
++#include <afs/com_err.h>
+ #include <afs/afsutil.h>
+ #include <afs/sysincludes.h>
+ #include <afs_usrops.h>
+--- openafs-1.8.6-orig/src/libuafs/Makefile.common.in	2020-06-29 13:03:45.000000000 -0400
++++ openafs-1.8.6/src/libuafs/Makefile.common.in	2020-07-24 21:41:29.000000000 -0400
+@@ -490,6 +490,7 @@
+ 		.libs/libuafs_pic.a ${TOP_LIBDIR}/libcmd_pic.a \
+ 		${TOP_LIBDIR}/libafsutil_pic.a \
+ 		$(TOP_LIBDIR)/libopr_pic.a \
++		$(TOP_LIBDIR)/libafscom_err.a \
+ 		$(LDFLAGS_roken) $(LDFLAGS_hcrypto) $(LIB_hcrypto) \
+ 		$(LIB_roken) $(LIB_crypt) \
+ 		$(XLIBS)

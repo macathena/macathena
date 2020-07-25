@@ -31,7 +31,15 @@ worksrcdir openafs-${version}
 
 use_parallel_build  no
 
+# Allow xcodebuild for the prefpane
+use_xcode           yes
+
 depends_build       port:swig-perl
+
+patchfiles          swig-com_err.patch \
+                    afsd_fuse.patch \
+                    xcodebuild.patch
+patch.args          -p1
 
 if {${os.major} >= 13} {
     set use_signed_kext    yes
@@ -50,14 +58,14 @@ if { $use_signed_kext } {
 	19 15 Catalina
     }
     foreach { mp.darwin mp.os mp.name } ${mp.dist} {
-	if {${os.major} == ${mp.darwin}} {
-	    configure.args-append --disable-kernel-module
-	    # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
-	    master_sites-append https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}:auristor
-	    distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
-	    use_dmg yes
-	    extract.only Auristor-client-0.195-${mp.name}.dmg
-	}
+        if {${os.major} == ${mp.darwin}} {
+            configure.args-append --disable-kernel-module
+            # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
+            master_sites-append https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}:auristor
+            distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
+            use_dmg yes
+            extract.only Auristor-client-0.195-${mp.name}.dmg
+        }
     }
 }
 
@@ -66,3 +74,5 @@ post-extract {
 	system -W ${workpath} "tar -xvf ${distpath}/openafs-${version}-src.tar.gz"
     }
 }
+
+destroot.target install dest
