@@ -2,19 +2,19 @@
 
 PortSystem          1.0
 
-name		    openafs-client
-version		    1.8.6
-categories	    sysutils
-license		    IPL-1
-maintainers	    mit.edu:sipb-macathena
-description	    AFS distributed fileystem client
+name                openafs-client
+version             1.8.6
+categories          sysutils
+license             IPL-1
+maintainers         mit.edu:sipb-macathena
+description         AFS distributed fileystem client
 long_description    AFS is a distributed filesystem allowing cross-platform \
-		    sharing of files among multiple computers.  Facilities \
-		    are provided for access control, authentication, backup \
-		    and administrative management.
-homepage	    http://www.openafs.org/
-master_sites	    http://openafs.org/dl/openafs/${version}/
-distname	    openafs-${version}-src
+                    sharing of files among multiple computers.  Facilities \
+                    are provided for access control, authentication, backup \
+                    and administrative management.
+homepage            http://www.openafs.org/
+master_sites        http://openafs.org/dl/openafs/${version}/
+distname            openafs-${version}-src
 
 checksums           openafs-1.8.6-src.tar.gz \
                     rmd160  4a59624b935f25c9819902dfd38ee54d66b2a8d6 \
@@ -24,10 +24,14 @@ checksums           openafs-1.8.6-src.tar.gz \
                     rmd160  403ca9683d6a541e0eff8b79f7b82ea0f2afef88 \
                     sha256  9b0ff041d5158ab63b95e2520a01c81a9e6535f06955ff1e0c18a0b635b4f553 \
                     size    8651568 \
-		    Auristor-client-0.195-Catalina.dmg \
+                    Auristor-client-0.195-Catalina.dmg \
                     rmd160  ede269da7ccc9d422f8131ec666ce27411891ba6 \
                     sha256  f24a450376bbfe9d6994c34a4bd8fe05af3c5522d93b01a8930d808d88dc5ca1 \
-                    size    8657345
+                    size    8657345 \
+                    CellServDB \
+                    rmd160  e0995062877e21b6887b57399a0cc9ae057c4092 \
+                    sha256  62e6510079f7565b7c642d7b799342bee36c89fe6d510bc24559785fabb1b2f2 \
+                    size    36955
 
 universal_variant   no
 
@@ -51,13 +55,13 @@ if {${os.major} >= 13} {
 
 if { $use_signed_kext } {
     set mp.dist {
-	13 9 Mavericks
-	14 10 Yosemite
-	15 11 ElCapitan
-	16 12 Sierra
-	17 13 HighSierra
-	18 14 Mojave
-	19 15 Catalina
+        13 9 Mavericks
+        14 10 Yosemite
+        15 11 ElCapitan
+        16 12 Sierra
+        17 13 HighSierra
+        18 14 Mojave
+        19 15 Catalina
     }
     foreach { mp.darwin mp.os mp.name } ${mp.dist} {
         if {${os.major} == ${mp.darwin}} {
@@ -67,14 +71,71 @@ if { $use_signed_kext } {
             distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
             use_dmg yes
             extract.only Auristor-client-0.195-${mp.name}.dmg
+            post-extract {
+                system -W ${workpath} "tar -xvf ${distpath}/openafs-${version}-src.tar.gz"
+                move ${workpath}/${distname} ${workpath}/auristor-dmg
+                system -W ${workpath}/auristor-dmg "pkgutil --expand 'Auristor-Lite.pkg' ${workpath}/auristor-pkg"
+                file mkdir ${workpath}/auristor-unpacked
+                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-common.pkg/Payload | cpio -id"
+                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-client.pkg/Payload | cpio -id"
+            }
+            post-patch {
+                reinplace "s|/usr/local/libexec/afsd|${prefix}/libexec/auristor/afsd|" ${workpath}/auristor-unpacked/Library/LaunchDaemons/com.auristor.filesystems.yfs.plist
+            }
+            destroot.violate_mtree yes
+            post-destroot {
+                set pkgpath ${workpath}/auristor-unpacked
+                # TODO: Do we need PreferencePanes and PrivilegedHelperTools or can we use OpenAFS versions?
+                copy ${pkgpath}/Library/Application\ Support \
+                    ${pkgpath}/Library/Auristor \
+                    ${pkgpath}/Library/Extensions \
+                    ${pkgpath}/Library/PreferencePanes \
+                    ${pkgpath}/Library/LaunchDaemons \
+                    ${pkgpath}/Library/PrivilegedHelperTools \
+                    ${destroot}/Library/
+                file mkdir ${destroot}/private/etc
+                copy ${pkgpath}/private/etc/yfs ${destroot}/private/etc/yfs
+                # Dropping /usr/local/bin/{aklog,fs,pts,tokens,unlog} in favor of OpenAFS versions
+                copy ${pkgpath}/usr/local/libexec/ ${destroot}${prefix}/libexec/auristor/
+                file mkdir ${destroot}/var/yfs
+                destroot.keepdirs-append \
+                    "${destroot}/Library/Application Support/Auristor/com.auristor.afsd" \
+                    ${destroot}/var/yfs
+
+                # Create default config
+                file mkdir ${destroot}${prefix}/etc/openafs
+                system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
+                ln -s ${prefix}/etc/openafs/ThisCell ${destroot}/private/etc/yfs/config/ThisCell
+                copy ${filespath}/yfs-client.conf ${destroot}/private/etc/yfs/yfs-client.conf
+                copy ${destroot}/private/etc/yfs/cacheinfo.conf.default ${destroot}/private/etc/yfs/yfs-client.conf.d/cacheinfo.conf
+                system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
+                ln -s ${prefix}/etc/openafs/CellAlias ${destroot}/private/etc/yfs/config/CellAlias
+                copy ${filespath}/thiscell.conf ${destroot}/private/etc/yfs/yfs-client.conf.d/thiscell.conf
+                copy ${destroot}/private/etc/yfs/config/settings.plist.orig ${destroot}/private/etc/yfs/config/settings.plist
+            }
+            post-activate {
+                if {[file exists /usr/share/firmlinks]} {
+                    system "(grep ^afs /etc/synthetic.conf || echo afs >> /etc/synthetic.conf) > /dev/null 2>&1"
+                } else {
+                    file mkdir /afs
+                }
+                system "/usr/libexec/PlistBuddy -c \"Print :SkipPaths:\" /Library/Preferences/com.apple.TimeMachine.plist | grep /afs || /usr/libexec/PlistBuddy -c 'Add :SkipPaths: string \"/afs\"' /Library/Preferences/com.apple.TimeMachine.plist"
+                if {[catch {system kextload /Library/Extensions/yfs.kext}]} {
+                    notes {
+                        You must allow the kernel extension to load by visiting the Security
+                        preference pane. You can go there by running:
+                        open "x-apple.systempreferences:com.apple.preference.security?General"
+                    }
+                }
+            }
         }
     }
 }
 
-post-extract {
-    if { $use_signed_kext } {
-	system -W ${workpath} "tar -xvf ${distpath}/openafs-${version}-src.tar.gz"
-    }
-}
-
 destroot.target install dest
+
+master_sites-append http://grand.central.org/dl/cellservdb/:csdb
+distfiles-append CellServDB:csdb
+post-destroot {
+    copy ${distpath}/CellServDB ${destroot}${prefix}/etc/openafs/CellServDB
+}
