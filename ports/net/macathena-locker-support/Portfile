@@ -1,0 +1,20 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem	1.0
+PortGroup	python 1.0
+
+name		macathena-locker-support
+version		10.4.7
+categories	net
+maintainers	mit.edu:sipb-macathena
+platforms	darwin
+description	Programs for working with Athena lockers
+distname	debathena-locker-support-${version}
+master_sites	http://macathena.mit.edu/dist/
+patchfiles	patch-py3 patch-locker.py
+patch.args	-p1
+python.default_version	38
+checksums           rmd160  4019e3efc3d99de9306c5f3d269fb25094f32a69 \
+                    sha256  2812c83ec367bb574e7bbea5aa768bd66ca8353f1a68346e8cb5faa565af7a98 \
+                    size    25054
+use_tar		yes
+depends_lib	port:python-afs

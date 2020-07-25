@@ -1,0 +1,288 @@
+diff --git a/athdir b/athdir
+index a570d80..975ce83 100755
+--- a/athdir
++++ b/athdir
+@@ -64,7 +64,7 @@ if len(sys.argv) <= 3 and not any(x.startswith('-') for x in sys.argv):
+     a = athdir.Athdir(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else 'bin')
+     paths = a.get_paths()
+     if len(paths) > 0:
+-        print ''.join(paths)
++        print(''.join(paths))
+     sys.exit(0 if len(paths) > 0 else 1)
+ 
+ (options, args) = parser.parse_args()
+@@ -89,5 +89,5 @@ for p in options.lockerpath:
+                          options.forceDependent, options.forceIndependent,
+                          options.listAll)
+ if len(paths) > 0:
+-    print options.recsep.join(paths)
++    print(options.recsep.join(paths))
+ sys.exit(0 if len(paths) > 0 else 1)
+diff --git a/attach b/attach
+index c51956b..68e3b8b 100755
+--- a/attach
++++ b/attach
+@@ -53,14 +53,12 @@ class Environment(dict):
+             assert len(paths) < 2
+             if subdir == 'bin' and options.warn:
+                 if len(paths) == 0:
+-                    print >>sys.stderr, \
+-                        "%s: warning: %s has no binary directory" % \
+-                        (sys.argv[0], mountpoint)
++                    print("%s: warning: %s has no binary directory" % \
++                        (sys.argv[0], mountpoint), file=sys.stderr)
+                 else:
+                     if False in [adir.is_native(p) for p in paths]:
+-                        print >>sys.stderr, \
+-                            "%s: warning: using compatibility for %s" % \
+-                            (sys.argv[0], mountpoint)
++                        print("%s: warning: using compatibility for %s" % \
++                            (sys.argv[0], mountpoint), file=sys.stderr)
+             for p in paths:
+                 self[varmap[subdir]].remove(p)
+                 if options.front:
+@@ -97,13 +95,13 @@ def attach_filesys(filesys, options):
+     if options.lookup:
+         try:
+             results = locker.resolve(filesys)
+-            print "%s resolves to:" % (filesys)
++            print("%s resolves to:" % (filesys))
+             for r in results:
+-                print "%s %s%s" % \
++                print("%s %s%s" % \
+                     (r['type'], r['data'],
+-                     ' ' + str(r['priority']) if r['priority'] > 0 else '')
++                     ' ' + str(r['priority']) if r['priority'] > 0 else ''))
+         except (locker.LockerNotFoundError, locker.LockerError) as e:
+-            print >>sys.stderr, e
++            print(e, file=sys.stderr)
+     else:
+         # Multiple entries will only be returned for FSGROUPs
+         # which we want to try in order.  Once successful, we're done
+@@ -114,7 +112,7 @@ def attach_filesys(filesys, options):
+             try:
+                 filesystems = locker.lookup(filesys)
+             except locker.LockerError as e:
+-                print >>sys.stderr, e
++                print(e, file=sys.stderr)
+         for entry in filesystems:
+             logger.debug("Attempting to attach %s", entry)
+             if (options.map or options.remap) and \
+@@ -122,7 +120,7 @@ def attach_filesys(filesys, options):
+                 try:
+                     subprocess.check_call(entry.getAuthCommandline())
+                 except subprocess.CalledProcessError as e:
+-                    print >>sys.stderr, "Error while authenticating:", e
++                    print("Error while authenticating:", e, file=sys.stderr)
+                     if entry.authRequired:
+                         return None
+             if options.mountpoint is not None:
+@@ -130,13 +128,13 @@ def attach_filesys(filesys, options):
+             try:
+                 entry.attach(force=options.force)
+             except locker.LockerError as e:
+-                print >>sys.stderr, e
++                print(e, file=sys.stderr)
+                 continue
+             if options.printpath:
+-                print entry.mountpoint
++                print(entry.mountpoint)
+             elif options.verbose:
+-                print "%s: %s attached to %s for filesystem %s" % \
+-                      (sys.argv[0], entry.path, entry.mountpoint, entry.name)
++                print("%s: %s attached to %s for filesystem %s" % \
++                      (sys.argv[0], entry.path, entry.mountpoint, entry.name))
+             return entry.mountpoint
+         return None
+ 
+@@ -151,7 +149,7 @@ def deprecated_callback(option, opt_str, value, parser):
+     """
+     An OptionParser callback for deprecated options
+     """
+-    print >>sys.stderr, "WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str)
++    print("WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str), file=sys.stderr)
+ 
+ def attachopts_callback(option, opt_str, value, parser):
+     # Consume all remaining values on the list
+@@ -275,7 +273,7 @@ if (len(argv) > 0) and (argv[0] == "-Padd"):
+     if options.printpath or len(lockers + paths) < 1:
+         # See NOTES[5]
+         pathsep=':' if options.bourne else ' '
+-        print >>sys.stderr, pathsep.join([shorten_path(p) for p in env['PATH']])
++        print(pathsep.join([shorten_path(p) for p in env['PATH']]), file=sys.stderr)
+         sys.exit(0)
+     if options.remove:
+         for p in paths:
+@@ -285,7 +283,7 @@ if (len(argv) > 0) and (argv[0] == "-Padd"):
+             if at is None:
+                 at = locker.read_attachtab()
+             if filesys not in at:
+-                print >>sys.stderr, "%s: Not attached." % (filesys,)
++                print("%s: Not attached." % (filesys,), file=sys.stderr)
+                 continue
+             env.removeLocker(at[filesys].mountpoint)
+     else:
+@@ -298,14 +296,14 @@ if (len(argv) > 0) and (argv[0] == "-Padd"):
+                 env['PATH'].insert(0, p)
+             else:
+                 env['PATH'].append(p)
+-    print env.toShell(options.bourne)
++    print(env.toShell(options.bourne))
+ else:
+     (options, args) = attachParser.parse_args(argv)
+     if options.debug:
+         logging.basicConfig()
+         logger.setLevel(logging.DEBUG)
+     if len(args) < 1:
+-        print locker.read_attachtab()._legacyFormat()
++        print(locker.read_attachtab()._legacyFormat())
+     if not options.map:
+         options.remap = False
+     if options.explicit and not options.mountpoint:
+diff --git a/detach b/detach
+index 71571d2..d48ae10 100755
+--- a/detach
++++ b/detach
+@@ -22,8 +22,7 @@ def deprecated_callback(option, opt_str, value, parser):
+     """
+     An OptionParser callback for deprecated options
+     """
+-    print >>sys.stderr, "WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str)
+-
++    print("WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str), file=sys.stderr)
+ parser = OptionParser(usage=usage, add_help_option=False)
+ parser.set_defaults(zephyr=False, unmap=True, verbose=True,
+                     all_filesys=False, explicit=False, fstype=[])
+@@ -111,9 +110,9 @@ if options.all_filesys or options.host:
+         try:
+             attachtab[l].detach()
+             if options.verbose:
+-                print >>sys.stderr, "%s: %s detached" % (sys.argv[0], attachtab[l].name)
++                print("%s: %s detached" % (sys.argv[0], attachtab[l].name), file=sys.stderr)
+         except locker.LockerError as e:
+-            print >>sys.stderr, "%s: Unable to detach: %s" % (l, e)
++            print("%s: Unable to detach: %s" % (l, e), file=sys.stderr)
+     sys.exit(0)
+ 
+ for a in args:
+@@ -121,9 +120,9 @@ for a in args:
+         try:
+             attachtab[a].detach()
+             if options.verbose:
+-                print >>sys.stderr, "%s: %s detached" % (sys.argv[0], attachtab[a].name)
++                print("%s: %s detached" % (sys.argv[0], attachtab[a].name), file=sys.stderr)
+         except locker.LockerError as e:
+-            print >>sys.stderr, "%s: Unable to detach: %s" % (l, e)
++            print("%s: Unable to detach: %s" % (l, e), file=sys.stderr)
+     else:
+-        print >>sys.stderr, "%s: Not attached." % (a,)
++        print("%s: Not attached." % (a,), file=sys.stderr)
+ sys.exit(0)
+diff --git a/fsid b/fsid
+index a3fef74..a656c71 100755
+--- a/fsid
++++ b/fsid
+@@ -13,28 +13,31 @@ def do_map(l, options):
+     if not options.map:
+         cmdline = l.getDeauthCommandline()
+     if cmdline is None:
+-        print >>sys.stderr, "%s: %s: %smapping not supported" % (sys.argv[0],
++        print("%s: %s: %smapping not supported" % (sys.argv[0],
+                                                                  l.name,
+-                                                                 '' if options.map else 'un')
++                                                                 '' if options.map else 'un'), file=sys.stderr)
+     else:
+         try:
+             subprocess.check_call(cmdline)
+             if options.verbose:
+-                print >>sys.stderr, "%s: %s mapped" % (sys.argv[0],
+-                                                       l.name)
++                print("%s: %s mapped" % (sys.argv[0],
++                                                       l.name), file=sys.stderr)
++
+         except subprocess.CalledProcessError as e:
+-            print >>sys.stderr, "%s: Unable to map %s" % (sys.argv[0],
+-                                                          l.name)
++            print("%s: Unable to map %s" % (sys.argv[0],
++                                                          l.name), file=sys.stderr)
++
+         except locker.LockerError as e:
+-            print >>sys.stderr, "%s: %s: %s" % (sys.argv[0],
++            print("%s: %s: %s" % (sys.argv[0],
+                                                 l.name,
+-                                                e)
++                                                e), file=sys.stderr)
++
+ 
+ def deprecated_callback(option, opt_str, value, parser):
+     """
+     An OptionParser callback for deprecated options
+     """
+-    print >>sys.stderr, "WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str)
++    print("WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str), file=sys.stderr)
+ 
+ usage = """%prog [options] [-f] filesystem ...
+        %prog [options] -c cell ...
+@@ -111,6 +114,6 @@ for f in options.filesystems + args:
+     if f in attachtab:
+         do_map(attachtab[f], options)
+     else:
+-        print >>sys.stderr, "%s: %s not attached" % (sys.argv[0], f)
++        print("%s: %s not attached" % (sys.argv[0], f), file=sys.stderr)
+ 
+ sys.exit(0)
+diff --git a/quota.debathena b/quota.debathena
+index 9b16751..b160f88 100755
+--- a/quota.debathena
++++ b/quota.debathena
+@@ -15,7 +15,7 @@ def deprecated_callback(option, opt_str, value, parser):
+     """
+     An OptionParser callback for deprecated options
+     """
+-    print >>sys.stderr, "WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str)
++    print("WARNING: '%s' is obsolete and will be removed in future versions." % (opt_str), file=sys.stderr)
+ 
+ parser = OptionParser(usage=usage)
+ parser.set_defaults(verbose=False, all_filesys=False, parsable=False,
+@@ -72,8 +72,8 @@ for x in set(options.filesys):
+         continue
+     if x not in at:
+         # See NOTES[6]
+-        print >>sys.stderr, "%s: Not attached." % (x,)
+-        print >>sys.stderr, "%s: Unknown filesystem %s." % (sys.argv[0], x)
++        print("%s: Not attached." % (x,), file=sys.stderr)
++        print("%s: Unknown filesystem %s." % (sys.argv[0], x), file=sys.stderr)
+         sys.exit(1)
+     filesystems.append(at[x].mountpoint)
+ 
+@@ -118,7 +118,7 @@ for l in at:
+ 
+ if options.verbose:
+     if options.parsable:
+-        print "\n".join(output['parsable'])
++        print("\n".join(output['parsable']))
+         sys.exit(0)
+     uid = os.getuid()
+     try:
+@@ -126,15 +126,15 @@ if options.verbose:
+     except Exception as e:
+         logger.debug("Exception while getting username: %s", e)
+         username = "unknown user"
+-    print "Disk quotas for %s (uid %d)" % (username, uid)
+-    print "%-16s %8s %8s %8s    %8s %8s %8s" % ("Filesystem",
++    print("Disk quotas for %s (uid %d)" % (username, uid))
++    print("%-16s %8s %8s %8s    %8s %8s %8s" % ("Filesystem",
+                                                 "usage", "quota",
+                                                 "limit", "files",
+-                                                "quota", "limit")
+-    print "\n".join(output['quotas'])
++                                                "quota", "limit"))
++    print("\n".join(output['quotas']))
+ # We always print a blank line.
+-print ''
++print('')
+ if len(output['overage']) > 0:
+-    print "\n".join(output['overage'])
++    print("\n".join(output['overage']))
+ 
+ sys.exit(0)
