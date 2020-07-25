@@ -23,13 +23,15 @@ checksums           openafs-1.8.6-src.tar.gz \
                     Auristor-client-0.195-Mojave.dmg \
                     rmd160  403ca9683d6a541e0eff8b79f7b82ea0f2afef88 \
                     sha256  9b0ff041d5158ab63b95e2520a01c81a9e6535f06955ff1e0c18a0b635b4f553 \
-                    size    8651568
+                    size    8651568 \
+		    Auristor-client-0.195-Catalina.dmg \
+                    rmd160  ede269da7ccc9d422f8131ec666ce27411891ba6 \
+                    sha256  f24a450376bbfe9d6994c34a4bd8fe05af3c5522d93b01a8930d808d88dc5ca1 \
+                    size    8657345
 
 universal_variant   no
 
 worksrcdir openafs-${version}
-
-use_parallel_build  no
 
 # Allow xcodebuild for the prefpane
 use_xcode           yes
