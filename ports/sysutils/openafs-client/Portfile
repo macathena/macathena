@@ -57,6 +57,16 @@ if {${os.major} >= 13} {
     set use_signed_kext    no
 }
 
+post-destroot {
+    # Create default config
+    file mkdir ${destroot}${prefix}/etc/openafs
+    system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
+    file mkdir ${destroot}${prefix}/etc/openafs/config
+    #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
+    system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
+    #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
+}
+
 if { $use_signed_kext } {
     set mp.dist {
         13 9 Mavericks
@@ -84,6 +94,7 @@ if { $use_signed_kext } {
                 system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-client.pkg/Payload | cpio -id"
             }
             post-patch {
+                # Auristor libraries have hard-coded paths that must be removed.
                 set toolsdir ${workpath}/auristor-unpacked/Library/Auristor/Tools
                 set libs [glob -directory ${toolsdir} -tails lib/*.dylib private/*.dylib]
                 set args "-add_rpath ${prefix}/Library/Auristor/Tools"
@@ -110,17 +121,11 @@ if { $use_signed_kext } {
                     ${destroot}${prefix}/var/openafs/yfs-afsd
 
                 # Create default config
-                file mkdir ${destroot}${prefix}/etc/openafs
-                system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
-                file mkdir ${destroot}${prefix}/etc/openafs/config
-                #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
                 file mkdir ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
                 destroot.keepdirs-append ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
                 copy ${filespath}/yfs-client.conf ${destroot}${prefix}/etc/openafs/yfs-client.conf
                 reinplace "s|@PREFIX@|${prefix}|" ${destroot}${prefix}/etc/openafs/yfs-client.conf
                 copy ${pkgpath}/private/etc/yfs/cellservdb.conf ${destroot}${prefix}/etc/openafs/cellservdb.conf
-                system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
-                #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
                 copy ${pkgpath}/private/etc/yfs/config/settings.plist.orig ${destroot}${prefix}/etc/openafs/config/settings.plist
 
                 # Write startup item
