@@ -4,6 +4,7 @@ PortSystem          1.0
 
 name                openafs-client
 version             1.8.6
+revision            2
 categories          sysutils
 license             IPL-1
 maintainers         mit.edu:sipb-macathena
@@ -46,6 +47,9 @@ patchfiles          swig-com_err.patch \
                     afsd_fuse.patch \
                     xcodebuild.patch
 patch.args          -p1
+post-patch {
+    reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
+}
 
 if {${os.major} >= 13} {
     set use_signed_kext    yes
@@ -80,39 +84,54 @@ if { $use_signed_kext } {
                 system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-client.pkg/Payload | cpio -id"
             }
             post-patch {
-                reinplace "s|/usr/local/libexec/afsd|${prefix}/libexec/auristor/afsd|" ${workpath}/auristor-unpacked/Library/LaunchDaemons/com.auristor.filesystems.yfs.plist
+                set toolsdir ${workpath}/auristor-unpacked/Library/Auristor/Tools
+                set libs [glob -directory ${toolsdir} -tails lib/*.dylib private/*.dylib]
+                set args "-add_rpath ${prefix}/Library/Auristor/Tools"
+                foreach lib $libs {
+                    append args " -change /Library/Auristor/Tools/${lib} @rpath/${lib}"
+                }
+                foreach lib $libs {
+                    system "install_name_tool $args ${toolsdir}/${lib}"
+                }
+                system "install_name_tool $args ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
             }
-            destroot.violate_mtree yes
             post-destroot {
                 set pkgpath ${workpath}/auristor-unpacked
-                # TODO: Do we need PreferencePanes and PrivilegedHelperTools or can we use OpenAFS versions?
-                copy ${pkgpath}/Library/Application\ Support \
-                    ${pkgpath}/Library/Auristor \
+                copy ${pkgpath}/Library/Auristor \
                     ${pkgpath}/Library/Extensions \
-                    ${pkgpath}/Library/PreferencePanes \
-                    ${pkgpath}/Library/LaunchDaemons \
-                    ${pkgpath}/Library/PrivilegedHelperTools \
-                    ${destroot}/Library/
-                file mkdir ${destroot}/private/etc
-                copy ${pkgpath}/private/etc/yfs ${destroot}/private/etc/yfs
-                # Dropping /usr/local/bin/{aklog,fs,pts,tokens,unlog} in favor of OpenAFS versions
+                    ${destroot}${prefix}/Library/
+                # We only install the Auristor afsd and kernel module.
+                # We drop /usr/local/bin/{aklog,fs,pts,tokens,unlog} in favor of OpenAFS versions.
+                # (Yes, that means you won't be able to use Auristor-specific features.)
                 copy ${pkgpath}/usr/local/libexec/ ${destroot}${prefix}/libexec/auristor/
-                file mkdir ${destroot}/var/yfs
+                file mkdir ${destroot}/var/openafs/yfs ${destroot}/var/openafs/yfs-afsd
                 destroot.keepdirs-append \
-                    "${destroot}/Library/Application Support/Auristor/com.auristor.afsd" \
-                    ${destroot}/var/yfs
+                    ${destroot}${prefix}/var/openafs/yfs \
+                    ${destroot}${prefix}/var/openafs/yfs-afsd
 
                 # Create default config
                 file mkdir ${destroot}${prefix}/etc/openafs
                 system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
-                ln -s ${prefix}/etc/openafs/ThisCell ${destroot}/private/etc/yfs/config/ThisCell
-                copy ${filespath}/yfs-client.conf ${destroot}/private/etc/yfs/yfs-client.conf
-                copy ${destroot}/private/etc/yfs/cacheinfo.conf.default ${destroot}/private/etc/yfs/yfs-client.conf.d/cacheinfo.conf
+                file mkdir ${destroot}${prefix}/etc/openafs/config
+                #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
+                copy ${filespath}/yfs-client.conf ${destroot}${prefix}/etc/openafs/yfs-client.conf
+                reinplace "s|@PREFIX@|${prefix}|" ${destroot}${prefix}/etc/openafs/yfs-client.conf
+                copy ${pkgpath}/private/etc/yfs/cellservdb.conf ${destroot}${prefix}/etc/openafs/cellservdb.conf
                 system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
-                ln -s ${prefix}/etc/openafs/CellAlias ${destroot}/private/etc/yfs/config/CellAlias
-                copy ${filespath}/thiscell.conf ${destroot}/private/etc/yfs/yfs-client.conf.d/thiscell.conf
-                copy ${destroot}/private/etc/yfs/config/settings.plist.orig ${destroot}/private/etc/yfs/config/settings.plist
+                #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
+                copy ${pkgpath}/private/etc/yfs/config/settings.plist.orig ${destroot}${prefix}/etc/openafs/config/settings.plist
+
+                # Write startup item
+                set itemdir ${destroot}${prefix}/etc/LaunchDaemons/${startupitem.uniquename}
+                file mkdir ${itemdir}
+                copy ${filespath}/launchdaemon.plist ${itemdir}/${startupitem.plist}
+                reinplace "s|@PREFIX@|${prefix}|g; s|@UNIQUENAME@|${startupitem.uniquename}|g" ${itemdir}/${startupitem.plist}
+                # Install startup item
+                file mkdir "${destroot}/Library/LaunchDaemons"
+                ln -sf "${itemdir}/${startupitem.plist}" "${destroot}/Library/LaunchDaemons"
             }
+            startupitem.create no
+            startupitem.autostart yes
             post-activate {
                 if {[file exists /usr/share/firmlinks]} {
                     system "(grep ^afs /etc/synthetic.conf || echo afs >> /etc/synthetic.conf) > /dev/null 2>&1"
@@ -121,7 +140,7 @@ if { $use_signed_kext } {
                 }
                 system "/usr/libexec/PlistBuddy -c \"Print :SkipPaths:\" /Library/Preferences/com.apple.TimeMachine.plist | grep /afs || /usr/libexec/PlistBuddy -c 'Add :SkipPaths: string \"/afs\"' /Library/Preferences/com.apple.TimeMachine.plist"
                 if {[catch {system kextload /Library/Extensions/yfs.kext}]} {
-                    notes {
+                    notes-append {
                         You must allow the kernel extension to load by visiting the Security
                         preference pane. You can go there by running:
                         open "x-apple.systempreferences:com.apple.preference.security?General"
