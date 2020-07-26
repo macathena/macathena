@@ -114,6 +114,8 @@ if { $use_signed_kext } {
                 system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
                 file mkdir ${destroot}${prefix}/etc/openafs/config
                 #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
+                file mkdir ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
+                destroot.keepdirs-append ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
                 copy ${filespath}/yfs-client.conf ${destroot}${prefix}/etc/openafs/yfs-client.conf
                 reinplace "s|@PREFIX@|${prefix}|" ${destroot}${prefix}/etc/openafs/yfs-client.conf
                 copy ${pkgpath}/private/etc/yfs/cellservdb.conf ${destroot}${prefix}/etc/openafs/cellservdb.conf
@@ -128,7 +130,7 @@ if { $use_signed_kext } {
                 reinplace "s|@PREFIX@|${prefix}|g; s|@UNIQUENAME@|${startupitem.uniquename}|g" ${itemdir}/${startupitem.plist}
                 # Install startup item
                 file mkdir "${destroot}/Library/LaunchDaemons"
-                ln -sf "${itemdir}/${startupitem.plist}" "${destroot}/Library/LaunchDaemons"
+                ln -sf "${prefix}/etc/LaunchDaemons/${startupitem.uniquename}/${startupitem.plist}" "${destroot}/Library/LaunchDaemons"
             }
             startupitem.create no
             startupitem.autostart yes
