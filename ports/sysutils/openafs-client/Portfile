@@ -105,6 +105,7 @@ if { $use_signed_kext } {
                     system "install_name_tool $args ${toolsdir}/${lib}"
                 }
                 system "install_name_tool $args ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
+		system "codesign --remove-signature ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
             }
             post-destroot {
                 set pkgpath ${workpath}/auristor-unpacked
@@ -146,7 +147,7 @@ if { $use_signed_kext } {
                     file mkdir /afs
                 }
                 system "/usr/libexec/PlistBuddy -c \"Print :SkipPaths:\" /Library/Preferences/com.apple.TimeMachine.plist | grep /afs || /usr/libexec/PlistBuddy -c 'Add :SkipPaths: string \"/afs\"' /Library/Preferences/com.apple.TimeMachine.plist"
-                if {[catch {system kextload /Library/Extensions/yfs.kext}]} {
+                if {[catch {system "kextload ${prefix}/Library/Extensions/yfs.kext"}]} {
                     notes-append {
                         You must allow the kernel extension to load by visiting the Security
                         preference pane. You can go there by running:
