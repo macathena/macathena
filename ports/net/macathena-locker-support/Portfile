@@ -17,4 +17,4 @@ checksums           rmd160  4019e3efc3d99de9306c5f3d269fb25094f32a69 \
                     sha256  2812c83ec367bb574e7bbea5aa768bd66ca8353f1a68346e8cb5faa565af7a98 \
                     size    25054
 use_tar		yes
-depends_lib	port:python-afs
+depends_lib	port:py${python.version}-afs
