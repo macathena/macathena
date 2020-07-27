@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem	1.0
+PortGroup 	github 1.0
+PortGroup	python 1.0
+
+github.setup	macathena python-afs 300a92404859ed99a8d9db066b9526c363760e21 
+name		py-afs
+version		0.2.3
+categories	devel
+platforms	darwin
+maintainers	mit.edu:sipb-macathena
+description	Python bindings for AFS
+python.versions	27 37 38
+checksums           rmd160  97423b8736bc1ffa96b48bbf3ae697b915e8d83b \
+                    sha256  5ba24c9428ceb8ce060371e989b16903ec293a6e82533cee9396cbb1e3a51098 \
+                    size    17840
+if {${name} ne ${subport}} {
+    depends_lib		port:py${python.version}-cython \
+			port:openafs-client
+    post-patch {
+        reinplace "s|/opt/local|${prefix}|g" ${worksrcpath}/setup.py
+    }
+}

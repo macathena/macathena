@@ -1,0 +1,23 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           github 1.0
+
+github.setup        macathena locker-support 8bebaf104fea5d5bbeed9eb6ff57e902cd79d2e9
+
+name                macathena-locker-support
+version             10.4.8
+categories          net
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         Programs for working with Athena lockers
+# Workaround for our old py-hesiod
+patchfiles          patch-locker.py
+patch.args          -p1
+python.default_version 38
+checksums           rmd160  5199bfdac32445973a028aed15c31a96e3b01919 \
+                    sha256  7ee9b98e9cdd80a41410e079fe1db1cbdafb4a892cd24456ad825ec11fcfbe14 \
+                    size    25180
+use_tar             yes
+depends_lib         port:py${python.version}-afs \
+                    port:py${python.version}-hesiod
