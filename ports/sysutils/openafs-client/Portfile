@@ -1,0 +1,168 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+
+name                openafs-client
+version             1.8.6
+revision            2
+categories          sysutils
+license             IPL-1
+maintainers         mit.edu:sipb-macathena
+description         AFS distributed fileystem client
+long_description    AFS is a distributed filesystem allowing cross-platform \
+                    sharing of files among multiple computers.  Facilities \
+                    are provided for access control, authentication, backup \
+                    and administrative management.
+homepage            http://www.openafs.org/
+master_sites        http://openafs.org/dl/openafs/${version}/
+distname            openafs-${version}-src
+
+checksums           openafs-1.8.6-src.tar.gz \
+                    rmd160  4a59624b935f25c9819902dfd38ee54d66b2a8d6 \
+                    sha256  9efc374ef32b90ed62e59280535babff684d1bb551889d08abbf3e9d93e2e7d2 \
+                    size    17789990 \
+                    Auristor-client-0.195-Mojave.dmg \
+                    rmd160  403ca9683d6a541e0eff8b79f7b82ea0f2afef88 \
+                    sha256  9b0ff041d5158ab63b95e2520a01c81a9e6535f06955ff1e0c18a0b635b4f553 \
+                    size    8651568 \
+                    Auristor-client-0.195-Catalina.dmg \
+                    rmd160  ede269da7ccc9d422f8131ec666ce27411891ba6 \
+                    sha256  f24a450376bbfe9d6994c34a4bd8fe05af3c5522d93b01a8930d808d88dc5ca1 \
+                    size    8657345 \
+                    CellServDB \
+                    rmd160  e0995062877e21b6887b57399a0cc9ae057c4092 \
+                    sha256  62e6510079f7565b7c642d7b799342bee36c89fe6d510bc24559785fabb1b2f2 \
+                    size    36955
+
+universal_variant   no
+
+worksrcdir openafs-${version}
+
+# Allow xcodebuild for the prefpane
+use_xcode           yes
+
+depends_build       port:swig-perl
+
+patchfiles          swig-com_err.patch \
+                    afsd_fuse.patch \
+                    xcodebuild.patch
+patch.args          -p1
+post-patch {
+    reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
+}
+
+if {${os.major} >= 13} {
+    set use_signed_kext    yes
+} else {
+    set use_signed_kext    no
+}
+
+post-destroot {
+    # Create default config
+    file mkdir ${destroot}${prefix}/etc/openafs
+    system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
+    file mkdir ${destroot}${prefix}/etc/openafs/config
+    #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
+    system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
+    #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
+}
+
+if { $use_signed_kext } {
+    set mp.dist {
+        13 9 Mavericks
+        14 10 Yosemite
+        15 11 ElCapitan
+        16 12 Sierra
+        17 13 HighSierra
+        18 14 Mojave
+        19 15 Catalina
+    }
+    foreach { mp.darwin mp.os mp.name } ${mp.dist} {
+        if {${os.major} == ${mp.darwin}} {
+            configure.args-append --disable-kernel-module
+            # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
+            master_sites-append https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}:auristor
+            distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
+            use_dmg yes
+            extract.only Auristor-client-0.195-${mp.name}.dmg
+            post-extract {
+                system -W ${workpath} "tar -xvf ${distpath}/openafs-${version}-src.tar.gz"
+                move ${workpath}/${distname} ${workpath}/auristor-dmg
+                system -W ${workpath}/auristor-dmg "pkgutil --expand 'Auristor-Lite.pkg' ${workpath}/auristor-pkg"
+                file mkdir ${workpath}/auristor-unpacked
+                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-common.pkg/Payload | cpio -id"
+                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-client.pkg/Payload | cpio -id"
+            }
+            post-patch {
+                # Auristor libraries have hard-coded paths that must be removed.
+                set toolsdir ${workpath}/auristor-unpacked/Library/Auristor/Tools
+                set libs [glob -directory ${toolsdir} -tails lib/*.dylib private/*.dylib]
+                set args "-add_rpath ${prefix}/Library/Auristor/Tools"
+                foreach lib $libs {
+                    append args " -change /Library/Auristor/Tools/${lib} @rpath/${lib}"
+                }
+                foreach lib $libs {
+                    system "install_name_tool $args ${toolsdir}/${lib}"
+                }
+                system "install_name_tool $args ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
+		system "codesign --remove-signature ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
+            }
+            post-destroot {
+                set pkgpath ${workpath}/auristor-unpacked
+                copy ${pkgpath}/Library/Auristor \
+                    ${pkgpath}/Library/Extensions \
+                    ${destroot}${prefix}/Library/
+                # We only install the Auristor afsd and kernel module.
+                # We drop /usr/local/bin/{aklog,fs,pts,tokens,unlog} in favor of OpenAFS versions.
+                # (Yes, that means you won't be able to use Auristor-specific features.)
+                copy ${pkgpath}/usr/local/libexec/ ${destroot}${prefix}/libexec/auristor/
+                file mkdir ${destroot}/var/openafs/yfs ${destroot}/var/openafs/yfs-afsd
+                destroot.keepdirs-append \
+                    ${destroot}${prefix}/var/openafs/yfs \
+                    ${destroot}${prefix}/var/openafs/yfs-afsd
+
+                # Create default config
+                file mkdir ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
+                destroot.keepdirs-append ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
+                copy ${filespath}/yfs-client.conf ${destroot}${prefix}/etc/openafs/yfs-client.conf
+                reinplace "s|@PREFIX@|${prefix}|" ${destroot}${prefix}/etc/openafs/yfs-client.conf
+                copy ${pkgpath}/private/etc/yfs/cellservdb.conf ${destroot}${prefix}/etc/openafs/cellservdb.conf
+                copy ${pkgpath}/private/etc/yfs/config/settings.plist.orig ${destroot}${prefix}/etc/openafs/config/settings.plist
+
+                # Write startup item
+                set itemdir ${destroot}${prefix}/etc/LaunchDaemons/${startupitem.uniquename}
+                file mkdir ${itemdir}
+                copy ${filespath}/launchdaemon.plist ${itemdir}/${startupitem.plist}
+                reinplace "s|@PREFIX@|${prefix}|g; s|@UNIQUENAME@|${startupitem.uniquename}|g" ${itemdir}/${startupitem.plist}
+                # Install startup item
+                file mkdir "${destroot}/Library/LaunchDaemons"
+                ln -sf "${prefix}/etc/LaunchDaemons/${startupitem.uniquename}/${startupitem.plist}" "${destroot}/Library/LaunchDaemons"
+            }
+            startupitem.create no
+            startupitem.autostart yes
+            post-activate {
+                if {[file exists /usr/share/firmlinks]} {
+                    system "(grep ^afs /etc/synthetic.conf || echo afs >> /etc/synthetic.conf) > /dev/null 2>&1"
+                } else {
+                    file mkdir /afs
+                }
+                system "/usr/libexec/PlistBuddy -c \"Print :SkipPaths:\" /Library/Preferences/com.apple.TimeMachine.plist | grep /afs || /usr/libexec/PlistBuddy -c 'Add :SkipPaths: string \"/afs\"' /Library/Preferences/com.apple.TimeMachine.plist"
+                if {[catch {system "kextload ${prefix}/Library/Extensions/yfs.kext"}]} {
+                    notes-append {
+                        You must allow the kernel extension to load by visiting the Security
+                        preference pane. You can go there by running:
+                        open "x-apple.systempreferences:com.apple.preference.security?General"
+                    }
+                }
+            }
+        }
+    }
+}
+
+destroot.target install dest
+
+master_sites-append http://grand.central.org/dl/cellservdb/:csdb
+distfiles-append CellServDB:csdb
+post-destroot {
+    copy ${distpath}/CellServDB ${destroot}${prefix}/etc/openafs/CellServDB
+}
