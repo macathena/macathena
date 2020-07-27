@@ -17,4 +17,3 @@ use_autoreconf      yes
 
 depends_lib-append  port:libidn
 
-#destroot.violate_mtree	yes

@@ -28,3 +28,8 @@ post-patch {
 
 depends_lib         port:py${python.version}-hesiod \
                     port:py${python.version}-fuse
+post-activate {
+    if {[file exists /usr/share/firmlinks]} {
+        system "(grep ^mit /etc/synthetic.conf || echo mit >> /etc/synthetic.conf) > /dev/null 2>&1"
+    }
+}
