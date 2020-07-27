@@ -1,6 +1,6 @@
 # MacAthena
 ## Welcome to MacAthena
- The MacAthena project is working to bring the functionality of the [Athena system](http://web.mit.edu/is/topics/athena/) to your [Mac OS X](http://www.apple.com/macosx/) Tiger, Leopard, Snow Leopard, or Lion machine.
+ The MacAthena project is working to bring the functionality of the [Athena system](http://web.mit.edu/is/topics/athena/) to your [Mac OS X](http://www.apple.com/macosx/) Tiger, Leopard, Snow Leopard, Lion, Mojave, or Catalina machine.
 
 MacAthena is a project of [SIPB](http://sipb.mit.edu/). If you have questions or comments, please contact the [MacAthena maintainers.](mailto:sipb-macathena@mit.edu)
 
