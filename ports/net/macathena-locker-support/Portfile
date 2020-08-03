@@ -7,13 +7,11 @@ github.setup        macathena locker-support 8bebaf104fea5d5bbeed9eb6ff57e902cd7
 
 name                macathena-locker-support
 version             10.4.8
+revision            1
 categories          net
 maintainers         mit.edu:sipb-macathena
 platforms           darwin
 description         Programs for working with Athena lockers
-# Workaround for our old py-hesiod
-patchfiles          patch-locker.py
-patch.args          -p1
 python.default_version 38
 checksums           rmd160  5199bfdac32445973a028aed15c31a96e3b01919 \
                     sha256  7ee9b98e9cdd80a41410e079fe1db1cbdafb4a892cd24456ad825ec11fcfbe14 \
