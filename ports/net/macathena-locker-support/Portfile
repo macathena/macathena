@@ -21,3 +21,6 @@ checksums           rmd160  5199bfdac32445973a028aed15c31a96e3b01919 \
 use_tar             yes
 depends_lib         port:py${python.version}-afs \
                     port:py${python.version}-hesiod
+
+depends_run		port:macathena-machtype \
+                        port:macathena-pyhesiodfs
