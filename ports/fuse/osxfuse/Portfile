@@ -5,6 +5,7 @@ PortSystem          1.0
 name                osxfuse
 epoch               2
 version             3.11.0
+revision            1
 categories          fuse devel
 platforms           macosx
 license             BSD APSL
@@ -49,7 +50,16 @@ patch {
 
 use_configure   no
 build {
+    system "install_name_tool -change /usr/local/lib/libosxfuse.2.dylib ${prefix}/lib/libosxfuse.2.dylib ${workpath}/pkg/unpacked/Library/Frameworks/OSXFUSE.framework/Versions/A/OSXFUSE"
     system "install_name_tool -change /usr/local/lib/libfuse_ino64.2.dylib ${prefix}/lib/libfuse_ino64.2.dylib ${workpath}/pkg/unpacked/Library/Frameworks/MacFUSE.framework/Versions/A/MacFUSE"
+    system "codesign --remove-signature ${workpath}/pkg/unpacked/Library/Frameworks/MacFUSE.framework/Versions/A/MacFUSE"
+    set libs [glob -directory ${workpath}/pkg/unpacked/usr/local/lib -tails *.dylib]
+    foreach lib $libs {
+        if {[file type ${workpath}/pkg/unpacked/usr/local/lib/$lib] ne "link"} {
+            system "install_name_tool -id ${prefix}/lib/$lib ${workpath}/pkg/unpacked/usr/local/lib/$lib"
+            system "codesign --remove-signature ${workpath}/pkg/unpacked/usr/local/lib/$lib"
+        }
+    }
 }
 
 destroot {
