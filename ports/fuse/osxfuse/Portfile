@@ -55,6 +55,7 @@ build {
     foreach lib $libs {
         if {[file type ${workpath}/pkg/unpacked/usr/local/lib/$lib] ne "link"} {
             system "install_name_tool -id ${prefix}/lib/$lib ${workpath}/pkg/unpacked/usr/local/lib/$lib"
+            system "codesign --remove-signature ${workpath}/pkg/unpacked/usr/local/lib/$lib"
         }
     }
 }
