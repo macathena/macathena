@@ -23,5 +23,4 @@ destroot		{
 }
 
 depends_run		port:macathena-moira \
-				port:macathena-machtype \
-				port:macathena-athrun
+				port:macathena-locker-support
