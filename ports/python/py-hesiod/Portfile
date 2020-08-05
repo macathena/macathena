@@ -4,9 +4,9 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           python 1.0
 
-github.setup        mit-scripts python-hesiod 583fc21cee08baaf5117ed8045bf18a9252eba84
+github.setup        macathena python-hesiod e764d7cbe9ed013579af34f4b092ba7e68fc5ad3
 name                py-hesiod
-version             0.2.11
+version             0.2.13
 
 categories-append   devel
 platforms           darwin
@@ -14,9 +14,9 @@ license             MIT
 maintainers         mit.edu:sipb-macathena
 description         Python bindings for the Hesiod name resolution library
 
-checksums           rmd160  17fdc201871dcfda2c324e1d8704657604d8dd58 \
-                    sha256  ed98670e76f92e351ef5afc33320f2e8a09fe7332a639a3cc3782f8a35710713 \
-                    size    3439
+checksums           rmd160  ca5d103caec3dfe2585f7ebdac4360a475f7b332 \
+                    sha256  9ebf1d13b367d90a571d6378fd3ae05ad9047427cb9061aca3c55560df58305c \
+                    size    3949
 
 python.versions     27 36 37 38
 
@@ -24,8 +24,8 @@ if {${name} ne ${subport}} {
     depends_lib-append      port:hesiod \
                             port:py${python.version}-cython \
                             port:py${python.version}-setuptools
-}
-patchfiles              patch-setup.py
-post-patch {
-    reinplace "s|__PREFIX__|${prefix}|g" ${worksrcpath}/setup.py
+    patchfiles              patch-setup.py
+    post-patch {
+        reinplace "s|__PREFIX__|${prefix}|g" ${worksrcpath}/setup.py
+    }
 }
