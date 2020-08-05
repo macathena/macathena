@@ -19,9 +19,17 @@ destroot		{
 	file mkdir ${destroot}/etc/athena
 	file copy ${filespath}/reactivate ${destroot}/etc/athena
 	file copy ${filespath}/version ${destroot}/etc/athena
-	
-	file mkdir ${destroot}/usr
-	file mkdir ${destroot}/bin
-	ln -s /usr ${destroot}/usr/athena
-	ln -s /bin ${destroot}/bin/athena
+
+	if {${os.major} >= 15} {
+		notes-append {
+			System Integrity Protection prevents the creation of /usr/athena and /bin/athena. Many Athena programs will still work without this, but some require these directories to work properly. If you want to run these programs, you will need to boot into recovery mode and run the following commands:
+ln -s /usr /usr/athena
+ln -s /bin /bin/athena
+		}
+	} else {
+		file mkdir ${destroot}/usr
+		ln -s /usr ${destroot}/usr/athena
+		file mkdir ${destroot}/bin
+		ln -s /bin ${destroot}/bin/athena
+	}
 }
