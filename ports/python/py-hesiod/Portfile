@@ -24,8 +24,8 @@ if {${name} ne ${subport}} {
     depends_lib-append      port:hesiod \
                             port:py${python.version}-cython \
                             port:py${python.version}-setuptools
-}
-patchfiles              patch-setup.py
-post-patch {
-    reinplace "s|__PREFIX__|${prefix}|g" ${worksrcpath}/setup.py
+    patchfiles              patch-setup.py
+    post-patch {
+        reinplace "s|__PREFIX__|${prefix}|g" ${worksrcpath}/setup.py
+    }
 }
