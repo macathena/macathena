@@ -1,0 +1,49 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem		1.0
+PortGroup		config_package 1.0
+
+name			macathena-clients
+categories      meta
+version			0.1
+revision		1
+
+config.meta
+
+depends_run \
+    port:hesiod \
+    port:macathena-hes \
+    port:macathena-kerberos-config \
+    port:macathena-moira \
+    port:openldap
+# macathena-msmtp-config
+
+# Remaining packages from debathena-clients:
+# athena-jot
+# debathena-apparmor-config
+# debathena-athinfo
+# debathena-counterlog
+# debathena-discuss
+# debathena-discuss-emacs
+# debathena-discuss-ng
+# debathena-from-config
+# debathena-getcluster
+# debathena-get-message
+# debathena-hesiod-config
+# debathena-hostinfo
+# debathena-lam
+# debathena-ldap-config
+# debathena-mitmailutils
+# debathena-nmh-config
+# debathena-printing-config
+# debathena-rs
+# debathena-saferm
+# debathena-sendbug
+# debathena-ssh-client-config
+# debathena-ssl-certificates
+# debathena-syncupdate
+# debathena-tex-extras
+# debathena-xcluster
+# debathena-xdsc
+# debathena-zephyr-config
+# finger (>= 0.17-13~)
+# tzc
