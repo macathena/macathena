@@ -1,0 +1,10 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem 1.0
+default_variants +gssapi_mit
+
+# Include the libgsasl port from the same source that provides
+# "macports" (i.e. upstream).
+set upstream_ports [mport_lookup macports]
+array set upstream [lindex $upstream_ports 1]
+source [file join [getportdir $upstream(porturl)] ../../security/libgsasl/Portfile]
