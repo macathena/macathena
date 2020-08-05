@@ -1,0 +1,36 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem		1.0
+PortGroup		config_package 1.0
+
+name			macathena-locker
+categories      meta
+version			0.1
+revision		1
+description		Metapackage providing Athena locker support
+long_description 	This package installs support for accessing MIT AFS lockers and \
+ running software from them.
+
+config.meta
+
+depends_run \
+    port:openafs-client \
+    port:hesiod \
+    port:macathena-base \
+    port:macathena-kerberos-config \
+    port:macathena-locker-support \
+    port:macathena-machtype \
+    port:macathena-pyhesiodfs
+
+# Remaining packages from debathena-locker:
+# debathena-afs-config
+# debathena-athrun
+# debathena-attachandrun
+# debathena-bash-config
+# debathena-delete
+# debathena-hesiod-config
+# debathena-machtype
+# debathena-quota
+# debathena-quota-config
+# debathena-tcsh-config
+# debathena-tellme
+# debathena-zephyr-config
