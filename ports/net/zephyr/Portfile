@@ -1,0 +1,49 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=u
+PortSystem          1.0
+PortGroup           github 1.0
+
+github.setup        zephyr-im zephyr 3.1.2 release/
+license             MIT
+categories          net
+maintainers         mit.edu:sipb-macathena
+description         Zephyr IM system
+long_description \
+    An institutional/enterprise-scale distributed real-time messaging and notification system
+platforms           darwin
+checksums           md5     dd16984018d923a908f770e61d809ec1 \
+                    sha1    a0b2d83c80a0849f14e9119b67287e56ae5fc6dd \
+                    rmd160  ca62bdaf4b991c990094aa9c333a62de130aaca8 \
+                    sha256  b5755642d40cb1afe486c47a89d54ef64a40441b6e204e1958b08b5c84105eef \
+                    size    740393
+
+patchfiles \
+    0001-Check-for-proper-symbols-for-Darwin-libresolv.patch \
+    0002-Use-the-IP-address-from-SystemConfiguration-for-daem.patch
+
+patch.args          -p1
+
+use_autoreconf      yes
+
+configure.args-append \
+    --with-hesiod \
+    --with-krb5
+
+depends_build-append \
+    port:bison \
+    port:flex \
+    port:imake
+
+depends_lib-append \
+    port:c-ares \
+    port:e2fsprogs \
+    port:hesiod \
+    port:kerberos5 \
+    port:libcomerr \
+    port:xorg-libice \
+    port:xorg-libX11
+
+startupitem.autostart  yes
+startupitem.create     yes
+startupitem.name       zhm
+startupitem.executable ${prefix}/sbin/zhm -n -f -N
+startupitem.netchange  yes

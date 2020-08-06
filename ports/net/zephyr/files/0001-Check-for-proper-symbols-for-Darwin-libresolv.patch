@@ -1,0 +1,26 @@
+From 420e0448e2740ca034cff35b4b29e103072c9c89 Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Thu, 6 Aug 2020 00:55:41 -0400
+Subject: [PATCH 1/2] Check for proper symbols for Darwin libresolv
+
+---
+ configure.ac | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index dd0dc5aa..f29fe776 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -175,7 +175,8 @@ if test "$krb5" != no; then
+    AC_CHECK_FUNC(res_send, :,
+                  AC_CHECK_LIB(resolv, res_send, LIBZEPHYR_LIBS="-lresolv $LIBZEPHYR_LIBS",
+                               AC_CHECK_LIB(resolv, __res_send, LIBZEPHYR_LIBS="-lresolv $LIBZEPHYR_LIBS",
+-                                           AC_MSG_ERROR(Zephyr requires libresolv along with Kerberos V.))))
++                                           AC_CHECK_LIB(resolv, res_9_send, LIBZEPHYR_LIBS="-lresolv $LIBZEPHYR_LIBS",
++                                                        AC_MSG_ERROR(Zephyr requires libresolv along with Kerberos V.)))))
+    case "$target_os" in 
+       darwin*) KRB5_LIBS="$KRB5_LIBS -framework Kerberos" ;;
+    esac 
+-- 
+2.25.1
+
