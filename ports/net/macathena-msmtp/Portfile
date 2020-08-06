@@ -1,0 +1,32 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           github 1.0
+PortGroup           perl5 1.0
+PortGroup           active_variants 1.1
+
+github.setup        mit-athena msmtp-config 1.9.3
+
+name                macathena-msmtp
+categories          net
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         Sendmail replacement using MSMTP
+checksums           rmd160  7b0170113fc1ec9f363f79db395d766312933cc4 \
+                    sha256  ab1390f56ac9d4cf278b553964da3492bb5a8bf5ba4c6b69b0bbb14c988c2f16 \
+                    size    7176
+
+patch {
+    reinplace "s|#!/usr/bin/perl|#!${prefix}/bin/perl${perl5.default_branch}|" ${worksrcpath}/debian/debathena-msmtp
+}
+configure {}
+build {}
+destroot {
+    file copy ${worksrcpath}/debian/debathena-msmtp ${destroot}${prefix}/libexec/macathena-msmtp
+}
+
+depends_run	    port:msmtp \
+    port:libgsasl \
+    port:perl${perl5.default_branch} \
+    port:p${perl5.major}-mail-expandaliases
+
+require_active_variants port:libgsasl gssapi_mit
