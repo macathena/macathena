@@ -1,0 +1,25 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           perl5 1.0
+
+perl5.branches      5.26 5.28 5.30
+perl5.setup         Object-Event 1.23
+license             {Artistic-1 GPL}
+maintainers         mit.edu:sipb-macathena
+description         A class that provides an event callback interface
+long_description    ${description}
+
+platforms           darwin
+
+checksums           rmd160  0a3ba17a502d5cce2e40c9ce683b2677658acf71 \
+                    sha256  ab6bb80508f4fddaf2d51b20ca876aab038582a86b5228e6435411348af53c82 \
+                    size    15740
+
+if {${perl5.major} != ""} {
+    depends_lib-append \
+        port:p${perl5.major}-anyevent \
+        port:p${perl5.major}-common-sense
+
+    supported_archs     noarch
+}

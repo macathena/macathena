@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           perl5 1.0
+
+perl5.branches      5.26 5.28 5.30
+perl5.setup         PAR 1.016
+license             {Artistic-1 GPL}
+maintainers         mit.edu:sipb-macathena
+description         Perl Archive Toolkit
+long_description    ${description}
+
+platforms           darwin
+
+checksums           rmd160  6d00358106f4e04a9ffe11e1adbdbf84e39d6f95 \
+                    sha256  0a25fbaf3367ae92c1a880105f4e080df0e7749b457172abd8bec47644dd9d97 \
+                    size    66317
+
+if {${perl5.major} != ""} {
+    depends_lib-append \
+        port:p${perl5.major}-archive-zip
+
+    supported_archs     noarch
+}

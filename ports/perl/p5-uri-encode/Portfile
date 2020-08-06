@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           perl5 1.0
+
+perl5.branches      5.26 5.28 5.30
+perl5.setup         URI-Encode v1.1.1 ../../authors/id/M/MI/MITHUN
+license             {Artistic-1 GPL}
+maintainers         mit.edu:sipb-macathena
+description         Simple percent Encoding/Decoding
+long_description    ${description}
+
+platforms           darwin
+
+checksums           rmd160  88594beedeb9bccb4a9ee33c347e77fc4294d21e \
+                    sha256  4bb9ce4e7016c0138cf9c2375508595286efa1c8dc15b45baa4c47281c08243b \
+                    size    15424
+
+if {${perl5.major} != ""} {
+    depends_lib-append \
+        port:p${perl5.major}-encode
+
+    supported_archs     noarch
+}

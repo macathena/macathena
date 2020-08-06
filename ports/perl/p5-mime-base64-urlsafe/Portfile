@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           perl5 1.0
+
+perl5.branches      5.26 5.28 5.30
+perl5.setup         MIME-Base64-URLSafe 0.01
+license             {Artistic-1 GPL}
+maintainers         mit.edu:sipb-macathena
+description         Perl version of Python's URL-safe base64 codec
+long_description    ${description}
+
+platforms           darwin
+
+checksums           rmd160  561b7c26371079494c91f56b3f23347837f14a1b \
+                    sha256  cb9966c50538bb676ab67bc40a7c841019b23ba2243d0ffcc2ccf084e5c33798 \
+                    size    2404
+
+if {${perl5.major} != ""} {
+    depends_lib-append \
+        port:p${perl5.major}-mime-base64
+
+    supported_archs     noarch
+}
