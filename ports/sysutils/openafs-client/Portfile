@@ -83,6 +83,8 @@ if { $use_signed_kext } {
             # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
             master_sites-append https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}:auristor
             distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
+            # www.auristor.com has an expired intermediary certificate.
+            fetch.ignore_sslcert yes
             use_dmg yes
             extract.only Auristor-client-0.195-${mp.name}.dmg
             post-extract {
