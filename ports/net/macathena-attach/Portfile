@@ -1,28 +1,11 @@
 # $Id$
 PortSystem		1.0
+PortGroup		obsolete 1.0
 
 name			macathena-attach
+replaced_by		macathena-locker-support
 version			1
+revision		1
 # Mapped to the svn revision - please change when attach is updated:
 epoch			8
 categories		net
-maintainers		mit.edu:sipb-macathena
-platforms		darwin
-
-distfiles		
-
-depends_lib		port:macathena-base \
-				port:hesiod
-
-destroot.violate_mtree	yes
-
-fetch			{}
-checksum		{}
-configure		{}
-build			{}
-destroot		{
-	file copy ${filespath}/attach ${destroot}${prefix}/bin/attach
-	
-	file mkdir ${destroot}/bin
-	ln -s ${prefix}/bin/attach ${destroot}/bin
-}

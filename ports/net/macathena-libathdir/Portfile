@@ -1,24 +1,9 @@
 # $Id$
 PortSystem		1.0
+PortGroup		obsolete 1.0
 
 name			macathena-libathdir
+replaced_by		macathena-locker-support
 version			10.1.1
-distname		debathena-libathdir-${version}
+revision		1
 categories		net
-maintainers		mit.edu:sipb-macathena
-platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-checksums           md5     6711e2d2b4910da37b7bb6ecb2318447 \
-                    sha1    8ac64cfe539a917d8d5cfcb8d763aa4fce2f11e9 \
-                    rmd160  15681898577260b254318cd32b52199a873451b7 \
-                    sha256  ebbc9daa9280e04c1e9c04d9252ea67694cab10a196c23c0bbdba7f5d8c6e91e \
-                    size    6679
-
-use_autoreconf	yes
-use_autoconf	yes
-autoreconf.args --install
-
-configure.env-append ATHENA_SYS=[exec machtype -S]
-
-depends_build		port:automake \
-			port:macathena-machtype
