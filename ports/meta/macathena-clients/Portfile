@@ -14,7 +14,7 @@ depends_run \
     port:macathena-hes \
     port:macathena-kerberos-config \
     port:macathena-moira \
-    port:macathena-msmtp-config \
+    port:macathena-msmtp \
     port:openldap
 
 # Remaining packages from debathena-clients:
