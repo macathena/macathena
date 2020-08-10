@@ -1,0 +1,482 @@
+From c560353e1156a19d5cf93accdcc7cddffc2b3caf Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Sat, 8 Aug 2020 19:03:33 -0400
+Subject: [PATCH 8/8] Add UPnP support for opening ports
+
+---
+ clients/zctl/zctl.c   |  2 +
+ clients/zstat/zstat.c |  1 +
+ configure.ac          |  7 +++-
+ h/internal.h          |  7 ++++
+ lib/Makefile.in       |  2 +-
+ lib/ZClosePort.c      | 15 +++++---
+ lib/ZInit.c           | 37 +++++++++++++++----
+ lib/ZLocations.c      |  2 +
+ lib/ZOpenPort.c       |  6 ++-
+ lib/ZRetSubs.c        |  2 +
+ lib/ZSubs.c           |  6 +++
+ lib/ZUPnP.c           | 85 +++++++++++++++++++++++++++++++++++++++++++
+ lib/Zinternal.c       | 15 +++++---
+ zhm/Makefile.in       |  3 +-
+ zhm/zhm.c             |  8 ++++
+ 15 files changed, 176 insertions(+), 22 deletions(-)
+ create mode 100644 lib/ZUPnP.c
+
+diff --git a/clients/zctl/zctl.c b/clients/zctl/zctl.c
+index f18df10a..cc3bb0ce 100644
+--- a/clients/zctl/zctl.c
++++ b/clients/zctl/zctl.c
+@@ -183,6 +183,7 @@ main(int argc,
+ 		if (code)
+ 		    fprintf (stderr, "%s: %s: %s\n",
+ 			     argv[0], error_message (code), ssline);
++		ZClosePort();
+ 		exit((code != 0));
+ 	}
+ 
+@@ -194,6 +195,7 @@ main(int argc,
+ #else
+ 	run_command(argc-1, argv+1);
+ #endif
++	ZClosePort();
+ 	exit(0);
+ }
+ 
+diff --git a/clients/zstat/zstat.c b/clients/zstat/zstat.c
+index 27dd8f40..d18c8b39 100644
+--- a/clients/zstat/zstat.c
++++ b/clients/zstat/zstat.c
+@@ -36,6 +36,7 @@ const char *hm_head[] = {
+     "Size:",
+     "Machine type:",
+     "External IP:",
++    "UPnP IGD Root URL:",
+ };
+ #define	HM_SIZE	(sizeof(hm_head) / sizeof (char *))
+ const char *srv_head[] = {
+diff --git a/configure.ac b/configure.ac
+index 4b776d74..ea9a79c0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -276,7 +276,12 @@ if test "x$with_ares" != "xno"; then
+ 			     AC_MSG_ERROR(libcares not found)))
+ fi
+ AC_SUBST(ARES_LIBS)
+-		    
++
++PKG_CHECK_MODULES([UPNP], [miniupnpc], [AC_DEFINE([HAVE_UPNP], [1], [Use UPnP])], [])
++CFLAGS="$UPNP_CFLAGS $CFLAGS"
++LIBS="$UPNP_LIBS $LIBS"
++LIBZEPHYR_LIBS="$LIBZEPHYR_LIBS $UPNP_LIBS"
++
+ AC_PROG_GCC_TRADITIONAL
+ AC_FUNC_VPRINTF
+ AC_FUNC_GETPGRP
+diff --git a/h/internal.h b/h/internal.h
+index b6e68048..040a6568 100644
+--- a/h/internal.h
++++ b/h/internal.h
+@@ -115,6 +115,9 @@ extern int __subscriptions_next;
+ 
+ extern int __Zephyr_port;		/* Port number */
+ extern struct in_addr __My_addr;
++extern struct in_addr __My_addr_internal;
++extern int __UPnP_active;
++extern char* __UPnP_rooturl;
+ extern int __Zephyr_fd;
+ extern int __Q_CompleteLength;
+ extern struct sockaddr_in __HM_addr;
+@@ -205,4 +208,8 @@ Code_t ZFormatAuthenticNotice(ZNotice_t*, char*, int, int*, C_Block);
+ #define Z_tktprinc(tkt)		((tkt)->client)
+ #endif
+ 
++void Z_InitUPnP_ZHM();
++void Z_InitUPnP();
++void Z_CloseUPnP();
++
+ #endif /* __INTERNAL_H__ */
+diff --git a/lib/Makefile.in b/lib/Makefile.in
+index d76f2a90..d55f18b1 100644
+--- a/lib/Makefile.in
++++ b/lib/Makefile.in
+@@ -42,7 +42,7 @@ OBJS =	zephyr_err.lo ZAsyncLocate.lo ZCkAuth.lo ZCkIfNot.lo ZClosePort.lo \
+ 	ZSendPkt.lo ZSendRaw.lo ZSendRLst.lo ZSetDest.lo ZSetFD.lo ZSetSrv.lo \
+ 	ZSubs.lo ZVariables.lo ZWait4Not.lo Zinternal.lo ZMakeZcode.lo \
+ 	ZReadZcode.lo ZCkZAut.lo quad_cksum.lo charset.lo ZExpnRlm.lo \
+-	ZDumpSession.lo
++	ZDumpSession.lo ZUPnP.lo
+ 
+ .SUFFIXES: .lo
+ 
+diff --git a/lib/ZClosePort.c b/lib/ZClosePort.c
+index bd212b48..849131ea 100644
+--- a/lib/ZClosePort.c
++++ b/lib/ZClosePort.c
+@@ -19,11 +19,16 @@ static const char rcsid_ZClosePort_c[] = "$Id$";
+ Code_t
+ ZClosePort(void)
+ {
+-    if (__Zephyr_fd >= 0 && __Zephyr_open)
+-	(void) close(__Zephyr_fd);
++  if (__Zephyr_fd >= 0 && __Zephyr_open) {
++    (void) close(__Zephyr_fd);
+ 
+-    __Zephyr_fd = -1;
+-    __Zephyr_open = 0;
++#ifdef Z_DEBUG
++    Z_debug_stderr("ZClosePort() closed port %d", ntohs(__Zephyr_port));
++#endif
++  }
++  Z_CloseUPnP();
++  __Zephyr_fd = -1;
++  __Zephyr_open = 0;
+ 	
+-    return (ZERR_NONE);
++  return (ZERR_NONE);
+ }
+diff --git a/lib/ZInit.c b/lib/ZInit.c
+index 9457b8f2..73584649 100644
+--- a/lib/ZInit.c
++++ b/lib/ZInit.c
+@@ -17,6 +17,7 @@ static const char rcsid_ZInitialize_c[] =
+ 
+ #include <internal.h>
+ 
++#include <arpa/inet.h>
+ #include <sys/socket.h>
+ #ifdef HAVE_KRB4
+ #include <krb_err.h>
+@@ -58,6 +59,8 @@ ZInitialize(void)
+     int s;
+     Code_t code;
+     ZNotice_t notice;
++    int nf;
++    char* mp;
+ #ifdef HAVE_KRB5
+     char **krealms = NULL;
+ #else
+@@ -115,6 +118,8 @@ ZInitialize(void)
+        code will fall back to something which might not be "right",
+        but this is is ok, since none of the servers call krb_rd_req. */
+ 
++    __My_addr_internal.s_addr = INADDR_NONE;
++    __My_addr.s_addr = INADDR_NONE;
+     servaddr.s_addr = INADDR_NONE;
+     if (! __Zephyr_server) {
+        if ((code = ZOpenPort(NULL)) != ZERR_NONE)
+@@ -146,6 +151,21 @@ ZInitialize(void)
+        if (hostent && hostent->h_addrtype == AF_INET)
+ 	   memcpy(&servaddr, hostent->h_addr, sizeof(servaddr));
+ 
++       // Field 10 contains our external IP.
++       mp=notice.z_message;
++       *(notice.z_message+notice.z_message_len-1) = 0;
++       for (nf=0;mp<notice.z_message+notice.z_message_len && nf<10; nf++) {
++	 mp += strlen(mp)+1;
++       }
++       if (nf==10 && mp<notice.z_message+notice.z_message_len) {
++	 inet_aton(mp, &__My_addr);
++       }
++       // Field 11 contains the IGD root URL (if UPnP is enabled)
++       mp += strlen(mp)+1;
++       if (mp<notice.z_message+notice.z_message_len) {
++	 __UPnP_rooturl = strdup(mp);
++       }
++
+        ZFreeNotice(&notice);
+     }
+ 
+@@ -180,7 +200,6 @@ ZInitialize(void)
+ #endif
+ #endif
+ 
+-    __My_addr.s_addr = INADDR_NONE;
+     if (servaddr.s_addr != INADDR_NONE) {
+ 	/* Try to get the local interface address by connecting a UDP
+ 	 * socket to the server address and getting the local address.
+@@ -195,25 +214,25 @@ ZInitialize(void)
+ 	    if (connect(s, (struct sockaddr *) &sin, sizeof(sin)) == 0
+ 		&& getsockname(s, (struct sockaddr *) &sin, &sinsize) == 0
+ 		&& sin.sin_addr.s_addr != 0)
+-		memcpy(&__My_addr, &sin.sin_addr, sizeof(__My_addr));
++		memcpy(&__My_addr_internal, &sin.sin_addr, sizeof(__My_addr_internal));
+ 	    close(s);
+ 	}
+     }
+ #if defined(__APPLE__) && defined(__MACH__)
+-    if (__My_addr.s_addr == INADDR_NONE) {
++    if (__My_addr_internal.s_addr == INADDR_NONE) {
+       nwi_state_t state;
+       state = nwi_state_copy();
+       nwi_ifstate_t ifstate;
+       ifstate = nwi_state_get_first_ifstate(state, AF_INET);
+       if (ifstate != NULL) {
+-	memcpy(&__My_addr, &ifstate->iaddr, sizeof(__My_addr));
++	memcpy(&__My_addr_internal, &ifstate->iaddr, sizeof(__My_addr_internal));
+       }
+       if (state != NULL) {
+ 	nwi_state_release(state);
+       }
+     }
+ #endif
+-    if (__My_addr.s_addr == INADDR_NONE) {
++    if (__My_addr_internal.s_addr == INADDR_NONE) {
+ 	/* We couldn't figure out the local interface address by the
+ 	 * above method.  Try by resolving the local hostname.  (This
+ 	 * is a pretty broken thing to do, and unfortunately what we
+@@ -221,13 +240,17 @@ ZInitialize(void)
+ 	if (gethostname(hostname, sizeof(hostname)) == 0) {
+ 	    hostent = gethostbyname(hostname);
+ 	    if (hostent && hostent->h_addrtype == AF_INET)
+-		memcpy(&__My_addr, hostent->h_addr, sizeof(__My_addr));
++		memcpy(&__My_addr_internal, hostent->h_addr, sizeof(__My_addr_internal));
+ 	}
+     }
+     /* If the above methods failed, zero out __My_addr so things will
+      * sort of kind of work. */
++    if (__My_addr_internal.s_addr == INADDR_NONE)
++	__My_addr_internal.s_addr = 0;
++
++    /* If ZHM didn't give us an external address, use the internal one */
+     if (__My_addr.s_addr == INADDR_NONE)
+-	__My_addr.s_addr = 0;
++      __My_addr = __My_addr_internal;
+ 
+     /* Get the sender so we can cache it */
+     (void) ZGetSender();
+diff --git a/lib/ZLocations.c b/lib/ZLocations.c
+index e7537dae..03c26911 100644
+--- a/lib/ZLocations.c
++++ b/lib/ZLocations.c
+@@ -128,6 +128,8 @@ Z_SendLocation(char *class,
+     if (!location_info_set)
+ 	ZInitLocationInfo(NULL, NULL);
+ 
++    Z_InitUPnP();
++
+     memset((char *)&notice, 0, sizeof(notice));
+     notice.z_kind = ACKED;
+     notice.z_port = (u_short) ((wg_port == -1) ? 0 : wg_port);
+diff --git a/lib/ZOpenPort.c b/lib/ZOpenPort.c
+index b15ee286..0b091f6e 100644
+--- a/lib/ZOpenPort.c
++++ b/lib/ZOpenPort.c
+@@ -66,8 +66,12 @@ ZOpenPort(u_short *port)
+     __Zephyr_port = bindin.sin_port;
+     __Zephyr_open = 1;
+ 
++#ifdef Z_DEBUG
++    Z_debug_stderr("ZOpenPort() opened port %d", ntohs(__Zephyr_port));
++#endif
++
+     if (port)
+-	*port = bindin.sin_port;
++	*port = __Zephyr_port;
+ 
+     return ZERR_NONE;
+ }
+diff --git a/lib/ZRetSubs.c b/lib/ZRetSubs.c
+index 9926171b..5757c0f0 100644
+--- a/lib/ZRetSubs.c
++++ b/lib/ZRetSubs.c
+@@ -78,6 +78,8 @@ Z_RetSubs(register ZNotice_t *notice,
+ 		if ((retval = ZOpenPort((u_short *)0)) != ZERR_NONE)
+ 			return (retval);
+ 
++	Z_InitUPnP();
++
+ 	notice->z_kind = ACKED;
+ 	notice->z_port = __Zephyr_port;
+ 	notice->z_class = ZEPHYR_CTL_CLASS;
+diff --git a/lib/ZSubs.c b/lib/ZSubs.c
+index 535f3f99..ac27b185 100644
+--- a/lib/ZSubs.c
++++ b/lib/ZSubs.c
+@@ -93,6 +93,12 @@ ZSubscriptions(register ZSubscription_t *sublist,
+     int size, start, numok;
+     Z_AuthProc cert_routine;
+ 
++    if (ZGetFD() < 0)
++	if ((retval = ZOpenPort((u_short *)0)) != ZERR_NONE)
++	    return (retval);
++
++    Z_InitUPnP();
++
+     /* nitems = 0 means cancel all subscriptions; still need to allocate a */
+     /* array for one item so we can cancel, however. */
+   
+diff --git a/lib/ZUPnP.c b/lib/ZUPnP.c
+new file mode 100644
+index 00000000..a52a9ab0
+--- /dev/null
++++ b/lib/ZUPnP.c
+@@ -0,0 +1,85 @@
++#include <internal.h>
++
++#ifdef HAVE_UPNP
++#include <arpa/inet.h>
++#include <miniupnpc/miniupnpc.h>
++#include <miniupnpc/upnpcommands.h>
++
++static struct UPNPUrls __UPnP_urls = {.controlURL = NULL};
++static struct IGDdatas __UPnP_data;
++static int __UPnP_attempted = 0;
++static char* __UPnP_name = "Zephyr Client";
++
++void Z_InitUPnP_ZHM() {
++  struct UPNPDev * devlist;
++  int upnperror = 0;
++  if (__UPnP_active) {
++    // tried to initialize twice
++    return;
++  }
++  devlist = upnpDiscover(
++			 2000,
++			 NULL/*multicast interface*/,
++			 NULL/*minissdpd socket path*/,
++			 UPNP_LOCAL_PORT_ANY/*sameport*/,
++			 0/*ipv6*/,
++			 2/*TTL*/,
++			 &upnperror);
++  if (devlist) {
++    int igdfound = UPNP_GetValidIGD(devlist, &__UPnP_urls, &__UPnP_data, NULL, 0);
++    if (igdfound) {
++      __UPnP_rooturl = __UPnP_urls.rootdescURL;
++      char extIpAddr[16];
++      if (UPNP_GetExternalIPAddress(__UPnP_urls.controlURL, __UPnP_data.first.servicetype, extIpAddr) == 0) {
++	struct in_addr ext_addr;
++	if (inet_aton(extIpAddr, &ext_addr)) {
++	  __My_addr = ext_addr;
++	  __UPnP_active = 1;
++	}
++      }
++    }
++    freeUPNPDevlist(devlist);
++  }
++  __UPnP_name = "Zephyr Host Manager";
++  Z_InitUPnP();
++}
++
++void Z_InitUPnP() {
++  if (__UPnP_attempted) {
++    return;
++  }
++  __UPnP_attempted = 1;
++  if (__UPnP_rooturl && !__UPnP_active) {
++    __UPnP_active = UPNP_GetIGDFromUrl(__UPnP_rooturl, &__UPnP_urls, &__UPnP_data, NULL, 0);
++  }
++  if (__UPnP_active) {
++    char port_str[16];
++    snprintf(port_str, 16, "%d", ntohs(__Zephyr_port));
++    int ret = UPNP_AddPortMapping(__UPnP_urls.controlURL,
++				  __UPnP_data.first.servicetype,
++				  port_str,
++				  port_str,
++				  inet_ntoa(__My_addr_internal),
++				  __UPnP_name, "UDP", NULL, NULL);
++    // TODO: Handle error 718 (ConflictInMappingEntry) by choosing a new random port.
++  }
++}
++
++void Z_CloseUPnP() {
++  if (__UPnP_active && __UPnP_attempted) {
++    __UPnP_attempted = 0;
++    char port_str[16];
++    snprintf(port_str, 16, "%d", ntohs(__Zephyr_port));
++    UPNP_DeletePortMapping(__UPnP_urls.controlURL,
++			   __UPnP_data.first.servicetype,
++			   port_str,
++			   "UDP",
++			   NULL);
++  }
++}
++#else
++// Noop.
++void Z_InitUPnP_ZHM() {};
++void Z_InitUPnP() {}
++void Z_CloseUPnP() {}
++#endif
+diff --git a/lib/Zinternal.c b/lib/Zinternal.c
+index ecee122f..c2bb0d33 100644
+--- a/lib/Zinternal.c
++++ b/lib/Zinternal.c
+@@ -25,7 +25,10 @@ static const char copyright[] =
+ int __Zephyr_fd = -1;
+ int __Zephyr_open;
+ int __Zephyr_port = -1;
+-struct in_addr __My_addr;
++struct in_addr __My_addr = {.s_addr = INADDR_NONE};
++struct in_addr __My_addr_internal = {.s_addr = INADDR_NONE};
++int __UPnP_active = 0;
++char* __UPnP_rooturl = NULL;
+ int __Q_CompleteLength;
+ int __Q_Size;
+ struct _Z_InputQ *__Q_Head, *__Q_Tail;
+@@ -651,12 +654,12 @@ Z_FormatHeader(ZNotice_t *notice,
+     if (!notice->z_sender)
+ 	notice->z_sender = ZGetSender();
+ 
++    if (ZGetFD() < 0) {
++      retval = ZOpenPort((u_short *)0);
++      if (retval != ZERR_NONE)
++	return (retval);
++    }
+     if (notice->z_port == 0) {
+-	if (ZGetFD() < 0) {
+-	    retval = ZOpenPort((u_short *)0);
+-	    if (retval != ZERR_NONE)
+-		return (retval);
+-	}
+ 	notice->z_port = __Zephyr_port;
+     }
+ 
+diff --git a/zhm/Makefile.in b/zhm/Makefile.in
+index 77bf2c0a..0f1f914c 100644
+--- a/zhm/Makefile.in
++++ b/zhm/Makefile.in
+@@ -32,6 +32,7 @@ CPPFLAGS=@CPPFLAGS@
+ CFLAGS=@CFLAGS@
+ ALL_CFLAGS=${CFLAGS} -I${top_srcdir}/h -I${BUILDTOP}/h ${CPPFLAGS}
+ LDFLAGS=@LDFLAGS@
++LIBS=@LIBS@
+ HESIOD_LIBS=@HESIOD_LIBS@
+ 
+ OBJS=	timer.o queue.o zhm.o zhm_client.o zhm_server.o
+@@ -39,7 +40,7 @@ OBJS=	timer.o queue.o zhm.o zhm_client.o zhm_server.o
+ all: zhm zhm.8
+ 
+ zhm: ${OBJS} ${LIBZEPHYR}
+-	${LIBTOOL} --mode=link ${CC} ${LDFLAGS} -o $@ ${OBJS} ${LIBZEPHYR} ${HESIOD_LIBS} -lcom_err
++	${LIBTOOL} --mode=link ${CC} ${LDFLAGS} -o $@ ${OBJS} ${LIBZEPHYR} ${LIBS} ${HESIOD_LIBS} -lcom_err
+ 
+ zhm.8: ${srcdir}/zhm.8.in Makefile
+ 	${editman} ${srcdir}/$@.in > $@.tmp
+diff --git a/zhm/zhm.c b/zhm/zhm.c
+index 4daff5f3..21953717 100644
+--- a/zhm/zhm.c
++++ b/zhm/zhm.c
+@@ -407,6 +407,8 @@ init_hm(void)
+      }
+      cli_sin = ZGetDestAddr();
+ 
++     Z_InitUPnP_ZHM();
++
+      sp = getservbyname(SERVER_SVCNAME, "udp");
+      memset(&serv_sin, 0, sizeof(struct sockaddr_in));
+      serv_sin.sin_port = (sp) ? sp->s_port : SERVER_SVC_FALLBACK;
+@@ -592,6 +594,12 @@ send_stats(ZNotice_t *notice,
+      strncpy(list[10], inet_ntoa(__My_addr), 32);
+      list[10][31] = '\0';
+ 
++     if (__UPnP_rooturl) {
++       list[11] = stats_malloc(strlen(__UPnP_rooturl));
++       strcpy(list[11], __UPnP_rooturl);
++       nitems++;
++     }
++
+      /* Since ZFormatRaw* won't change the version number on notices,
+ 	we need to set the version number explicitly.  This code is taken
+ 	from Zinternal.c, function Z_FormatHeader */
+-- 
+2.28.0
+

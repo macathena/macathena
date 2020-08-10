@@ -1,0 +1,41 @@
+From 0169d65f0732066dc528af78cf7c23334dd5d126 Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Sun, 9 Aug 2020 01:25:51 -0400
+Subject: [PATCH 2/8] Fix building with -DDEBUG
+
+---
+ server/server.c  | 3 ---
+ server/zserver.h | 3 +++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/server/server.c b/server/server.c
+index 16037753..54d40ca5 100644
+--- a/server/server.c
++++ b/server/server.c
+@@ -112,9 +112,6 @@ long timo_up = TIMO_UP;
+ long timo_tardy = TIMO_TARDY;
+ long timo_dead = TIMO_DEAD;
+ 
+-#ifdef DEBUG
+-int zalone;
+-#endif /* DEBUG */
+ /*
+  * Initialize the array of servers.  The `limbo' server goes in the first
+  * slot (otherservers[0]).
+diff --git a/server/zserver.h b/server/zserver.h
+index b1b4bc83..38dc07b3 100644
+--- a/server/zserver.h
++++ b/server/zserver.h
+@@ -436,6 +436,9 @@ extern fd_set interesting;		/* the file descrips we are listening
+ 					 to right now */
+ extern int nfds;			/* number to look at in select() */
+ extern int zdebug;
++#ifdef DEBUG
++extern int zalone;
++#endif
+ extern char myname[];			/* domain name of this host */
+ extern char list_file[];
+ #ifdef HAVE_KRB5
+-- 
+2.28.0
+

@@ -3,6 +3,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 
 github.setup        zephyr-im zephyr 3.1.2 release/
+revision            2
 license             MIT
 categories          net
 maintainers         mit.edu:sipb-macathena
@@ -17,12 +18,20 @@ checksums           md5     dd16984018d923a908f770e61d809ec1 \
                     size    740393
 
 patchfiles \
-    0001-Check-for-proper-symbols-for-Darwin-libresolv.patch \
-    0002-Use-the-IP-address-from-SystemConfiguration-for-daem.patch
+    0001-Write-PID-file-after-forking-and-before-exiting.patch \
+    0002-Fix-building-with-DDEBUG.patch \
+    0003-Check-for-proper-symbols-for-Darwin-libresolv.patch \
+    0004-Wireshark-dissector.patch \
+    0005-Use-the-IP-address-from-SystemConfiguration-on-OS-X.patch \
+    0006-Fix-buffer-overflow-in-zstat.patch \
+    0007-Report-zhm-s-external-IP-in-zstat.patch \
+    0008-Add-UPnP-support-for-opening-ports.patch
 
 patch.args          -p1
 
 use_autoreconf      yes
+
+# TODO: Figure out why kerberos errors aren't being translated by com_err
 
 configure.args-append \
     --with-hesiod \
@@ -31,7 +40,8 @@ configure.args-append \
 depends_build-append \
     port:bison \
     port:flex \
-    port:imake
+    port:imake \
+    port:pkgconfig
 
 depends_lib-append \
     port:c-ares \
@@ -39,6 +49,7 @@ depends_lib-append \
     port:hesiod \
     port:kerberos5 \
     port:libcomerr \
+    lib:libminiupnpc:miniupnpc \
     port:xorg-libice \
     port:xorg-libX11
 
