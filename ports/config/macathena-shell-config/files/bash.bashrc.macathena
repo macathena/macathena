@@ -1,0 +1,13 @@
+# This is the Macathena bashrc configuration, installed by
+# macathena-bash-config.
+MACATHENA_BASHRC_DIR=@PREFIX@/share/@NAME@/bashrc.d
+
+# Enable MacPorts
+export PATH=@PREFIX@/bin:@PREFIX@/sbin:$PATH
+export MANPATH=@PREFIX@/share/man:$PATH
+
+# Source all bash scripts in our bashrc.d directory.
+for i in `run-parts --list "$MACATHENA_BASHRC_DIR"`; do . "$i"; done
+
+# Inform profile.d that bashrc.d has already been sourced.
+macathena_bashrc_sourced=1
