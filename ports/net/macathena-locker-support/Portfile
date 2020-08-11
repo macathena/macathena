@@ -3,7 +3,7 @@ PortSystem          1.0
 PortGroup           python 1.0
 PortGroup           github 1.0
 
-github.setup        macathena locker-support 8bebaf104fea5d5bbeed9eb6ff57e902cd79d2e9
+github.setup        macathena locker-support 3801013b44488dab81bcea2b72634ba9340a1499 
 
 name                macathena-locker-support
 version             10.4.8
@@ -13,12 +13,13 @@ maintainers         mit.edu:sipb-macathena
 platforms           darwin
 description         Programs for working with Athena lockers
 python.default_version 38
-checksums           rmd160  5199bfdac32445973a028aed15c31a96e3b01919 \
-                    sha256  7ee9b98e9cdd80a41410e079fe1db1cbdafb4a892cd24456ad825ec11fcfbe14 \
-                    size    25180
+checksums           rmd160  3a80671279289c00fb6bcc71d1fabed023447131 \
+                    sha256  34c3d64843bb28db7f4e9f976358841900c16499d2cc73689cfe01ad6ad7bd99 \
+                    size    25198
 use_tar             yes
 depends_lib         port:py${python.version}-afs \
-                    port:py${python.version}-hesiod
+                    port:py${python.version}-hesiod \
+		    port:py${python.version}-six
 
 depends_run		port:macathena-machtype \
                         port:macathena-pyhesiodfs
