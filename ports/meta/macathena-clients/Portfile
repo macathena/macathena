@@ -11,6 +11,7 @@ config.meta
 
 depends_run \
     port:hesiod \
+    port:macathena-alpine-config \
     port:macathena-hes \
     port:macathena-kerberos-config \
     port:macathena-moira \

@@ -6,6 +6,7 @@ name			macathena-kerberos-config
 version			1
 description		Macathena Kerberos configuration
 long_description	Configure Kerberos for the ATHENA.MIT.EDU realm
+distfiles
 
 depends_run		port:kerberos5
 

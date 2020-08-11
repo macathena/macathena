@@ -10,8 +10,6 @@ platforms               darwin
 maintainers             mit.edu:sipb-macathena
 homepage                http://macathena.mit.edu/
 
-distfiles
-
 configure               {}
 build                   {}
 destroot                {}
@@ -20,6 +18,7 @@ options config.readme
 default config.readme {{This is a configuration package.}}
 
 proc config.meta {} {
+    distfiles
     config.readme {${name} for MacAthena
 
 This is a metapackage.  It provides no files, and its only purpose is to cause
@@ -37,31 +36,58 @@ post-destroot {
     close $outfile
 }
 
-options config.files
+options \
+    config.files \
+    config.file_pairs
 option_proc config.files config_files
+default config.file_pairs {}
+
+proc config.add_variant {} {
+    global config._addedvariant
+    if {![info exists config._addedvariant]} {
+        variant manual_config description {Skip installing config files} {
+            config.readme-append "This config package was installed with +manual_config."
+        }
+        set config._addedvariant 1
+    }
+}
+
+pre-destroot {
+    if {[exists config.file_pairs]} {
+        config.readme-append "" "This config package installed the following configuration files:"
+        foreach file [option "config.file_pairs"] {
+            lassign $file src dst
+            config.readme-append [file join ${prefix} ${dst}]
+        }
+    }
+}
 
 proc config_files {option action args} {
+    global filespath
     if {$action ne "set"} {
         return
     }
-    variant manual_config description {Skip installing config files} {
-        config.readme-append "This config package was installed with +manual_config."
-    }
     if {![variant_isset manual_config]} {
-        config.readme-append "This config package installed the following files:"
-        # TODO: Support generated config files
         foreach file [option "config.files"] {
-            if {[string index $file 0] eq "/"} {
-                destroot.violate_mtree yes
-            }
+            config.install ${filespath}${file} ${file}
         }
-        pre-destroot {
-            foreach file [option "config.files"] {
-                set dest [file join ${prefix} ${file}]
-                config.readme-append ${dest}
-                file mkdir ${destroot}[file dirname ${dest}]
-                file copy ${filespath}${file} ${destroot}${dest}
-            }
+    }
+}
+
+proc config.install {src dst} {
+    config.add_variant
+    if {![variant_isset manual_config]} {
+        if {[string index ${dst} 0] eq "/"} {
+            destroot.violate_mtree yes
         }
+        config.file_pairs-append [list ${src} ${dst}]
+    }
+}
+pre-destroot {
+    foreach file ${config.file_pairs} {
+        lassign $file src dst
+        set dest [file join ${prefix} ${dst}]
+        file mkdir ${destroot}[file dirname ${dest}]
+        file copy ${src} ${destroot}${dest}
     }
 }
