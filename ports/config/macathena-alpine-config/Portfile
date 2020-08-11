@@ -1,0 +1,38 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           github 1.0
+PortGroup           config_package 1.0
+
+github.setup        mit-athena alpine-config 1.21.1
+name                macathena-alpine-config
+description         Alpine configuration for Macathena
+long_description    \
+    This package configures Alpine for the Macathena system by \
+    setting up the default inbox, changing a few default flags, and \
+    creating a "pine" symlink for historical compatibility.
+
+checksums           rmd160  b5326981630aa4759550c3f4604913788bcca7e5 \
+                    sha256  33dec0332ee38d862d08c99f19cafef571a7c2aaca57aeb50c6e784ab88920dc \
+                    size    5284
+
+depends_lib \
+    port:alpine
+depends_run \
+    port:macathena-msmtp
+
+patch {
+    reinplace "s|/usr/bin/sensible-browser|/usr/bin/open|" ${worksrcpath}/debian/transform_pine.conf.debathena
+    reinplace "s|/usr/lib/debathena-msmtp|${prefix}/libexec/macathena-msmtp|" ${worksrcpath}/debian/transform_pine.conf.debathena
+    reinplace "s|/base=dc=mit,dc=edu|/base=dc=mit,dc=edu/impl=1|" ${worksrcpath}/debian/transform_pine.conf.debathena
+}
+
+configure {}
+build {
+    system "alpine -conf > ${workpath}/pine.conf.dist"
+    system "perl ${worksrcpath}/debian/transform_pine.conf.debathena < ${workpath}/pine.conf.dist > ${workpath}/pine.conf"
+}
+destroot {
+    ln -s ${prefix}/bin/alpine ${destroot}${prefix}/bin/pine
+}
+
+config.install ${workpath}/pine.conf lib/pine.conf
