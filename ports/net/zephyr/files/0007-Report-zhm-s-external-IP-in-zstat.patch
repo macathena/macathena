@@ -1,0 +1,51 @@
+From 623c8a8e2e696b550f8f343cbb5c8cd69dea958e Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Sun, 9 Aug 2020 05:39:09 -0400
+Subject: [PATCH 7/8] Report zhm's external IP in zstat
+
+---
+ clients/zstat/zstat.c | 3 ++-
+ zhm/zhm.c             | 6 +++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/clients/zstat/zstat.c b/clients/zstat/zstat.c
+index 9f54071f..27dd8f40 100644
+--- a/clients/zstat/zstat.c
++++ b/clients/zstat/zstat.c
+@@ -34,7 +34,8 @@ const char *hm_head[] = {
+     "Looking for a new server:",
+     "Time running:",
+     "Size:",
+-    "Machine type:"
++    "Machine type:",
++    "External IP:",
+ };
+ #define	HM_SIZE	(sizeof(hm_head) / sizeof (char *))
+ const char *srv_head[] = {
+diff --git a/zhm/zhm.c b/zhm/zhm.c
+index 409e737b..4daff5f3 100644
+--- a/zhm/zhm.c
++++ b/zhm/zhm.c
+@@ -535,7 +535,7 @@ send_stats(ZNotice_t *notice,
+      Code_t ret;
+      char *bfr;
+      char *list[20];
+-     int len, i, nitems = 10;
++     int len, i, nitems = 11;
+      unsigned long size;
+      extern int Zauthtype; /* XXX this may be changing in the future */
+ 
+@@ -588,6 +588,10 @@ send_stats(ZNotice_t *notice,
+      strncpy(list[9], MACHINE_TYPE, 32);
+      list[9][31] = '\0';
+ 
++     list[10] = stats_malloc(32);
++     strncpy(list[10], inet_ntoa(__My_addr), 32);
++     list[10][31] = '\0';
++
+      /* Since ZFormatRaw* won't change the version number on notices,
+ 	we need to set the version number explicitly.  This code is taken
+ 	from Zinternal.c, function Z_FormatHeader */
+-- 
+2.28.0
+

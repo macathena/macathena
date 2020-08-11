@@ -1,0 +1,44 @@
+From 54d56748e8e966af9fcc2eecec6e163a883e00dd Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Thu, 6 Aug 2020 04:02:23 -0400
+Subject: [PATCH 2/2] Replace sigwaitinfo on Darwin
+
+Darwin does not have sigwaitinfo. Fortunately, barnowl only ever uses
+the si_signo field of the siginfo_t.
+---
+ configure.ac | 2 ++
+ signal.c     | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index c221689..6107a94 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -186,6 +186,8 @@ AC_CONFIG_LIBOBJ_DIR([compat])
+ AC_CHECK_DECLS([memrchr])
+ AC_REPLACE_FUNCS([memrchr])
+ 
++AC_CHECK_DECLS([sigwaitinfo])
++
+ AC_SUBST([abs_builddir])
+ AC_SUBST([abs_srcdir])
+ 
+diff --git a/signal.c b/signal.c
+index c3a31f8..8a04b10 100644
+--- a/signal.c
++++ b/signal.c
+@@ -71,7 +71,11 @@ static void *signal_thread_func(void *data) {
+     siginfo_t siginfo;
+     int ret;
+ 
++#if HAVE_DECL_SIGWAITINFO
+     ret = sigwaitinfo(&signal_set, &siginfo);
++#else
++    ret = sigwait(&signal_set, &siginfo.si_signo);
++#endif
+     /* TODO: Print an error? */
+     if (ret < 0)
+       continue;
+-- 
+2.25.1
+

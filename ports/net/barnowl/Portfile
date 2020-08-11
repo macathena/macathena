@@ -1,0 +1,57 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=u
+PortSystem          1.0
+PortGroup           github 1.0
+PortGroup           perl5 1.0
+
+github.setup        barnowl barnowl 9a0d25d1513e92f2b0c99d89ab5fc5ae2c061151
+version             1.11dev
+license             BarnOwl
+categories          net
+maintainers         mit.edu:sipb-macathena
+description         Multiprotocol curses IM client
+long_description \
+    owl, with more ponies
+platforms           darwin
+checksums           md5     236d04351ede12e68d009ef615e335f9 \
+                    sha1    0a340470994603176d6c523189b3c017f8500cac \
+                    rmd160  66e171596c810e398056e31078e9854acb13f9f5 \
+                    sha256  77b54ba03ab059e58eb33e4dd01da709aac70ad7136aae335e5752f8945daa81 \
+                    size    497967
+
+use_autoreconf      yes
+
+patchfiles \
+    0001-Add-missing-includes.patch \
+    0002-Replace-sigwaitinfo-on-Darwin.patch
+patch.args -p1
+
+post-patch {
+    ln -s ${prefix}/include ${worksrcpath}/ncursesw
+}
+
+configure.args      --with-zephyr
+
+depends_lib-append \
+    port:kerberos5 \
+    port:ncurses \
+    port:openssl \
+    port:p${perl5.major}-any-moose \
+    port:p${perl5.major}-anyevent \
+    port:p${perl5.major}-anyevent-http \
+    port:p${perl5.major}-anyevent-irc \
+    port:p${perl5.major}-authen-sasl \
+    port:p${perl5.major}-class-accessor \
+    port:p${perl5.major}-datetime \
+    port:p${perl5.major}-datetime-format-strptime \
+    port:p${perl5.major}-extutils-depends \
+    port:p${perl5.major}-glib \
+    port:p${perl5.major}-mime-base64-urlsafe \
+    port:p${perl5.major}-module-install \
+    port:p${perl5.major}-moose \
+    port:p${perl5.major}-net-dns \
+    port:p${perl5.major}-net-twitter-lite \
+    port:p${perl5.major}-ouch \
+    port:p${perl5.major}-par \
+    port:p${perl5.major}-text-autoformat \
+    port:p${perl5.major}-uri-encode \
+    port:zephyr

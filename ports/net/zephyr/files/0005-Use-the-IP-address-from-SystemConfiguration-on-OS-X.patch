@@ -1,0 +1,704 @@
+From 5b9dcc3d2319a78888ed0e81a8eeec39d9991a03 Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Thu, 6 Aug 2020 02:14:13 -0400
+Subject: [PATCH 5/8] Use the IP address from SystemConfiguration on OS X
+
+---
+ lib/ZInit.c                              |  17 ++
+ lib/nwi/network_information.h            | 286 ++++++++++++++++++
+ lib/nwi/network_state_information_priv.h | 355 +++++++++++++++++++++++
+ 3 files changed, 658 insertions(+)
+ create mode 100644 lib/nwi/network_information.h
+ create mode 100644 lib/nwi/network_state_information_priv.h
+
+diff --git a/lib/ZInit.c b/lib/ZInit.c
+index abaa2a4f..9457b8f2 100644
+--- a/lib/ZInit.c
++++ b/lib/ZInit.c
+@@ -24,6 +24,9 @@ static const char rcsid_ZInitialize_c[] =
+ #ifdef HAVE_KRB5
+ #include <krb5.h>
+ #endif
++#if defined(__APPLE__) && defined(__MACH__)
++#include "nwi/network_state_information_priv.h"
++#endif
+ 
+ #ifndef INADDR_NONE
+ #define INADDR_NONE 0xffffffff
+@@ -196,6 +199,20 @@ ZInitialize(void)
+ 	    close(s);
+ 	}
+     }
++#if defined(__APPLE__) && defined(__MACH__)
++    if (__My_addr.s_addr == INADDR_NONE) {
++      nwi_state_t state;
++      state = nwi_state_copy();
++      nwi_ifstate_t ifstate;
++      ifstate = nwi_state_get_first_ifstate(state, AF_INET);
++      if (ifstate != NULL) {
++	memcpy(&__My_addr, &ifstate->iaddr, sizeof(__My_addr));
++      }
++      if (state != NULL) {
++	nwi_state_release(state);
++      }
++    }
++#endif
+     if (__My_addr.s_addr == INADDR_NONE) {
+ 	/* We couldn't figure out the local interface address by the
+ 	 * above method.  Try by resolving the local hostname.  (This
+diff --git a/lib/nwi/network_information.h b/lib/nwi/network_information.h
+new file mode 100644
+index 00000000..3ca3d04f
+--- /dev/null
++++ b/lib/nwi/network_information.h
+@@ -0,0 +1,286 @@
++/*
++ * Copyright (c) 2011-2019 Apple Inc. All rights reserved.
++ *
++ * @APPLE_LICENSE_HEADER_START@
++ *
++ * This file contains Original Code and/or Modifications of Original Code
++ * as defined in and that are subject to the Apple Public Source License
++ * Version 2.0 (the 'License'). You may not use this file except in
++ * compliance with the License. Please obtain a copy of the License at
++ * http://www.opensource.apple.com/apsl/ and read it before using this
++ * file.
++ *
++ * The Original Code and all software distributed under the License are
++ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
++ * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
++ * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
++ * Please see the License for the specific language governing rights and
++ * limitations under the License.
++ *
++ * @APPLE_LICENSE_HEADER_END@
++ */
++
++
++#ifndef _NETWORK_INFORMATION_H_
++#define _NETWORK_INFORMATION_H_
++
++#include <os/availability.h>
++#include <stdint.h>
++#include <sys/cdefs.h>
++
++typedef struct _nwi_state * nwi_state_t;
++typedef struct _nwi_ifstate * nwi_ifstate_t;
++
++__BEGIN_DECLS
++
++/*
++ * Function: nwi_state_copy
++ * Purpose:
++ *   Returns the current network state information; NULL if no state
++ *	information is currently available.
++ *   Release after use by calling nwi_state_release().
++ */
++nwi_state_t
++nwi_state_copy(void);
++
++/*
++ * Function: nwi_state_release
++ * Purpose:
++ *   Release the memory associated with the network state.
++ */
++void
++nwi_state_release(nwi_state_t state);
++
++/*
++ * Function: nwi_state_get_notify_key
++ * Purpose:
++ *   Returns the BSD notify key to use to monitor when the state changes.
++ *
++ * Note:
++ *   The nwi_state_copy API uses this notify key to monitor when the state
++ *   changes, so each invocation of nwi_state_copy returns the current
++ *   information.
++ */
++const char *
++nwi_state_get_notify_key(void);
++
++/*
++ * Function: nwi_state_get_first_ifstate
++ * Purpose:
++ *   Returns the first and highest priority interface that has connectivity
++ *   for the specified address family 'af'. 'af' is either AF_INET or AF_INET6.
++ *   The connectivity provided is for general networking.   To get information
++ *   about an interface that isn't available for general networking, use
++ *   nwi_state_get_ifstate().
++ *
++ *   Use nwi_ifstate_get_next() to get the next, lower priority interface
++ *   in the list.
++ *
++ *   Returns NULL if no connectivity for the specified address family is
++ *   available.
++ */
++nwi_ifstate_t
++nwi_state_get_first_ifstate(nwi_state_t state, int af);
++
++/*
++ * Function: nwi_state_get_generation
++ * Purpose:
++ *   Returns the generation of the nwi_state data.
++ *   Every time the data is updated due to changes
++ *   in the network, this value will change.
++ */
++uint64_t
++nwi_state_get_generation(nwi_state_t state);
++
++/*
++ * Function: nwi_ifstate_get_generation
++ * Purpose:
++ *   Returns the generation of the nwi_ifstate data.
++ */
++uint64_t
++nwi_ifstate_get_generation(nwi_ifstate_t ifstate);
++
++/*
++ * Function: nwi_state_get_ifstate
++ * Purpose:
++ *   Return information for the specified interface 'ifname'.
++ *
++ *   This API directly returns the ifstate for the specified interface.
++ *   This is the only way to access information about an interface that isn't
++ *   available for general networking.
++ *
++ *   Returns NULL if no information is available for that interface.
++ */
++nwi_ifstate_t
++nwi_state_get_ifstate(nwi_state_t state, const char * ifname);
++
++/*
++ * Function: nwi_ifstate_get_ifname
++ * Purpose:
++ *   Return the interface name of the specified ifstate.
++ */
++const char *
++nwi_ifstate_get_ifname(nwi_ifstate_t ifstate);
++
++/*
++ * Type: nwi_ifstate_flags
++ * Purpose:
++ *   Provide information about the interface, including its IPv4 and IPv6
++ *   connectivity, and whether DNS is configured or not.
++ */
++#define NWI_IFSTATE_FLAGS_HAS_IPV4	0x1	/* has IPv4 connectivity */
++#define NWI_IFSTATE_FLAGS_HAS_IPV6	0x2	/* has IPv6 connectivity */
++#define NWI_IFSTATE_FLAGS_HAS_DNS	0x4	/* has DNS configured */
++#define NWI_IFSTATE_FLAGS_HAS_CLAT46	0x0040	/* has CLAT46 configured */
++
++typedef uint64_t nwi_ifstate_flags;
++/*
++ * Function: nwi_ifstate_get_flags
++ * Purpose:
++ *   Return the flags for the given ifstate (see above for bit definitions).
++ */
++nwi_ifstate_flags
++nwi_ifstate_get_flags(nwi_ifstate_t ifstate);
++
++/*
++ * Function: nwi_ifstate_get_next
++ * Purpose:
++ *   Returns the next, lower priority nwi_ifstate_t after the specified
++ *   'ifstate' for the protocol family 'af'.
++ *
++ *   Returns NULL when the end of the list is reached.
++ */
++nwi_ifstate_t
++nwi_ifstate_get_next(nwi_ifstate_t ifstate, int af);
++
++/*
++ * Function: nwi_ifstate_compare_rank
++ * Purpose:
++ *   Compare the relative rank of two nwi_ifstate_t objects.
++ *
++ *   The "rank" indicates the importance of the underlying interface.
++ *
++ * Returns:
++ *   0 	if ifstate1 and ifstate2 are ranked equally
++ *  -1	if ifstate1 is ranked ahead of ifstate2
++ *   1	if ifstate2 is ranked ahead of ifstate1
++ */
++int
++nwi_ifstate_compare_rank(nwi_ifstate_t ifstate1, nwi_ifstate_t ifstate2);
++
++/*
++ * Function: _nwi_state_ack
++ * Purpose:
++ *   Acknowledge receipt and any changes associated with the [new or
++ *   updated] network state.
++ */
++void
++_nwi_state_ack(nwi_state_t state, const char *bundle_id)
++	API_AVAILABLE(macos(10.8), ios(6.0));
++
++/*
++ * Function: nwi_state_get_reachability_flags
++ * Purpose:
++ * Returns the global reachability flags for a given address family.
++ * If no address family is passed in, it returns the global reachability
++ * flags for either families.
++ *
++ * The reachability flags returned follow the definition of
++ * SCNetworkReachabilityFlags.
++ *
++ * If the flags are zero (i.e. do not contain kSCNetworkReachabilityFlagsReachable), there is no connectivity.
++ *
++ * Otherwise, at least kSCNetworkReachabilityFlagsReachable is set:
++ *        Reachable only
++ *          No other connection flags are set.
++ *        Reachable and no ConnectionRequired
++ *          If we have connectivity for the specified address family (and we'd
++ *          be returning the reachability flags associated with the default route)
++ *        Reachable and ConnectionRequired
++ *          If we do not currently have an active/primary network but we may
++ *          be able to establish connectivity.
++ *        Reachable and OnDemand
++ *          If we do not currently have an active/primary network but we may
++ *          be able to establish connective on demand.
++ *        Reachable and TransientConnection
++ *          This connection is transient.
++ *        Reachable and WWAN
++ *          This connection will be going over the cellular network.
++ */
++uint32_t
++nwi_state_get_reachability_flags(nwi_state_t nwi_state, int af);
++
++/*
++ * Function: nwi_state_get_interface_names
++ * Purpose:
++ *   Returns the list of network interface names that have connectivity.
++ *   The list is sorted from highest priority to least, highest priority
++ *   appearing at index 0.
++ *
++ *   If 'names' is NULL or 'names_count' is zero, this function returns
++ *   the number of elements that 'names' must contain to get the complete
++ *   list of interface names.
++ *
++ *   If 'names' is not NULL and 'names_count' is not zero, fills 'names' with
++ *   the list of interface names not exceeding 'names_count'. Returns the
++ *   number of elements that were actually populated.
++ *
++ * Notes:
++ * 1. The connectivity that an interface in this list provides may not be for
++ *    general purpose use.
++ * 2. The string pointers remain valid only as long as 'state' remains
++ *    valid.
++ */
++unsigned int
++nwi_state_get_interface_names(nwi_state_t state,
++			      const char * names[],
++			      unsigned int names_count);
++
++/*
++ * nwi_ifstate_get_vpn_server
++ *
++ * returns a sockaddr representation of the vpn server address.
++ * NULL if PPP/VPN/IPSec server address does not exist.
++ */
++const struct sockaddr *
++nwi_ifstate_get_vpn_server(nwi_ifstate_t ifstate);
++
++/*
++ * nwi_ifstate_get_reachability_flags
++ *
++ * returns the reachability flags for the interface given an address family.
++ * The flags returned are those determined outside of
++ * the routing table.  [None, ConnectionRequired, OnDemand,
++ * Transient Connection, WWAN].
++ */
++uint32_t
++nwi_ifstate_get_reachability_flags(nwi_ifstate_t ifstate);
++
++/*
++ * nwi_ifstate_get_signature
++ *
++ * returns the signature and its length for an ifstate given an address family.
++ * If AF_UNSPEC is passed in, the signature for a given ifstate is returned.
++ *
++ * If the signature does not exist, NULL is returned.
++ */
++const uint8_t *
++nwi_ifstate_get_signature(nwi_ifstate_t ifstate, int af, int * length);
++
++
++/*
++ * nwi_ifstate_get_dns_signature
++ *
++ * returns the signature and its length for given
++ * ifstate with a valid dns configuration.
++ *
++ * If the signature does not exist, NULL is returned.
++ *
++ */
++const uint8_t *
++nwi_ifstate_get_dns_signature(nwi_ifstate_t ifstate, int * length);
++
++__END_DECLS
++
++#endif
+diff --git a/lib/nwi/network_state_information_priv.h b/lib/nwi/network_state_information_priv.h
+new file mode 100644
+index 00000000..06d31c4e
+--- /dev/null
++++ b/lib/nwi/network_state_information_priv.h
+@@ -0,0 +1,355 @@
++/*
++ * Copyright (c) 2011-2013, 2016-2019 Apple Inc. All rights reserved.
++ *
++ * @APPLE_LICENSE_HEADER_START@
++ *
++ * This file contains Original Code and/or Modifications of Original Code
++ * as defined in and that are subject to the Apple Public Source License
++ * Version 2.0 (the 'License'). You may not use this file except in
++ * compliance with the License. Please obtain a copy of the License at
++ * http://www.opensource.apple.com/apsl/ and read it before using this
++ * file.
++ *
++ * The Original Code and all software distributed under the License are
++ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
++ * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
++ * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
++ * Please see the License for the specific language governing rights and
++ * limitations under the License.
++ *
++ * @APPLE_LICENSE_HEADER_END@
++ */
++
++#ifndef _NETWORK_STATE_INFORMATION_PRIV_H_
++#define _NETWORK_STATE_INFORMATION_PRIV_H_
++
++#include <CommonCrypto/CommonDigest.h>
++#include <net/if.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <string.h>
++#include <netinet/in.h>
++#include <sys/socket.h>
++
++#include "network_information.h"
++
++#define NWI_STATE_VERSION	((uint32_t)0x20170601)
++
++
++#define NWI_IFSTATE_FLAGS_NOT_IN_LIST	0x0008
++#define NWI_IFSTATE_FLAGS_HAS_SIGNATURE	0x0010
++#define NWI_IFSTATE_FLAGS_NOT_IN_IFLIST	0x0020
++
++/*
++ * NWI_IFSTATE_FLAGS_MASK
++ * - these are the bits that get preserved, all others are
++ *   control (last item, diff)
++ */
++#define NWI_IFSTATE_FLAGS_MASK		0x00ff
++
++
++#define NWI_IFSTATE_FLAGS_DIFF_MASK	0x0f00
++#define NWI_IFSTATE_FLAGS_LAST_ITEM	0x1000
++
++typedef enum {
++    knwi_ifstate_difference_none = 0,
++    knwi_ifstate_difference_changed = 1,
++    knwi_ifstate_difference_removed = 2
++} nwi_ifstate_difference_t;
++
++
++/*
++ * Type: Rank
++ * Purpose:
++ *   A 32-bit value to encode the relative rank of a service.
++ *
++ *   The top 8 bits are used to hold the rank assertion (first, default, last,
++ *   never, scoped);
++ *
++ *   The bottom 24 bits are used to store the service index (i.e. the
++ *   position within the service order array).
++ */
++typedef uint32_t        Rank;
++#define RANK_ASSERTION_MAKE(r)		((Rank)(r) << 24)		// rank assertion (top 8 bits)
++#define kRankAssertionFirst		RANK_ASSERTION_MAKE(0)
++#define kRankAssertionDefault		RANK_ASSERTION_MAKE(1)
++#define kRankAssertionLast		RANK_ASSERTION_MAKE(2)
++#define kRankAssertionNever		RANK_ASSERTION_MAKE(3)
++#define kRankAssertionScoped		RANK_ASSERTION_MAKE(4)
++#define kRankAssertionMask		RANK_ASSERTION_MAKE(0xff)
++#define RANK_ASSERTION_MASK(r)		((Rank)(r) & kRankAssertionMask)
++#define RANK_INDEX_MAKE(r)		((Rank)(r))			// rank index (bottom 24 bits)
++#define kRankIndexMask			RANK_INDEX_MAKE(0xffffff)
++#define RANK_INDEX_MASK(r)		((Rank)(r) & kRankIndexMask)
++
++typedef int32_t		nwi_ifindex_t;
++
++#define NWI_SIGNATURE_LENGTH	20
++
++#pragma pack(4)
++typedef struct _nwi_ifstate {
++	char			ifname[IFNAMSIZ];
++	uint64_t		flags;
++	nwi_ifindex_t		af_alias_offset; /* relative index to alias */
++	Rank			rank;
++	sa_family_t		af;
++	union {
++	    struct in_addr	iaddr;
++	    struct in6_addr	iaddr6;
++	};
++	uint64_t		if_generation_count;
++	uint32_t		reach_flags;
++	union {
++	    struct sockaddr_in	vpn_server_address4;
++	    struct sockaddr_in6	vpn_server_address6;
++	} vpn_server_address;
++	unsigned char		signature[NWI_SIGNATURE_LENGTH];
++} nwi_ifstate;
++#pragma pack()
++
++#pragma pack(4)
++typedef struct _nwi_state {
++	uint32_t	version;	/* NWI_STATE_VERSION */
++	nwi_ifindex_t	max_if_count;	/* available slots per protocol */
++	nwi_ifindex_t	ipv4_count;	/* # of v4 ifstates in use */
++	nwi_ifindex_t	ipv6_count;	/* # of v6 ifstates in use */
++	nwi_ifindex_t	if_list_count;	/* # of if_list[] slots in use */
++	uint32_t	ref;		/* reference count */
++	uint32_t	reach_flags_v4;
++	uint32_t	reach_flags_v6;
++	uint64_t	generation_count;
++	nwi_ifstate	ifstate_list[1];/* (max_if_count * 2) ifstates */
++/*	nwi_ifindex_t 	if_list[0];        max_if_count indices */
++} nwi_state;
++#pragma pack()
++
++static __inline__ int
++nwi_other_af(int af)
++{
++	return ((af == AF_INET) ? (AF_INET6) : (AF_INET));
++}
++
++static __inline__ size_t
++nwi_state_compute_size(unsigned int max_if_count)
++{
++	size_t	size;
++
++	size = offsetof(nwi_state, ifstate_list[max_if_count * 2])
++		+ sizeof(nwi_ifindex_t) * max_if_count;
++	return (size);
++}
++
++static __inline__ size_t
++nwi_state_size(nwi_state_t state)
++{
++	return (nwi_state_compute_size(state->max_if_count));
++}
++
++static __inline__ nwi_ifstate_t
++nwi_state_ifstate_list(nwi_state_t state, int af)
++{
++	if (af == AF_INET) {
++		return (state->ifstate_list);
++	}
++	return (state->ifstate_list + state->max_if_count);
++}
++
++static __inline__ nwi_ifindex_t *
++nwi_state_if_list(nwi_state_t state)
++{
++	return ((nwi_ifindex_t *)&state->ifstate_list[state->max_if_count * 2]);
++}
++
++static __inline__ int
++uint32_cmp(uint32_t a, uint32_t b)
++{
++	int		ret;
++
++	if (a == b) {
++		ret = 0;
++	}
++	else if (a < b) {
++		ret = -1;
++	}
++	else {
++		ret = 1;
++	}
++	return (ret);
++}
++
++static __inline__ int
++RankCompare(Rank a, Rank b)
++{
++	return (uint32_cmp(a, b));
++}
++
++/*
++ * Function: nwi_state_get_ifstate_count
++ * Purpose:
++ *   Return the number of ifstate elements for the specified address family
++ *   'af'. 'af' is either AF_INET or AF_INET6.
++ *
++ *   Returns zero if there are no elements.
++ */
++static __inline__
++int
++nwi_state_get_ifstate_count(nwi_state_t state, int af)
++{
++	return (af == AF_INET)?state->ipv4_count:state->ipv6_count;
++}
++
++static __inline__ nwi_ifstate_t
++nwi_ifstate_get_alias(nwi_ifstate_t ifstate, int af)
++{
++	if (ifstate->af == af) {
++		return (ifstate);
++	}
++	if (ifstate->af_alias_offset == 0) {
++		return (NULL);
++	}
++	return (ifstate + ifstate->af_alias_offset);
++}
++
++/*
++ *   The ifstate list is sorted in order of decreasing priority, with the
++ *   highest priority element appearing at index zero.
++ *
++ *   If 'idx' is outside of the bounds of the corresponding array, returns NULL.
++ */
++static __inline__
++nwi_ifstate_t
++nwi_state_get_ifstate_with_index(nwi_state_t state, int af, int idx)
++{
++	int i_idx = idx;
++
++	if (idx >= nwi_state_get_ifstate_count(state, af)) {
++		return (NULL);
++	}
++
++	if (af == AF_INET6) {
++		i_idx = idx + state->max_if_count;
++	}
++
++	return &state->ifstate_list[i_idx];
++}
++
++/*
++ * Function: nwi_state_get_ifstate_with_name
++ * Purpose:
++ *   Return the ifstate for the specified ifstate for the specified address
++ *   family 'af'. 'af' is either AF_INET or AF_INET6.
++ *
++ *   Returns NULL if no such information exists.
++ */
++static __inline__
++nwi_ifstate_t
++nwi_state_get_ifstate_with_name(nwi_state_t state,
++				 int af, const char * name)
++{
++	int idx = 0;
++	int count;
++	nwi_ifstate_t ifstate = NULL;
++
++	if (state == NULL) {
++		return NULL;
++	}
++
++	count = (af == AF_INET)
++	?state->ipv4_count:state->ipv6_count;
++
++
++	while (idx < count) {
++		ifstate = nwi_state_get_ifstate_with_index(state, af, idx);
++		if (ifstate == NULL) {
++			break;
++		}
++		if (strcmp(name,
++			   nwi_ifstate_get_ifname(ifstate)) == 0) {
++			return (ifstate);
++		}
++		idx++;
++	}
++	return (NULL);
++}
++
++static __inline__
++void
++_nwi_ifstate_set_vpn_server(nwi_ifstate_t ifstate, struct sockaddr *serv_addr)
++{
++	size_t len;
++
++	if (serv_addr == NULL) {
++		memset(&ifstate->vpn_server_address, 0, sizeof(ifstate->vpn_server_address));
++		return;
++	}
++
++	len = serv_addr->sa_len;
++
++	if (len == 0 || len > sizeof(ifstate->vpn_server_address)) {
++		return;
++	}
++
++	memcpy(&ifstate->vpn_server_address,
++	       serv_addr,
++	       len);
++	return;
++
++}
++
++static __inline__
++void
++_nwi_state_set_reachability_flags(nwi_state_t state, uint32_t reach_flags_v4, uint32_t reach_flags_v6)
++{
++	state->reach_flags_v4 = reach_flags_v4;
++	state->reach_flags_v6 = reach_flags_v6;
++	return;
++}
++
++nwi_state_t
++nwi_state_new(nwi_state_t old_state, int elems);
++
++nwi_state_t
++nwi_state_make_copy(nwi_state_t state);
++
++static __inline__ void
++nwi_state_free(nwi_state_t state)
++{
++	free(state);
++	return;
++}
++
++void
++nwi_state_finalize(nwi_state_t state);
++
++nwi_ifstate_t
++nwi_state_add_ifstate(nwi_state_t state, const char* ifname, int af,
++		      uint64_t flags, Rank rank,
++		      void * ifa, struct sockaddr * vpn_server_addr, uint32_t reach_flags);
++
++void
++nwi_ifstate_set_signature(nwi_ifstate_t ifstate, uint8_t * signature);
++
++void
++nwi_state_clear(nwi_state_t state, int af);
++
++nwi_state_t
++nwi_state_diff(nwi_state_t old_state, nwi_state_t new_state);
++
++void *
++nwi_ifstate_get_address(nwi_ifstate_t ifstate);
++
++const char *
++nwi_ifstate_get_diff_str(nwi_ifstate_t ifstate);
++
++nwi_ifstate_difference_t
++nwi_ifstate_get_difference(nwi_ifstate_t diff_ifstate);
++
++void
++_nwi_state_update_interface_generations(nwi_state_t old_state, nwi_state_t state, nwi_state_t changes);
++
++void
++_nwi_state_compute_sha256_hash(nwi_state_t state,
++			       unsigned char hash[CC_SHA256_DIGEST_LENGTH]);
++
++#endif	// _NETWORK_STATE_INFORMATION_PRIV_H_
+-- 
+2.28.0
+

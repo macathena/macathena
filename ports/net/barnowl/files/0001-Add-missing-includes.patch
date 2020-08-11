@@ -1,0 +1,33 @@
+From e0df96a3dc73e448914c5c50c8341345fa1d86d2 Mon Sep 17 00:00:00 2001
+From: Quentin Smith <quentin@mit.edu>
+Date: Thu, 6 Aug 2020 03:48:16 -0400
+Subject: [PATCH 1/2] Add missing includes
+
+---
+ owl.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/owl.h b/owl.h
+index 0bdbe34..c342a85 100644
+--- a/owl.h
++++ b/owl.h
+@@ -11,6 +11,8 @@
+ 
+ #include <config.h>
+ 
++#define _DARWIN_C_SOURCE
++
+ #include "compat/compat.h"
+ 
+ #include <stdbool.h>
+@@ -32,6 +34,7 @@
+ #include <signal.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <strings.h>
+ #include <termios.h>
+ #include <unistd.h>
+ #include <wchar.h>
+-- 
+2.25.1
+
