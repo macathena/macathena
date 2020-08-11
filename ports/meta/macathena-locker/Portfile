@@ -19,18 +19,16 @@ depends_run \
     port:macathena-kerberos-config \
     port:macathena-locker-support \
     port:macathena-machtype \
-    port:macathena-pyhesiodfs
+    port:macathena-pyhesiodfs \
+    port:macathena-shell-config
 
 # Remaining packages from debathena-locker:
 # debathena-afs-config
 # debathena-athrun
 # debathena-attachandrun
-# debathena-bash-config
 # debathena-delete
 # debathena-hesiod-config
-# debathena-machtype
 # debathena-quota
 # debathena-quota-config
-# debathena-tcsh-config
 # debathena-tellme
 # debathena-zephyr-config
