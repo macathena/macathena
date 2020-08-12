@@ -1,6 +1,5 @@
 namespace eval portfetch::mirror_sites { }
-namespace eval macports { }
-global os.platform os.major
+global os.platform os.major archivefetch_pubkeys
 set portfetch::mirror_sites::sites(macathena_archives) https://macathena.mit.edu/dist/port_archives/:nosubdir
 set portfetch::mirror_sites::archive_type(macathena_archives) tbz2
 set portfetch::mirror_sites::archive_prefix(macathena_archives) /opt/local
@@ -16,4 +15,9 @@ if {${os.platform} eq "darwin" && ${os.major} <= 12} {
 } else {
     set portfetch::mirror_sites::archive_delete_la_files(macathena_archives) yes
 }
-lappend macports::archivefetch_pubkeys "/opt/local/share/macports/macathena-pubkey.pem"
+
+set pubkeypath [file join [file dirname $mirrorfile] "macathena-pubkey.pem"]
+if {[lsearch $archivefetch_pubkeys $pubkeypath] < 0} {
+    lappend archivefetch_pubkeys $pubkeypath
+}
+#ui_debug "archivefetch_pubkeys = ${archivefetch_pubkeys}"
