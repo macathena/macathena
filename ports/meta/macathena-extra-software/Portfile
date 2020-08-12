@@ -1,0 +1,27 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup		config_package 1.0
+
+name                macathena-extra-software
+version             0.1
+revision            1
+categories          meta
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         This package pulls in miscellaneous non-Athena-specific software \
+			for a fully-stocked Athena workstation. Graphical applications \
+			are included. Macathena-extra-software-nox is the non-graphical subset.
+
+config.meta
+
+depends_lib		port:macathena-extra-software-nox \
+			port:pidgin port:pidgin-encryption \
+			port:gv \
+			port:gnuplot \
+			port:gimp \
+			port:twm \
+			port:ratpoison \
+			port:openjdk14-openj9 \
+			port:py-tkinter \
+			port:MPlayer \
+			port:poppler-data

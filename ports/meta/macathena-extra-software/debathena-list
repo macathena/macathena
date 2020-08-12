@@ -1,0 +1,34 @@
+# debathena-extra-software that's not in macathena-extra-software
+Source: debathena-extra-software
+Section: debathena/base
+Priority: extra
+Maintainer: Debathena Project <debathena@mit.edu>
+Build-Depends: debhelper (>= 7.0~)
+Standards-Version: 3.9.3
+
+Package: debathena-extra-software
+Architecture: all
+Conflicts: debathena-cluster-software
+Replaces: debathena-cluster-software
+Depends: debathena-extra-software-nox,
+  ${debathena-cool-kids-office-suite},
+  thunderbird | mozilla-thunderbird | icedove,
+  gnome3 # this is a port, but it has multiple broken dependencies
+  vim-gnome,
+  wmaker, wmbutton, wmcalclock, wmhdplop, wmmemload, wmnd, wmweather,
+  xmonad, suckless-tools | dwm-tools, xmobar,
+  default-java-plugin | icedtea-plugin,
+  ${misc:Depends}
+Recommends: flashplugin-installer | flashplugin-nonfree,
+  compizconfig-settings-manager,
+  compiz-plugins,
+  msttcorefonts,
+  ttf-xfree86-nonfree,
+  motif-clients,
+  wmbubble, wmfire
+Description: Athena auxiliary software
+ This package pulls in miscellaneous non-Athena-specific software
+ for a fully-stocked Athena workstation.
+ .
+ Graphical applications are included; debathena-extra-software-nox
+ is the non-graphical subset.
