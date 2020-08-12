@@ -36,6 +36,8 @@ checksums           openafs-1.8.6-src.tar.gz \
 
 universal_variant   no
 
+depends_run         port:perl5
+
 if {${name} eq ${subport}} {
     worksrcdir openafs-${version}
 
