@@ -4,7 +4,7 @@ PortGroup		config_package 1.0
 
 name			macathena-locker
 categories      meta
-version			0.1
+version			0.3
 revision		1
 description		Metapackage providing Athena locker support
 long_description 	This package installs support for accessing MIT AFS lockers and \
@@ -20,7 +20,8 @@ depends_run \
     port:macathena-locker-support \
     port:macathena-machtype \
     port:macathena-pyhesiodfs \
-    port:macathena-shell-config
+    port:macathena-shell-config \
+    port:debathena-tellme
 
 # Remaining packages from debathena-locker:
 # debathena-afs-config
@@ -30,5 +31,4 @@ depends_run \
 # debathena-hesiod-config
 # debathena-quota
 # debathena-quota-config
-# debathena-tellme
 # debathena-zephyr-config
