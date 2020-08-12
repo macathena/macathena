@@ -4,7 +4,7 @@ PortSystem          1.0
 
 name                openafs-client
 version             1.8.6
-revision            2
+revision            3
 categories          sysutils
 license             IPL-1
 maintainers         mit.edu:sipb-macathena
@@ -36,38 +36,52 @@ checksums           openafs-1.8.6-src.tar.gz \
 
 universal_variant   no
 
-worksrcdir openafs-${version}
+if {${name} eq ${subport}} {
+    worksrcdir openafs-${version}
 
-# Allow xcodebuild for the prefpane
-use_xcode           yes
+    # Allow xcodebuild for the prefpane
+    use_xcode           yes
 
-depends_build       port:swig-perl
+    depends_build       port:swig-perl
 
-patchfiles          swig-com_err.patch \
-                    afsd_fuse.patch \
-                    xcodebuild.patch
-patch.args          -p1
-post-patch {
-    reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
+    patchfiles \
+        swig-com_err.patch \
+        afsd_fuse.patch \
+        xcodebuild.patch
+    patch.args          -p1
+
+    post-patch {
+        reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
+    }
+
+    if {${os.major} >= 13} {
+        configure.args-append --disable-kernel-module
+        depends_run-append port:openafs-signed-kext
+    }
+
+    post-destroot {
+        # Create default config
+        file mkdir ${destroot}${prefix}/etc/openafs
+        system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
+        file mkdir ${destroot}${prefix}/etc/openafs/config
+        #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
+        system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
+        #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
+    }
+
+    destroot.target install dest
+
+    master_sites-append http://grand.central.org/dl/cellservdb/:csdb
+    distfiles-append CellServDB:csdb
+    post-destroot {
+        copy ${distpath}/CellServDB ${destroot}${prefix}/etc/openafs/CellServDB
+    }
 }
 
-if {${os.major} >= 13} {
-    set use_signed_kext    yes
-} else {
-    set use_signed_kext    no
-}
-
-post-destroot {
-    # Create default config
-    file mkdir ${destroot}${prefix}/etc/openafs
-    system "echo athena.mit.edu > ${destroot}${prefix}/etc/openafs/ThisCell"
-    file mkdir ${destroot}${prefix}/etc/openafs/config
-    #ln -s ${prefix}/etc/openafs/ThisCell ${destroot}${prefix}/etc/openafs/config/ThisCell
-    system "echo athena > ${destroot}${prefix}/etc/openafs/CellAlias"
-    #ln -s ${prefix}/etc/openafs/CellAlias ${destroot}${prefix}/etc/openafs/config/CellAlias
-}
-
-if { $use_signed_kext } {
+subport openafs-signed-kext {
+    description Signed Kernel Extension for AFS on 10.9+
+    long_description ${description}
+    version 0.195
     set mp.dist {
         13 9 Mavericks
         14 10 Yosemite
@@ -79,16 +93,14 @@ if { $use_signed_kext } {
     }
     foreach { mp.darwin mp.os mp.name } ${mp.dist} {
         if {${os.major} == ${mp.darwin}} {
-            configure.args-append --disable-kernel-module
             # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
-            master_sites-append https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}:auristor
-            distfiles-append Auristor-client-0.195-${mp.name}.dmg:auristor
+            master_sites https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}
+            distfiles Auristor-client-${version}-${mp.name}.dmg
             # www.auristor.com has an expired intermediary certificate.
             fetch.ignore_sslcert yes
             use_dmg yes
             extract.only Auristor-client-0.195-${mp.name}.dmg
             post-extract {
-                system -W ${workpath} "tar -xvf ${distpath}/openafs-${version}-src.tar.gz"
                 move ${workpath}/${distname} ${workpath}/auristor-dmg
                 system -W ${workpath}/auristor-dmg "pkgutil --expand 'Auristor-Lite.pkg' ${workpath}/auristor-pkg"
                 file mkdir ${workpath}/auristor-unpacked
@@ -110,7 +122,10 @@ if { $use_signed_kext } {
                 system "install_name_tool $args ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
                 system "codesign --remove-signature ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
             }
-            post-destroot {
+            configure {}
+            build {}
+            destroot {
+                file mkdir ${destroot}${prefix}/etc/openafs/config
                 set pkgpath ${workpath}/auristor-unpacked
                 copy ${pkgpath}/Library/Auristor \
                     ${pkgpath}/Library/Extensions \
@@ -160,12 +175,4 @@ if { $use_signed_kext } {
             }
         }
     }
-}
-
-destroot.target install dest
-
-master_sites-append http://grand.central.org/dl/cellservdb/:csdb
-distfiles-append CellServDB:csdb
-post-destroot {
-    copy ${distpath}/CellServDB ${destroot}${prefix}/etc/openafs/CellServDB
 }
