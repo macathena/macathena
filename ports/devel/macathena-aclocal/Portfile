@@ -7,7 +7,7 @@ github.setup		mit-athena aclocal 9172e338201e480369fbd06b8775631a7b7aad0c
 name                macathena-aclocal
 version             1.1.4
 revision            1
-categories          net
+categories          devel
 maintainers         mit.edu:sipb-macathena
 platforms           darwin
 description         Common autoconf macros for Athena
