@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           github 1.0
+
+github.setup		mit-athena aclocal 9172e338201e480369fbd06b8775631a7b7aad0c
+
+name                macathena-aclocal
+version             1.1.4
+revision            1
+categories          net
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         Common autoconf macros for Athena
+checksums           rmd160  b250c8b5b58408b475cd4a8b0551abbef009cea9 \
+                    sha256  21c9a68e368d36b4459695e83cdc4516a52ede5c70dafc47dbb1e6ab536adad2 \
+                    size    12751
+
+configure {}
+build {}
+destroot {
+	file copy ${worksrcpath}/aclocal ${destroot}${prefix}/share/aclocal
+}
+
+depends_lib	port:automake
