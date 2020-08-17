@@ -1,0 +1,25 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          	1.0
+PortGroup           	github 1.0
+
+github.setup        	mit-athena tellme 377d85ff6fb80b1fc0b8282ab8669a4c518b350b
+
+name                	macathena-tellme
+version             	1.4.3
+revision            	1
+categories          	net
+maintainers         	mit.edu:sipb-macathena
+platforms           	darwin
+description         	Reports combos and passwords for Athena
+checksums           rmd160  bcc1b060f92e5483b4a81d6f2ed020149fd8f016 \
+                    sha256  a1ea86729a6370e7423285cd725444035358a592423133734728448e056b0098 \
+                    size    861
+
+depends_run		port:macathena-locker-support
+
+use_configure		no
+build {}
+destroot {
+	file copy ${worksrcpath}/tellme ${destroot}${prefix}/bin/tellme
+	file copy ${worksrcpath}/tellme.1 ${destroot}${prefix}/share/man/man1/tellme.1
+}
