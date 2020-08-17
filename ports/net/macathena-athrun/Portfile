@@ -1,28 +1,38 @@
-# $Id$
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
 PortSystem		1.0
 PortGroup		github 1.0
 PortGroup		python 1.0
 
-name			macathena-athrun
-github.setup		macathena athrun 3c9c5b72414454df3c4faad6d92929c5b6e0dc2b
-version			10.3.2.1
-categories		net
-maintainers		mit.edu:sipb-macathena
-python.default_version	38
-platforms		darwin
+name                    macathena-athrun
+github.setup            macathena athrun 3c9c5b72414454df3c4faad6d92929c5b6e0dc2b
+epoch                   1
+version                 10.3.2.1
+python.default_version  ${python.default_version}
+categories              net
+maintainers             mit.edu:sipb-macathena
+platforms               darwin
+
+description         An Athena utility for users to run a program from a locker
+long_description    The athrun utility allows a user to robustly run a program from a \
+                    specified Athena locker.
 checksums           rmd160  72198fa0fcad450c28b9f002ba95a2a1d929e360 \
                     sha256  0e041cf633e043a12cfc0a71bdb20ce99b933cadd9641958c939ac9260197bd6 \
                     size    3529
 
-post-destroot {
-	file attributes ${worksrcpath}/athrun -permissions 0755
-	file copy ${worksrcpath}/athrun ${destroot}${prefix}/bin/athrun
-	file copy ${worksrcpath}/athrun.1 ${destroot}${prefix}/share/man/man1/athrun.1
-	file copy ${worksrcpath}/attachandrun.1 ${destroot}${prefix}/share/man/man1/attachandrun.1
+if {${name} eq ${subport}} {
+	post-destroot {
+		file attributes ${worksrcpath}/athrun -permissions 0755
+		file copy ${worksrcpath}/athrun ${destroot}${prefix}/bin/athrun
+		file copy ${worksrcpath}/athrun.1 ${destroot}${prefix}/share/man/man1/athrun.1
+		file copy ${worksrcpath}/attachandrun.1 ${destroot}${prefix}/share/man/man1/attachandrun.1
+		file mkdir ${destroot}${prefix}/share/bash-completion/completions
+		file copy ${worksrcpath}/bash_completion ${destroot}${prefix}/share/bash-completion/completions/athrun
+	}
 }
 
 depends_run		port:macathena-machtype \
-				port:macathena-locker-support
+				port:macathena-locker-support \
+				port:bash-completion
 
 subport macathena-gathrun {
 

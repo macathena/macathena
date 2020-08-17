@@ -7,7 +7,7 @@ github.setup        macathena locker-support 3801013b44488dab81bcea2b72634ba9340
 
 name                macathena-locker-support
 version             10.4.8
-revision            1
+revision            2
 categories          net
 maintainers         mit.edu:sipb-macathena
 platforms           darwin
@@ -19,7 +19,7 @@ checksums           rmd160  3a80671279289c00fb6bcc71d1fabed023447131 \
 use_tar             yes
 depends_lib         port:py${python.version}-afs \
                     port:py${python.version}-hesiod \
-		    port:py${python.version}-six
+                    port:py${python.version}-six
 
 depends_run		port:macathena-machtype \
                         port:macathena-pyhesiodfs

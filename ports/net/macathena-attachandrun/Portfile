@@ -2,9 +2,10 @@
 PortSystem		1.0
 PortGroup		obsolete 1.0
 
-name			macathena-attachandrun
-replaced_by		macathena-athrun
-version			20060626.1
-categories		net
-maintainers		mit.edu:sipb-macathena
-platforms		darwin
+name            macathena-attachandrun
+replaced_by     macathena-athrun
+version         20060626
+revision        1
+categories      net
+maintainers     mit.edu:sipb-macathena
+platforms       darwin
