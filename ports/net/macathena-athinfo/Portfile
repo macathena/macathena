@@ -22,3 +22,5 @@ post-destroot {
 	file mkdir ${destroot}${prefix}/share/bash-completion/completions
 	file copy ${worksrcpath}/bash_completion ${destroot}${prefix}/share/bash-completion/completions/athinfo
 }
+
+depends_run         port:bash-completion
