@@ -1,26 +1,10 @@
 # the remainder of the debathena-extra-software-nox list, that isn't in macathena-extra-software
-Source: debathena-extra-software-nox
-Section: debathena/base
-Priority: extra
-Standards-Version: 3.9.3
-Maintainer: Debathena Project <debathena@mit.edu>
-Build-Depends: cdbs, debhelper, dh-buildinfo
-
 Package: debathena-extra-software-nox
-Architecture: all
-Depends: build-essential, debathena-debian-dev, # I think these are debian specific
-  emacs-intl-fonts, # does this come with emacs?
-  athena-jot, # jot is already present on mac I think? But I don't know if athena-jot is the same thing.
-  ispell, iamerican, # ispell conflicts with aspell, which is also in debathena-extra-software-nox
-  drscheme | plt-scheme, # there are lots of other schemes but I don't see this one
+Depends: debathena-debian-dev, # I think these are debian specific
   inn2-inews, # can't find this
-  perl-doc, # does this come with perl?
   bsdgames, # I think this is packaged for homebrew but not macports
-  vpnc # this port exists but it has a dependency that fails to build
+  cyrus-clients # these are installed with cyrus-imapd but don't seem to come separately
   ${debathena-libstdc5-depends},
   ${misc:Depends}
 Recommends:
   manpages-posix-dev, manpages-dev,
-Description: Athena auxiliary software, non-graphical
- This package pulls in miscellaneous non-Athena-specific software
- for a fully-stocked non-graphical Athena machine, like a dialup.

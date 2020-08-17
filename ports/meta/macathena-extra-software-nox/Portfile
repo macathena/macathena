@@ -14,7 +14,10 @@ description         This package pulls in miscellaneous non-Athena-specific soft
 config.meta
 
 
-depends_lib		port:enscript \
+depends_lib	    port:dpkg \
+            port:debianutils \
+            port:gmake \
+            port:enscript \
 			port:psutils \
 			port:emacs \
 			port:vim \
@@ -30,11 +33,13 @@ depends_lib		port:enscript \
 			port:subversion \
 			port:bzr \
 			port:mercurial \
+            port:mit-scheme \
 			port:monotone-devel \
 			port:auctex \
 			port:tree \
 			port:py-twisted \
 			port:py-setuptools \
+            port:coreutils \
 			port:moreutils \
 			port:socat \
 			port:expect \
@@ -44,11 +49,8 @@ depends_lib		port:enscript \
 			port:texlive \
 			port:libgsasl \
 			port:remctl \
-			port:cyrus-imapd \
 			port:kermit \
-			port:openjdk14 \
-			port:x3270
+			port:openjdk14
 	
 require_active_variants port:git svn
-require_active_variants port:texlive full
 require_active_variants port:libgsasl gssapi_mit
