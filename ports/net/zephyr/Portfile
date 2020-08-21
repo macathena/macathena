@@ -3,7 +3,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 
 github.setup        zephyr-im zephyr 3.1.2 release/
-revision            2
+revision            3
 license             MIT
 categories          net
 maintainers         mit.edu:sipb-macathena
@@ -35,7 +35,8 @@ use_autoreconf      yes
 
 configure.args-append \
     --with-hesiod \
-    --with-krb5
+    --with-krb5 \
+    --with-ss=${prefix}
 
 depends_build-append \
     port:bison \
@@ -48,6 +49,7 @@ depends_lib-append \
     port:e2fsprogs \
     port:hesiod \
     port:kerberos5 \
+    port:e2fsprogs \
     port:libcomerr \
     lib:libminiupnpc:miniupnpc \
     port:xorg-libice \
