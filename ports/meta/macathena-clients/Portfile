@@ -5,7 +5,7 @@ PortGroup		config_package 1.0
 name			macathena-clients
 categories      meta
 version			0.1
-revision		3
+revision		9
 
 config.meta
 
@@ -13,6 +13,7 @@ depends_run \
     port:hesiod \
     port:macathena-alpine-config \
     port:macathena-hes \
+    port:macathena-hostinfo \
     port:macathena-kerberos-config \
     port:macathena-moira \
     port:macathena-msmtp \
@@ -31,7 +32,6 @@ depends_run \
 # debathena-getcluster
 # debathena-get-message
 # debathena-hesiod-config
-# debathena-hostinfo
 # debathena-lam
 # debathena-ldap-config
 # debathena-mitmailutils
