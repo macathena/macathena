@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          	1.0
+PortGroup           	github 1.0
+
+github.setup        	mit-athena saferm 297abfed433246392bdd447257e3c098c7e70f57
+
+name                	macathena-saferm
+version             	10.1.0
+revision            	1
+categories          	net
+maintainers         	mit.edu:sipb-macathena
+platforms           	darwin
+description         	A safe alternative to rm for Athena
+long_description        saferm is a file removal program which can be used running as root \
+ to safely remove, and optionally zero, files or directories from \
+ world-writable directories, such as /tmp.  It will refuse to \
+ change directories through symbolic links, and it will not zero \
+ files that have more than one hard link.
+checksums           rmd160  1a54b629c7fb713fbcc32cb2eabc551616ef0dd5 \
+                    sha256  01209e5cb309d9311fd5bbb21f280cd2d5b80965faf27c6649f2c72e37fb21f5 \
+                    size    6363
+
+use_autoreconf          yes
+autoreconf.args         --install
