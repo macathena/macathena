@@ -69,7 +69,7 @@ proc config_files {option action args} {
     }
     if {![variant_isset manual_config]} {
         foreach file [option "config.files"] {
-            config.install ${filespath}${file} ${file}
+            config.install ${filespath}/${file} ${file}
         }
     }
 }
