@@ -1,0 +1,24 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           github 1.0
+PortGroup           config_package 1.0
+
+github.setup        mit-athena ssh-client-config ee3aae0f0fec381288cc102aeccb8a612ea79166
+name                macathena-ssh-client-config
+version             1.7
+description         SSH client configuration for Macathena
+long_description    This package configures the SSH client to automatically forward \
+ Kerberos credentials.
+
+checksums           rmd160  fd3f0ac8cba58f9b38836680e3b42468e9f95177 \
+                    sha256  9c07af3db7c6f6a97fb370f9c8e78c303d8ad0993abb292c23c51140695526a5 \
+                    size    4761
+
+depends_run         port:macathena-kerberos-config \
+                    port:openssh
+
+post-destroot {
+    reinplace "s|#   GSSAPIAuthentication no|    GSSAPIAuthentication yes|" ${prefix}/etc/ssh/ssh_config
+}
+
+config.install      ${worksrcpath}/ssh_known_hosts.debathena ${prefix}/etc/ssh/ssh_known_hosts
