@@ -5,7 +5,7 @@ PortGroup		config_package 1.0
 name			macathena-clients
 categories      meta
 version			0.1
-revision		3
+revision		8
 
 config.meta
 
@@ -16,6 +16,7 @@ depends_run \
     port:macathena-kerberos-config \
     port:macathena-moira \
     port:macathena-msmtp \
+    port:macathena-xcluster \
     port:openldap \
     port:zephyr
 
@@ -44,7 +45,6 @@ depends_run \
 # debathena-ssl-certificates
 # debathena-syncupdate
 # debathena-tex-extras
-# debathena-xcluster
 # debathena-xdsc
 # finger (>= 0.17-13~)
 # tzc
