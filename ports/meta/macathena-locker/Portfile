@@ -16,6 +16,7 @@ depends_run \
     port:openafs-client \
     port:hesiod \
     port:macathena-base \
+    port:macathena-hesiod-config \
     port:macathena-kerberos-config \
     port:macathena-locker-support \
     port:macathena-machtype \
@@ -28,7 +29,6 @@ depends_run \
 # debathena-athrun
 # debathena-attachandrun
 # debathena-delete
-# debathena-hesiod-config
 # debathena-quota
 # debathena-quota-config
 # debathena-zephyr-config
