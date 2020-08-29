@@ -16,6 +16,7 @@ depends_run \
     port:macathena-athinfo \
     port:macathena-hes \
     port:macathena-kerberos-config \
+    port:macathena-ldap-config \
     port:macathena-moira \
     port:macathena-msmtp \
     port:openldap \
@@ -33,7 +34,6 @@ depends_run \
 # debathena-hesiod-config
 # debathena-hostinfo
 # debathena-lam
-# debathena-ldap-config
 # debathena-mitmailutils
 # debathena-nmh-config
 # debathena-printing-config
