@@ -3,7 +3,7 @@ PortSystem          1.0
 
 name                macathena-moira
 version             20190912
-revision            1
+revision            2
 distname            moira-${version}
 categories          net
 maintainers         mit.edu:sipb-macathena
@@ -48,4 +48,5 @@ depends_build		port:e2fsprogs \
 depends_lib		port:hesiod \
 				port:kerberos5 \
 				port:libcomerr \
-				port:ncurses
+				port:ncurses \
+				port:readline

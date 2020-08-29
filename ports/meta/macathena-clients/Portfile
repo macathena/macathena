@@ -12,8 +12,11 @@ config.meta
 depends_run \
     port:hesiod \
     port:macathena-alpine-config \
+    port:macathena-discuss \
+    port:macathena-athinfo \
     port:macathena-hes \
     port:macathena-kerberos-config \
+    port:macathena-ldap-config \
     port:macathena-moira \
     port:macathena-msmtp \
     port:macathena-saferm \
@@ -23,9 +26,7 @@ depends_run \
 # Remaining packages from debathena-clients:
 # athena-jot
 # debathena-apparmor-config
-# debathena-athinfo
 # debathena-counterlog
-# debathena-discuss
 # debathena-discuss-emacs
 # debathena-discuss-ng
 # debathena-from-config
@@ -34,7 +35,6 @@ depends_run \
 # debathena-hesiod-config
 # debathena-hostinfo
 # debathena-lam
-# debathena-ldap-config
 # debathena-mitmailutils
 # debathena-nmh-config
 # debathena-printing-config
