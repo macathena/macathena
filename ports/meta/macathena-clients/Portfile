@@ -5,7 +5,7 @@ PortGroup		config_package 1.0
 name			macathena-clients
 categories      meta
 version			0.1
-revision		5
+revision		6
 
 config.meta
 
@@ -19,6 +19,7 @@ depends_run \
     port:macathena-ldap-config \
     port:macathena-moira \
     port:macathena-msmtp \
+    port:macathena-saferm \
     port:openldap \
     port:zephyr
 
@@ -38,7 +39,6 @@ depends_run \
 # debathena-nmh-config
 # debathena-printing-config
 # debathena-rs
-# debathena-saferm
 # debathena-sendbug
 # debathena-ssh-client-config
 # debathena-ssl-certificates
