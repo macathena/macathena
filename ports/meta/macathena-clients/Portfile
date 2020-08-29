@@ -5,7 +5,7 @@ PortGroup		config_package 1.0
 name			macathena-clients
 categories      meta
 version			0.1
-revision		4
+revision		5
 
 config.meta
 
@@ -13,6 +13,7 @@ depends_run \
     port:hesiod \
     port:macathena-alpine-config \
     port:macathena-discuss \
+    port:macathena-athinfo \
     port:macathena-hes \
     port:macathena-kerberos-config \
     port:macathena-moira \
@@ -23,7 +24,6 @@ depends_run \
 # Remaining packages from debathena-clients:
 # athena-jot
 # debathena-apparmor-config
-# debathena-athinfo
 # debathena-counterlog
 # debathena-discuss-emacs
 # debathena-discuss-ng
