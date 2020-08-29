@@ -21,7 +21,8 @@ depends_run \
     port:macathena-locker-support \
     port:macathena-machtype \
     port:macathena-pyhesiodfs \
-    port:macathena-shell-config
+    port:macathena-shell-config \
+    port:macathena-tellme
 
 # Remaining packages from debathena-locker:
 # debathena-afs-config
@@ -30,5 +31,4 @@ depends_run \
 # debathena-hesiod-config
 # debathena-quota
 # debathena-quota-config
-# debathena-tellme
 # debathena-zephyr-config
