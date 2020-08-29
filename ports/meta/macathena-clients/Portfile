@@ -12,6 +12,7 @@ config.meta
 depends_run \
     port:hesiod \
     port:macathena-alpine-config \
+    port:macathena-discuss-ng \
     port:macathena-hes \
     port:macathena-kerberos-config \
     port:macathena-moira \
@@ -26,7 +27,6 @@ depends_run \
 # debathena-counterlog
 # debathena-discuss
 # debathena-discuss-emacs
-# debathena-discuss-ng
 # debathena-from-config
 # debathena-getcluster
 # debathena-get-message
