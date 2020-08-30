@@ -1,27 +1,27 @@
-# $Id$
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
 PortSystem		1.0
+PortGroup		github 1.0
+PortGroup		python 1.0
 
 name			macathena-getcluster
-version			svn25442
-distname		getcluster-${version}
+github.setup		macathena getcluster 95d97b08687a8b31000e1f30a5f3865b105c4b30
+version			10.2.2
 categories		net
 maintainers		mit.edu:sipb-macathena
+python.default_version	${python.default_version}
 platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-checksums		md5 3db1d7235bbc38709da1a6a10559b4a3 \
-				sha1 d722f095902a81873fe6d6dc14fe24ec85e9dcb9 \
-				rmd160 11dcb5e668cfc904050cb74a6b2664f47b9ee588
-
-use_autoconf	yes
-
-
-depends_build		port:automake
-post-patch {
-     file copy ${prefix}/share/automake-1.11/install-sh ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/mkinstalldirs ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.sub ${worksrcpath}/
-     file copy ${prefix}/share/automake-1.11/config.guess ${worksrcpath}/
-}
+description		Retrieve service cluster info from Hesiod for Athena workstations
+long_description	The getcluster program is used on all Athena workstations to find the \
+ service cluster information for the workstation and writes a list of \
+ environment variable assignments which can be used to initialize a \
+ shell accordingly.
+ checksums           rmd160  c4e522305dc71c1e378387b1c65b2675adb39605 \
+                    sha256  eefc76c60f607fc5aa8db562e08ac5c3e07da9f5153352e1d7d600ff042ee6e1 \
+                    size    5858
 
 depends_lib		port:hesiod \
 				port:macathena-base
+
+post-destroot {
+	file copy ${worksrcpath}/getcluster.1 ${destroot}${prefix}/share/man/man1
+}

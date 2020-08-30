@@ -4,7 +4,7 @@ PortGroup		config_package 1.0
 
 name			macathena-locker
 categories      meta
-version			0.3
+version			0.4
 revision		1
 description		Metapackage providing Athena locker support
 long_description 	This package installs support for accessing MIT AFS lockers and \
@@ -16,6 +16,7 @@ depends_run \
     port:openafs-client \
     port:hesiod \
     port:macathena-base \
+    port:macathena-delete \
     port:macathena-hesiod-config \
     port:macathena-kerberos-config \
     port:macathena-locker-support \
@@ -28,7 +29,6 @@ depends_run \
 # debathena-afs-config
 # debathena-athrun
 # debathena-attachandrun
-# debathena-delete
 # debathena-quota
 # debathena-quota-config
 # debathena-zephyr-config

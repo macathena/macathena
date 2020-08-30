@@ -1,0 +1,31 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           github 1.0
+
+github.setup        macathena get_message 6dc160bf742ab6def0e9bd2fa13f3f63dce262e4
+
+name                macathena-get-message
+version             10.1.1
+categories          net
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         A program to display the global Athena message of the day
+long_description    The get_message utility locates the Athena Global Message server, \
+                    retrieves the current message of the day, and displays it if \
+                    necessary.
+python.default_version ${python.default_version}
+checksums           rmd160  dac47dfd5aa6ea5522dc8906b1f24deee53e7af0 \
+                    sha256  fab053915df411564573215f758e37b3b25b88d0a3d2c93b867e1469ea311ea3 \
+                    size    1875
+
+depends_run         port:py${python.version}-hesiod \
+                    port:py${python.version}-six
+
+post-patch {
+    reinplace "s|MESSAGE_CACHE = '/var/cache/libgms/messages'|MESSAGE_CACHE = '${prefix}/var/cache/libgms/messages'|" ${worksrcpath}/get_message
+}
+
+post-destroot {
+    file mkdir ${destroot}${prefix}/var/cache/libgms/messages
+}
