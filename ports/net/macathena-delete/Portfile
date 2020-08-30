@@ -1,0 +1,31 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           github 1.0
+
+github.setup		macathena delete ed068bed82255120c1c2eaf27b03056034b84919
+
+name                macathena-delete
+version             10.1.1
+categories          net
+maintainers         mit.edu:sipb-macathena
+python.default_version  ${python.default_version}
+platforms           darwin
+description         A recoverable file-deletion utility
+long_description    The delete utility marks files and directories for later permanent \
+                    removal by prefixing them with '.#'.  Files accidentally marked for \
+                    deletion can be recovered with undelete.  Permanent removal can be \
+                    effected immediately with the purge and expunge commands.  The lsdel \
+                    utility lists the files that have been marked for deletion but not yet \
+                    removed.
+depends_run         port:py${python.version}-afs \
+                    port:py${python.version}-six \
+                    port:macathena-locker-support
+
+checksums           rmd160  9281932c6517dfc7951d4c18047dae3c2825dfc4 \
+                    sha256  dccd9ddd80ed93de932a25800f018dd62f4e4f10af55451b4614818d256fde68 \
+                    size    11885
+
+post-destroot {
+	file copy ${worksrcpath}/man1 ${destroot}${prefix}/share/man/man1
+}
