@@ -1,0 +1,29 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          	1.0
+PortGroup           	github 1.0
+
+github.setup        	mit-athena xcluster 10.1.1
+
+name                	macathena-xcluster
+version             	10.1.1
+categories          	net
+maintainers         	mit.edu:sipb-macathena
+platforms           	darwin
+description         	Utilities to display cluster usage status
+long_description        The cview and xcluster utilities display MIT maps and Athena cluster \
+ locations and current cluster usage statistics.
+checksums           rmd160  199f2433820d6913a2e8af051a47d7e5e3d11e00 \
+                    sha256  730b7066c6c8ea19cf4c23fa949f9d0982f0f251389af92544e2f8c181e1019c \
+                    size    2179
+
+use_configure		no
+build {}
+destroot {
+	file copy ${worksrcpath}/cview ${destroot}${prefix}/bin/cview
+	file copy ${worksrcpath}/cview.1 ${destroot}${prefix}/share/man/man1/cview.1
+	file copy ${worksrcpath}/xcluster ${destroot}${prefix}/bin/xcluster
+	file copy ${worksrcpath}/xcluster.1 ${destroot}${prefix}/share/man/man1/xcluster.1
+}
+
+depends_run         port:xdg-utils \
+                    port:hesiod
