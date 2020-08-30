@@ -1,0 +1,22 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem	1.0
+PortGroup 	github 1.0
+PortGroup	python 1.0
+
+github.setup		macathena python-discuss 04d6e0d8e5304f28e0e2ec353ade3d0f263097c5
+name		    	py-discuss
+version		    	1.3
+categories	    	python devel
+platforms	    	darwin
+maintainers	    	mit.edu:sipb-macathena
+description	    	Python bindings for discuss
+long_description    Pydiscuss provides a pure-Python implementation of discuss -- the forum \
+                    protocol developed in late 80's and still used around MIT
+python.versions		27 37 38
+checksums           rmd160  dacc3e897fc61dfb4ac8c59686140a9c6fb23e4e \
+                    sha256  be05db18b7e4f62047df677a80d3f3ad30ba194a9b6f9aa2eb0bf44325f92a07 \
+                    size    12661
+if {${name} ne ${subport}} {
+    depends_run port:py${python.version}-pykerberos
+}

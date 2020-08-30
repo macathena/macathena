@@ -13,6 +13,7 @@ depends_run \
     port:hesiod \
     port:macathena-alpine-config \
     port:macathena-discuss \
+    port:macathena-discuss-ng \
     port:macathena-athinfo \
     port:macathena-hes \
     port:macathena-kerberos-config \
@@ -30,7 +31,6 @@ depends_run \
 # debathena-apparmor-config
 # debathena-counterlog
 # debathena-discuss-emacs
-# debathena-discuss-ng
 # debathena-from-config
 # debathena-getcluster
 # debathena-hesiod-config
