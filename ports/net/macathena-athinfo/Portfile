@@ -1,17 +1,26 @@
-# $Id$
-PortSystem		1.0
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           github 1.0
 
-name			macathena-athinfo
-version			20071107
-distname		athinfo-${version}
-categories		net
-maintainers		mit.edu:sipb-macathena
-platforms		darwin
-master_sites	http://macathena.mit.edu/dist/
-checksums		md5 33a2bfe6b32732a5fad9fc97d37b4b03 \
-				sha1 0114f70f190330a255859be5fd2650266a375e27 \
-				rmd160 069dbd3f23b3c2112c614bcb9aabb460cbe65671
+github.setup		macathena athinfo 9e33d656f9ebc1ca0c6fd6227f6933d8fb927d5f 
 
-use_autoconf	yes
+name                macathena-athinfo
+version             10.3
+revision            1
+categories          net
+maintainers         mit.edu:sipb-macathena
+platforms           darwin
+description         Retrieve infomation about Athena workstations
+python.default_version 38
+checksums           rmd160  05ef395ef5827a90bf142e003a41572bef63022d \
+                    sha256  9373f241dd3e6e26f05f61e27b552b8eb606b0ecb473af1af4051caf186dee78 \
+                    size    3092
 
-depends_lib		port:macathena-base
+post-destroot {
+	file copy ${worksrcpath}/athinfo.1 ${destroot}${prefix}/share/man/man1
+	file mkdir ${destroot}${prefix}/share/bash-completion/completions
+	file copy ${worksrcpath}/bash_completion ${destroot}${prefix}/share/bash-completion/completions/athinfo
+}
+
+depends_run         port:bash-completion

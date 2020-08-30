@@ -1,0 +1,26 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          	1.0
+PortGroup           	github 1.0
+PortGroup               python 1.0
+
+github.setup        	macathena discuss-ng 6dd909b2ddcc8a5b12dc25b1e9720b82fcdb5c3c
+
+name                	macathena-discuss-ng
+version             	1.2
+categories          	net
+maintainers         	mit.edu:sipb-macathena
+platforms           	darwin
+python.versions         27 37 38
+description         	Conferencing and mail archiving system -- new client
+long_description        discuss-ng provides an ncurses-based discuss client coupled with an auxilary \
+                        program to manipulate meeting subscription.
+checksums               rmd160  e22fbcfc664e5149ed8fd6248d4493e4faaa1e43 \
+                        sha256  7143ea1ce00b4bd5ee8425c10a8a4d3b3e13bebde33c543ba2f984db7ae2b843 \
+                        size    5682
+
+depends_run		port:py${python.version}-discuss
+
+post-destroot {
+    file mkdir ${destroot}${prefix}/etc/bash_completion.d
+    file copy ${worksrcpath}/etc/bash_completion ${destroot}${prefix}/etc/bash_completion.d/macathena-discuss-ng    
+}
