@@ -1,0 +1,31 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+PortSystem          	1.0
+PortGroup               config_package 1.0
+
+name                	macathena-login-config
+version             	1.0
+categories          	config
+maintainers         	mit.edu:sipb-macathena
+platforms           	darwin
+description         	Configure network login for macathena
+destroot.violate_mtree  yes
+
+depends_run		port:macathena-kerberos-config \
+                port:py-pyobjc
+
+use_configure		no
+fetch {}
+checksum {}
+extract {
+    file copy ${filespath}/ldap_config.py ${workpath}/ldap_config.py
+}
+patch {
+    reinplace "s|FILESPATH|${filespath}|" ${workpath}/ldap_config.py 
+}
+build {}
+activate {
+	system "${prefix}/bin/python3.8 ${workpath}/ldap_config.py"
+    system "/usr/bin/defaults write /Library/Preferences/com.apple.loginwindow SHOWFULLNAME -bool \"TRUE\""
+    system "/usr/bin/perl -pi -e 's/auth       optional       pam_krb5.so use_first_pass use_kcminit/auth       optional       pam_krb5.so use_first_pass use_kcminit default_principal
+auth       sufficient     pam_krb5.so use_first_pass default_principal/g' \"/etc/pam.d/authorization\""
+}
