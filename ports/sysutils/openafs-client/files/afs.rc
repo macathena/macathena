@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -ex
+
+kext=@PREFIX@/Library/OpenAFS/etc/afs.kext
+
+start()
+{
+    kextload $kext
+
+    @PREFIX@/Library/OpenAFS/etc/afsd \
+     -confdir @PREFIX@/etc/openafs \
+     -chunksize 18 \
+     -afsdb \
+     -stat 5000 \
+     -dcache 800 \
+     -daemons 8 \
+     -volumes 70 \
+     -dynroot \
+     -fakestat-all
+
+    # TODO: Set sysname list
+}
+
+stop()
+{
+    umount -f /afs
+
+    @PREFIX@/Library/OpenAFS/etc/afsd \
+     -confdir @PREFIX@/etc/openafs \
+     -shutdown
+
+    kextunload $kext
+}
+
+case "${1:-start}" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    *)
+	echo "Unknown command"
+	;;
+esac
