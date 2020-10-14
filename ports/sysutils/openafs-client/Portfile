@@ -21,18 +21,18 @@ checksums           openafs-1.8.6-src.tar.gz \
                     rmd160  4a59624b935f25c9819902dfd38ee54d66b2a8d6 \
                     sha256  9efc374ef32b90ed62e59280535babff684d1bb551889d08abbf3e9d93e2e7d2 \
                     size    17789990 \
-                    Auristor-client-0.197.1-Mojave.dmg \
-                    rmd160  b30049b89266ae27975c861dcb442506c4dcf930 \
-                    sha256  442388eff95f5d251331a3af4caae939d6af81131a2ec867b982a2eb767a7f79 \
-                    size    7152387 \
-                    Auristor-client-0.197.1-Catalina.dmg \
-                    rmd160  d5a45513984468a6585fccaa7c567cbd463bb78c \
-                    sha256  7b59e22c5f0b786dc30f64bc662e5a3a8b96f2a9af6d62d6bc27050481ac0c65 \
-                    size    8732818 \
+                    OpenAFS-1.8.5-osxsna3-Mojave.dmg \
+                    rmd160  ed9fc4630feb30505d471474b1d5f5c000b52a82 \
+                    sha256  1c8d28bba89d846f72576999f0d78990f8f09d4a3cc599e7182b9801ed1c2542 \
+                    size    16959208 \
+                    OpenAFS-1.8.5-osxsna3-Catalina.dmg \
+                    rmd160  8e29c61062edae2172ebc8cf5249fed07e9c7f2a \
+                    sha256  5bb07d7905e17a65dec8897710c4146ad754b7c706d681e2d0e1883c63b8c206 \
+                    size    17514101 \
                     CellServDB \
-                    rmd160  e0995062877e21b6887b57399a0cc9ae057c4092 \
-                    sha256  62e6510079f7565b7c642d7b799342bee36c89fe6d510bc24559785fabb1b2f2 \
-                    size    36955
+                    rmd160  b63cce0e17b6a21aebc15165de377ab560eacce5 \
+                    sha256  43c5f0c0283eb2a1e03ea4b4d680922037a3fa495a024927acefd2f029c5d917 \
+                    size    35258
 
 universal_variant   no
 
@@ -82,8 +82,9 @@ if {${name} eq ${subport}} {
 
 subport openafs-signed-kext {
     description Signed Kernel Extension for AFS on 10.9+
+    # 1.8.6 doesn't have a kext yet
+    version 1.8.5
     long_description ${description}
-    version 0.197.1
     set mp.dist {
         13 9 Mavericks
         14 10 Yosemite
@@ -95,79 +96,76 @@ subport openafs-signed-kext {
     }
     foreach { mp.darwin mp.os mp.name } ${mp.dist} {
         if {${os.major} == ${mp.darwin}} {
-            # https://www.auristor.com/downloads/auristor/osx/macos-10.14/Auristor-client-0.195-Mojave.dmg
-            master_sites https://www.auristor.com/downloads/auristor/osx/macos-10.${mp.os}
-            distfiles Auristor-client-${version}-${mp.name}.dmg
-            # www.auristor.com has an expired intermediary certificate.
-            fetch.ignore_sslcert yes
+            # https://download.sinenomine.net/openafs/bins/1.8.5/macos-10.15/OpenAFS-1.8.5-osxsna3-Catalina.dmg
+            master_sites https://download.sinenomine.net/openafs/bins/${version}/macos-10.${mp.os}
+            distfiles OpenAFS-${version}-osxsna3-${mp.name}.dmg
+            extract.only OpenAFS-${version}-osxsna3-${mp.name}.dmg
             use_dmg yes
-            extract.only Auristor-client-0.197.1-${mp.name}.dmg
             post-extract {
-                move ${workpath}/${distname} ${workpath}/auristor-dmg
-                system -W ${workpath}/auristor-dmg "pkgutil --expand 'Auristor-Lite.pkg' ${workpath}/auristor-pkg"
-                file mkdir ${workpath}/auristor-unpacked
-                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-common.pkg/Payload | cpio -id"
-                system -W ${workpath}/auristor-unpacked "gzip -dc ../auristor-pkg/YFS-client.pkg/Payload | cpio -id"
+                move ${workpath}/${distname} ${workpath}/openafs-dmg
+                system -W ${workpath}/openafs-dmg "pkgutil --expand 'OpenAFS.pkg' ${workpath}/openafs-pkg"
+                file mkdir ${workpath}/openafs-unpacked
+                system -W ${workpath}/openafs-unpacked "gzip -dc ../openafs-pkg/OpenAFS-dist.pkg/Payload | cpio -id"
             }
             post-patch {
-                # Auristor libraries have hard-coded paths that must be removed.
-                set toolsdir ${workpath}/auristor-unpacked/Library/Auristor/Tools
-                set libs [glob -directory ${toolsdir} -tails lib/*.dylib private/*.dylib]
-                set args "-add_rpath ${prefix}/Library/Auristor/Tools"
+                # OpenAFS libraries have hard-coded paths that must be removed.
+                set toolsdir ${workpath}/openafs-unpacked/Library/OpenAFS/Tools
+                set libs [glob -directory ${toolsdir} -tails lib/*.dylib]
+                set args "-add_rpath ${prefix}/Library/OpenAFS"
                 foreach lib $libs {
-                    append args " -change /Library/Auristor/Tools/${lib} @rpath/${lib}"
+                    append args " -change /Library/OpenAFS/Tools/${lib} @rpath/${lib}"
                 }
                 foreach lib $libs {
-                    system "install_name_tool $args ${toolsdir}/${lib}"
-                    system "codesign --remove-signature ${toolsdir}/${lib}"
+                    if {[file type "${toolsdir}/${lib}"] ne "link"} {
+                        system "install_name_tool $args ${toolsdir}/${lib}"
+                        system "codesign --remove-signature ${toolsdir}/${lib}"
+                    }
                 }
-                system "install_name_tool $args ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
-                system "codesign --remove-signature ${workpath}/auristor-unpacked/usr/local/libexec/afsd"
+                system "install_name_tool $args ${workpath}/openafs-unpacked/Library/OpenAFS/Tools/root.client/usr/vice/etc/afsd"
+                system "codesign --remove-signature ${workpath}/openafs-unpacked/Library/OpenAFS/Tools/root.client/usr/vice/etc/afsd"
             }
             configure {}
             build {}
             destroot {
-                file mkdir ${destroot}${prefix}/etc/openafs/config
-                set pkgpath ${workpath}/auristor-unpacked
-                copy ${pkgpath}/Library/Auristor \
-                    ${pkgpath}/Library/Extensions \
-                    ${destroot}${prefix}/Library/
-                # We only install the Auristor afsd and kernel module.
-                # We drop /usr/local/bin/{aklog,fs,pts,tokens,unlog} in favor of OpenAFS versions.
-                # (Yes, that means you won't be able to use Auristor-specific features.)
-                copy ${pkgpath}/usr/local/libexec/ ${destroot}${prefix}/libexec/auristor/
-                file mkdir ${destroot}/var/openafs/yfs ${destroot}/var/openafs/yfs-afsd
-                destroot.keepdirs-append \
-                    ${destroot}${prefix}/var/openafs/yfs \
-                    ${destroot}${prefix}/var/openafs/yfs-afsd
+                set pkgpath ${workpath}/openafs-unpacked
+                file mkdir ${destroot}${prefix}/Library/OpenAFS
+                copy ${pkgpath}/Library/OpenAFS/Tools/root.client/usr/vice/etc \
+                    ${pkgpath}/Library/OpenAFS/Tools/lib \
+                    ${destroot}${prefix}/Library/OpenAFS
+                system "dot_clean ${destroot}${prefix}/Library/OpenAFS"
 
+                # Install startup/shutdown script
+                copy -force ${filespath}/afs.rc ${destroot}${prefix}/Library/OpenAFS/etc/afs.rc
+                reinplace "s|@PREFIX@|${prefix}|g" ${destroot}${prefix}/Library/OpenAFS/etc/afs.rc
+
+                # TODO: Install this config as part of openafs-client?
                 # Create default config
-                file mkdir ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
-                destroot.keepdirs-append ${destroot}${prefix}/etc/openafs/yfs-client.conf.d
-                copy ${filespath}/yfs-client.conf ${destroot}${prefix}/etc/openafs/yfs-client.conf
-                reinplace "s|@PREFIX@|${prefix}|" ${destroot}${prefix}/etc/openafs/yfs-client.conf
-                copy ${pkgpath}/private/etc/yfs/cellservdb.conf ${destroot}${prefix}/etc/openafs/cellservdb.conf
-                copy ${pkgpath}/private/etc/yfs/config/settings.plist.orig ${destroot}${prefix}/etc/openafs/config/settings.plist
-
-                # Write startup item
-                set itemdir ${destroot}${prefix}/etc/LaunchDaemons/${startupitem.uniquename}
-                file mkdir ${itemdir}
-                copy ${filespath}/launchdaemon.plist ${itemdir}/${startupitem.plist}
-                reinplace "s|@PREFIX@|${prefix}|g; s|@UNIQUENAME@|${startupitem.uniquename}|g" ${itemdir}/${startupitem.plist}
-                # Install startup item
-                file mkdir "${destroot}/Library/LaunchDaemons"
-                ln -sf "${prefix}/etc/LaunchDaemons/${startupitem.uniquename}/${startupitem.plist}" "${destroot}/Library/LaunchDaemons"
+                file mkdir ${destroot}${prefix}/etc/openafs
+                copy ${pkgpath}/private/var/db/openafs/etc/config/settings.plist.orig ${destroot}${prefix}/etc/openafs/settings.plist
+                file mkdir ${destroot}${prefix}/var/db/openafs/cache
+                destroot.keepdirs-append ${destroot}${prefix}/var/db/openafs/cache
+                system "echo /afs:${prefix}/var/db/openafs/cache:100000 > ${destroot}${prefix}/etc/openafs/cacheinfo"
             }
-            startupitem.create no
+            startupitem.create yes
             startupitem.autostart yes
+            startupitem.start "${prefix}/Library/OpenAFS/etc/afs.rc start"
+            startupitem.stop "${prefix}/Library/OpenAFS/etc/afs.rc start"
+            startupitem.logfile "${prefix}/var/log/openafs.log"
             post-activate {
                 if {[file exists /usr/share/firmlinks]} {
-                    system "(grep ^afs /etc/synthetic.conf || echo afs >> /etc/synthetic.conf) > /dev/null 2>&1"
+                    if {[catch {system "grep ^afs /etc/synthetic.conf"}]} {
+                        system "echo afs >> /etc/synthetic.conf"
+                        notes-append {
+                            You must restart your computer to create /afs.
+                        }
+                    }
                 } else {
-                    file mkdir /afs
+                    if {! [file exists /afs]} {
+                        file mkdir /afs
+                    }
                 }
                 system "/usr/libexec/PlistBuddy -c \"Print :SkipPaths:\" /Library/Preferences/com.apple.TimeMachine.plist | grep /afs || /usr/libexec/PlistBuddy -c 'Add :SkipPaths: string \"/afs\"' /Library/Preferences/com.apple.TimeMachine.plist"
-                if {[catch {system "kextload ${prefix}/Library/Extensions/yfs.kext"}]} {
+                if {[catch {system "kextload ${prefix}/Library/OpenAFS/etc/afs.kext"}]} {
                     notes-append {
                         You must allow the kernel extension to load by visiting the Security
                         preference pane. You can go there by running:
