@@ -3,10 +3,11 @@
 PortSystem          1.0
 
 name                openafs-client
-version             1.8.6
+version             1.8.7
 revision            4
 categories          sysutils
 license             IPL-1
+platforms           darwin
 maintainers         mit.edu:sipb-macathena
 description         AFS distributed fileystem client
 long_description    AFS is a distributed filesystem allowing cross-platform \
@@ -17,18 +18,22 @@ homepage            http://www.openafs.org/
 master_sites        http://openafs.org/dl/openafs/${version}/
 distname            openafs-${version}-src
 
-checksums           openafs-1.8.6-src.tar.gz \
-                    rmd160  4a59624b935f25c9819902dfd38ee54d66b2a8d6 \
-                    sha256  9efc374ef32b90ed62e59280535babff684d1bb551889d08abbf3e9d93e2e7d2 \
-                    size    17789990 \
-                    OpenAFS-1.8.5-osxsna3-Mojave.dmg \
-                    rmd160  ed9fc4630feb30505d471474b1d5f5c000b52a82 \
-                    sha256  1c8d28bba89d846f72576999f0d78990f8f09d4a3cc599e7182b9801ed1c2542 \
-                    size    16959208 \
-                    OpenAFS-1.8.5-osxsna3-Catalina.dmg \
-                    rmd160  8e29c61062edae2172ebc8cf5249fed07e9c7f2a \
-                    sha256  5bb07d7905e17a65dec8897710c4146ad754b7c706d681e2d0e1883c63b8c206 \
-                    size    17514101 \
+checksums           openafs-1.8.7-src.tar.gz \
+                    rmd160  7de7c8dbc49ac8834a2dff7e88aa2fed4cac1e58 \
+                    sha256  68e9c0e067e6f7de8a9a6d154e322b841e50c6b39427948f11ae9de786443392 \
+                    size    18096802 \
+                    OpenAFS-1.8.7-osxsna3-Mojave.dmg \
+                    rmd160  c9e4ef49bfc50a48e9cca93f1b551821aa5f6c27 \
+                    sha256  7477e321399b6e26a3bc8eeb6a8d920b6b5ce8dc31eb4a2906617f61216b52d4 \
+                    size    16961690 \
+                    OpenAFS-1.8.7-osxsna3-Catalina-beta-1.dmg \
+                    rmd160  65cc96079fc9583e5b89294ed887df9e20d94fe0 \
+                    sha256  970937b22e3544b5fdd0869fd4725beb0141201ec9e3650f6a8e6a3e061b81ef \
+                    size    16990843 \
+                    OpenAFS-1.8.7-osxsna3-BigSur-beta-1.dmg \
+                    rmd160  92c280691d8b7f234b2a1f06723f40abed9fc8cf \
+                    sha256  8c94ef78270e5094b7f318f9391de9e88e52078d881274f434009f45240677dd \
+                    size    17048350 \
                     CellServDB \
                     rmd160  b63cce0e17b6a21aebc15165de377ab560eacce5 \
                     sha256  43c5f0c0283eb2a1e03ea4b4d680922037a3fa495a024927acefd2f029c5d917 \
@@ -82,8 +87,6 @@ if {${name} eq ${subport}} {
 
 subport openafs-signed-kext {
     description Signed Kernel Extension for AFS on 10.9+
-    # 1.8.6 doesn't have a kext yet
-    version 1.8.5
     long_description ${description}
     set mp.dist {
         13 9 Mavericks
@@ -92,12 +95,13 @@ subport openafs-signed-kext {
         16 12 Sierra
         17 13 HighSierra
         18 14 Mojave
-        19 15 Catalina
+        19 15 Catalina-beta-1
+        20 16 BigSur-beta-1
     }
     foreach { mp.darwin mp.os mp.name } ${mp.dist} {
         if {${os.major} == ${mp.darwin}} {
             # https://download.sinenomine.net/openafs/bins/1.8.5/macos-10.15/OpenAFS-1.8.5-osxsna3-Catalina.dmg
-            master_sites https://download.sinenomine.net/openafs/bins/${version}/macos-10.${mp.os}
+            master_sites https://download.sinenomine.net/openafs/bins/${version}/macos
             distfiles OpenAFS-${version}-osxsna3-${mp.name}.dmg
             extract.only OpenAFS-${version}-osxsna3-${mp.name}.dmg
             use_dmg yes
@@ -124,7 +128,7 @@ subport openafs-signed-kext {
                 system "install_name_tool $args ${workpath}/openafs-unpacked/Library/OpenAFS/Tools/root.client/usr/vice/etc/afsd"
                 system "codesign --remove-signature ${workpath}/openafs-unpacked/Library/OpenAFS/Tools/root.client/usr/vice/etc/afsd"
             }
-            configure {}
+            use_configure no
             build {}
             destroot {
                 set pkgpath ${workpath}/openafs-unpacked
