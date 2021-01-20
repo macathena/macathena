@@ -35,9 +35,9 @@ checksums           openafs-1.8.7-src.tar.gz \
                     sha256  8c94ef78270e5094b7f318f9391de9e88e52078d881274f434009f45240677dd \
                     size    17048350 \
                     CellServDB \
-                    rmd160  b63cce0e17b6a21aebc15165de377ab560eacce5 \
-                    sha256  43c5f0c0283eb2a1e03ea4b4d680922037a3fa495a024927acefd2f029c5d917 \
-                    size    35258
+                    rmd160  e0995062877e21b6887b57399a0cc9ae057c4092 \
+                    sha256  62e6510079f7565b7c642d7b799342bee36c89fe6d510bc24559785fabb1b2f2 \
+                    size    36955
 
 universal_variant   no
 
@@ -60,7 +60,8 @@ if {${name} eq ${subport}} {
     post-patch {
         reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
     }
-
+    configure.cflags-append \
+                    -Wno-error=implicit-function-declaration
     if {${os.major} >= 13} {
         configure.args-append --disable-kernel-module
         depends_run-append port:openafs-signed-kext
