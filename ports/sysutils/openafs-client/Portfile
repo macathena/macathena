@@ -59,6 +59,8 @@ if {${name} eq ${subport}} {
 
     post-patch {
         reinplace "s|/var/db/openafs/etc|${prefix}/etc/openafs|" src/platform/DARWIN/afssettings.m
+        # TODO: Reenable (and fix building) if we ever decide to install the prefpane.
+        reinplace "s|@OSXSDK@|none|" src/platform/DARWIN/Makefile.in
     }
     configure.cflags-append \
                     -Wno-error=implicit-function-declaration
