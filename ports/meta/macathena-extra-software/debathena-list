@@ -1,0 +1,13 @@
+# debathena-extra-software that's not in macathena-extra-software
+Package: debathena-extra-software
+Depends: debathena-extra-software-nox,
+  ${debathena-cool-kids-office-suite},
+  thunderbird | mozilla-thunderbird | icedove,
+  default-java-plugin | icedtea-plugin,
+  ${misc:Depends}
+Recommends: flashplugin-installer | flashplugin-nonfree,
+  compizconfig-settings-manager,
+  compiz-plugins,
+  msttcorefonts,
+  ttf-xfree86-nonfree,
+  motif-clients,

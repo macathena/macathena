@@ -1,0 +1,10 @@
+# the remainder of the debathena-extra-software-nox list, that isn't in macathena-extra-software
+Package: debathena-extra-software-nox
+Depends: debathena-debian-dev, # I think these are debian specific
+  inn2-inews, # can't find this
+  bsdgames, # I think this is packaged for homebrew but not macports
+  cyrus-clients # these are installed with cyrus-imapd but don't seem to come separately
+  ${debathena-libstdc5-depends},
+  ${misc:Depends}
+Recommends:
+  manpages-posix-dev, manpages-dev,
