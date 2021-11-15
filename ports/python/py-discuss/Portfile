@@ -13,7 +13,7 @@ maintainers	    	mit.edu:sipb-macathena
 description	    	Python bindings for discuss
 long_description    Pydiscuss provides a pure-Python implementation of discuss -- the forum \
                     protocol developed in late 80's and still used around MIT
-python.versions		27 37 38
+python.versions		27 37 38 39
 checksums           rmd160  dacc3e897fc61dfb4ac8c59686140a9c6fb23e4e \
                     sha256  be05db18b7e4f62047df677a80d3f3ad30ba194a9b6f9aa2eb0bf44325f92a07 \
                     size    12661

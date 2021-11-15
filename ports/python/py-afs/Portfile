@@ -11,7 +11,7 @@ categories	devel
 platforms	darwin
 maintainers	mit.edu:sipb-macathena
 description	Python bindings for AFS
-python.versions	27 37 38
+python.versions	27 37 38 39
 checksums           rmd160  97423b8736bc1ffa96b48bbf3ae697b915e8d83b \
                     sha256  5ba24c9428ceb8ce060371e989b16903ec293a6e82533cee9396cbb1e3a51098 \
                     size    17840

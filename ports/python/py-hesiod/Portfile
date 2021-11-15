@@ -18,7 +18,7 @@ checksums           rmd160  ca5d103caec3dfe2585f7ebdac4360a475f7b332 \
                     sha256  9ebf1d13b367d90a571d6378fd3ae05ad9047427cb9061aca3c55560df58305c \
                     size    3949
 
-python.versions     27 36 37 38
+python.versions     27 36 37 38 39
 
 if {${name} ne ${subport}} {
     depends_lib-append      port:hesiod \
