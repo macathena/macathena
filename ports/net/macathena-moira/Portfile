@@ -1,4 +1,4 @@
-# $Id$
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
 PortSystem          1.0
 
 name                macathena-moira
@@ -8,6 +8,7 @@ distname            moira-${version}
 categories          net
 maintainers         mit.edu:sipb-macathena
 description         Moira is the Project Athena service management system
+long_description    Moira is the Project Athena service management system
 platforms           darwin
 homepage            https://github.mit.edu/ops/moira
 master_sites        http://macathena.mit.edu/dist/
@@ -22,31 +23,32 @@ checksums           md5     3e301d66296002aa79a151afeb85b6d5 \
                     sha256  1235824b7dcd1e4e067f841a2366dfd80555f7459a89d5202d927f72a0b57839 \
                     size    1881295
 
-use_autoconf	yes
+use_autoreconf  yes
+autoreconf.args -fvi
 
-configure.args	--with-krb5 \
-				--with-com_err \
-				--with-hesiod
+configure.args  --with-krb5 \
+                                --with-com_err \
+                                --with-hesiod
+configure.cflags-append -Wno-error=implicit-function-declaration
 
+configure.env-append    TERM=vt100
 
-configure.env-append	TERM=vt100
-
-post-destroot	{
-	file rename ${destroot}${prefix}/bin/chfn \
-		${destroot}${prefix}/bin/chfn.moira
-	file rename ${destroot}${prefix}/bin/chsh \
-		${destroot}${prefix}/bin/chsh.moira
-	file rename ${destroot}${prefix}/share/man/man1/chfn.1 \
-		${destroot}${prefix}/share/man/man1/chfn.moira.1
-	file rename ${destroot}${prefix}/share/man/man1/chsh.1 \
-		${destroot}${prefix}/share/man/man1/chsh.moira.1
+post-destroot    {
+        file rename ${destroot}${prefix}/bin/chfn \
+                ${destroot}${prefix}/bin/chfn.moira
+        file rename ${destroot}${prefix}/bin/chsh \
+                ${destroot}${prefix}/bin/chsh.moira
+        file rename ${destroot}${prefix}/share/man/man1/chfn.1 \
+                ${destroot}${prefix}/share/man/man1/chfn.moira.1
+        file rename ${destroot}${prefix}/share/man/man1/chsh.1 \
+                ${destroot}${prefix}/share/man/man1/chsh.moira.1
 }
 
-depends_build		port:e2fsprogs \
-			bin:autoconf:autoconf
+depends_build           port:e2fsprogs \
+                                bin:autoconf:autoconf
 
-depends_lib		port:hesiod \
-				port:kerberos5 \
-				port:libcomerr \
-				port:ncurses \
-				port:readline
+depends_lib             port:hesiod \
+                                port:kerberos5 \
+                                port:libcomerr \
+                                port:ncurses \
+                                port:readline
